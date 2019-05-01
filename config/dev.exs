@@ -50,7 +50,7 @@ config :phoenix, :plug_init_mode, :runtime
 # Configure your database
 config :tournamentsapi, Tournamentsapi.Repo,
   username: "postgres",
-  password: "postgres",
-  database: "tournamentsapi_dev",
+  password: "admin",
+  database: "tournaments",
   hostname: "localhost",
   pool_size: 10
