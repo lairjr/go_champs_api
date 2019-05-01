@@ -7,5 +7,7 @@ defmodule TournamentsapiWeb.Router do
 
   scope "/api", TournamentsapiWeb do
     pipe_through :api
+
+    resources "/users", UserController
   end
 end
