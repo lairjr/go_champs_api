@@ -1,5 +1,5 @@
-defmodule TournamentsapiWeb.TeamController do
-  use TournamentsapiWeb, :controller
+defmodule TournamentsApiWeb.TeamController do
+  use TournamentsApiWeb, :controller
 
   def index(conn, _params) do
     teams = [%{id: "team-one", name: "Panteras", link: "panteras-poa"},%{id: "team-two", name: "Illumis", link: "illumis"}]

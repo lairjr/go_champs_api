@@ -1,5 +1,5 @@
-defmodule TournamentsapiWeb.TournamentController do
-  use TournamentsapiWeb, :controller
+defmodule TournamentsApiWeb.TournamentController do
+  use TournamentsApiWeb, :controller
 
   def index(conn, _params) do
     tournaments = [

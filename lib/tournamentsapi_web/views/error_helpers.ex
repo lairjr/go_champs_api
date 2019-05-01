@@ -1,4 +1,4 @@
-defmodule TournamentsapiWeb.ErrorHelpers do
+defmodule TournamentsApiWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -25,9 +25,9 @@ defmodule TournamentsapiWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(TournamentsapiWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(TournamentsApiWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(TournamentsapiWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(TournamentsApiWeb.Gettext, "errors", msg, opts)
     end
   end
 end

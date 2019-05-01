@@ -1,7 +1,7 @@
-defmodule TournamentsapiWeb.Endpoint do
+defmodule TournamentsApiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :tournamentsapi
 
-  socket "/socket", TournamentsapiWeb.UserSocket,
+  socket "/socket", TournamentsApiWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -40,5 +40,5 @@ defmodule TournamentsapiWeb.Endpoint do
     key: "_tournamentsapi_key",
     signing_salt: "oLnPiZZN"
 
-  plug TournamentsapiWeb.Router
+  plug TournamentsApiWeb.Router
 end

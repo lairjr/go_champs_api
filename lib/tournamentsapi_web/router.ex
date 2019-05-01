@@ -1,11 +1,11 @@
-defmodule TournamentsapiWeb.Router do
-  use TournamentsapiWeb, :router
+defmodule TournamentsApiWeb.Router do
+  use TournamentsApiWeb, :router
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/api", TournamentsapiWeb do
+  scope "/api", TournamentsApiWeb do
     pipe_through :api
 
     resources "/games", GameController

@@ -2,7 +2,7 @@ use Mix.Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :tournamentsapi, TournamentsapiWeb.Endpoint,
+config :tournamentsapi, TournamentsApiWeb.Endpoint,
   http: [port: 4002],
   server: false
 
@@ -10,7 +10,7 @@ config :tournamentsapi, TournamentsapiWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :tournamentsapi, Tournamentsapi.Repo,
+config :tournamentsapi, TournamentsApi.Repo,
   username: "postgres",
   password: "postgres",
   database: "tournamentsapi_test",

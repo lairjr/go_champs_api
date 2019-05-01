@@ -1,5 +1,5 @@
-defmodule TournamentsapiWeb.ErrorView do
-  use TournamentsapiWeb, :view
+defmodule TournamentsApiWeb.ErrorView do
+  use TournamentsApiWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

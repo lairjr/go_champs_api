@@ -1,4 +1,4 @@
-# Tournamentsapi
+# TournamentsApi
 
 To start your Phoenix server:
 

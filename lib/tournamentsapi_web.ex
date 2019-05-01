@@ -1,12 +1,12 @@
-defmodule TournamentsapiWeb do
+defmodule TournamentsApiWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use TournamentsapiWeb, :controller
-      use TournamentsapiWeb, :view
+      use TournamentsApiWeb, :controller
+      use TournamentsApiWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,11 +19,11 @@ defmodule TournamentsapiWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: TournamentsapiWeb
+      use Phoenix.Controller, namespace: TournamentsApiWeb
 
       import Plug.Conn
-      import TournamentsapiWeb.Gettext
-      alias TournamentsapiWeb.Router.Helpers, as: Routes
+      import TournamentsApiWeb.Gettext
+      alias TournamentsApiWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -31,14 +31,14 @@ defmodule TournamentsapiWeb do
     quote do
       use Phoenix.View,
         root: "lib/tournamentsapi_web/templates",
-        namespace: TournamentsapiWeb
+        namespace: TournamentsApiWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
-      import TournamentsapiWeb.ErrorHelpers
-      import TournamentsapiWeb.Gettext
-      alias TournamentsapiWeb.Router.Helpers, as: Routes
+      import TournamentsApiWeb.ErrorHelpers
+      import TournamentsApiWeb.Gettext
+      alias TournamentsApiWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -53,7 +53,7 @@ defmodule TournamentsapiWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import TournamentsapiWeb.Gettext
+      import TournamentsApiWeb.Gettext
     end
   end
 

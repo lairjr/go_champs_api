@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(Tournamentsapi.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(TournamentsApi.Repo, :manual)

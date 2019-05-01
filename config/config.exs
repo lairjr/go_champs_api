@@ -8,14 +8,14 @@
 use Mix.Config
 
 config :tournamentsapi,
-  ecto_repos: [Tournamentsapi.Repo]
+  ecto_repos: [TournamentsApi.Repo]
 
 # Configures the endpoint
-config :tournamentsapi, TournamentsapiWeb.Endpoint,
+config :tournamentsapi, TournamentsApiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "imta0fFj1/DTKBsA9UFU4NP9/3U2KQAAi9TqID70AdjSC1sBxS8D1ddhrkRAHP5X",
-  render_errors: [view: TournamentsapiWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Tournamentsapi.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: TournamentsApiWeb.ErrorView, accepts: ~w(json)],
+  pubsub: [name: TournamentsApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
