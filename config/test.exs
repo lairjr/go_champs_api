@@ -10,9 +10,11 @@ config :tournamentsapi, TournamentsApiWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
+# Configure your database
 config :tournamentsapi, TournamentsApi.Repo,
   username: "postgres",
-  password: "postgres",
-  database: "tournamentsapi_test",
+  password: "admin",
+  database: "tournaments",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
