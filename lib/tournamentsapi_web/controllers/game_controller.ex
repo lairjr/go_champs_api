@@ -1,26 +1,43 @@
 defmodule TournamentsApiWeb.GameController do
   use TournamentsApiWeb, :controller
 
-  def index(conn, _params) do
-    games = [
-      %{
-        id: "game-one",
-        homeTeam: %{id: "panteras-poa", name: "Panteras"},
-        homeScore: 90,
-        awayTeam: %{id: "veteranos-poa", name: "Veterandos"},
-        awayScore: 80,
-        dateTime: "2011-10-05T14:48:00.000Z"
-      },
-      %{
-        id: "game-two",
-        homeTeam: %{id: "titios-poa", name: "Titios"},
-        homeScore: 80,
-        awayTeam: %{id: "mustangs-poa", name: "Mustangs"},
-        awayScore: 80,
-        dateTime: "2011-10-05T14:48:00.000Z"
-      }
-    ]
+  alias TournamentsApi.Games
+  alias TournamentsApi.Games.Game
 
-    json(conn, games)
+  action_fallback TournamentsApiWeb.FallbackController
+
+  def index(conn, _params) do
+    games = Games.list_games()
+    render(conn, "index.json", games: games)
+  end
+
+  def create(conn, %{"game" => game_params}) do
+    with {:ok, %Game{} = game} <- Games.create_game(game_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.game_path(conn, :show, game))
+      |> render("show.json", game: game)
+    end
+  end
+
+  def show(conn, %{"id" => id}) do
+    game = Games.get_game!(id)
+    render(conn, "show.json", game: game)
+  end
+
+  def update(conn, %{"id" => id, "game" => game_params}) do
+    game = Games.get_game!(id)
+
+    with {:ok, %Game{} = game} <- Games.update_game(game, game_params) do
+      render(conn, "show.json", game: game)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    game = Games.get_game!(id)
+
+    with {:ok, %Game{}} <- Games.delete_game(game) do
+      send_resp(conn, :no_content, "")
+    end
   end
 end
