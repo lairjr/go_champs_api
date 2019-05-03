@@ -35,7 +35,11 @@ defmodule TournamentsApi.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_game!(id), do: Repo.get!(Game, id)
+  def get_game!(id) do
+    Game
+    |> Repo.get!(id)
+    |> Repo.preload([:away_team, :home_team])
+  end
 
   @doc """
   Creates a game.

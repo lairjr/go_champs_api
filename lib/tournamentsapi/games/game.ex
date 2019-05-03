@@ -21,13 +21,13 @@ defmodule TournamentsApi.Games.Game do
   def changeset(game, attrs) do
     game
     |> cast(attrs, [
-      :home_score,
-      :home_team_name,
       :away_score,
       :away_team_name,
-      :location,
-      :datetime
+      :datetime,
+      :home_score,
+      :home_team_name,
+      :location
     ])
-    |> validate_required([:home_team_name, :away_team_name, :datetime])
+    |> validate_required([:away_team_name, :datetime, :home_team_name])
   end
 end
