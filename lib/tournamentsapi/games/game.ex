@@ -2,6 +2,7 @@ defmodule TournamentsApi.Games.Game do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
+  alias TournamentsApi.Teams.Team
 
   schema "games" do
     field :away_score, :integer
@@ -11,6 +12,8 @@ defmodule TournamentsApi.Games.Game do
     field :home_team_name, :string
     field :location, :string
 
+    belongs_to :away_team, Team
+    belongs_to :home_team, Team
     timestamps()
   end
 
@@ -25,6 +28,6 @@ defmodule TournamentsApi.Games.Game do
       :location,
       :datetime
     ])
-    |> validate_required([:home_score, :away_score, :location, :datetime])
+    |> validate_required([:home_team_name, :away_team_name, :datetime])
   end
 end

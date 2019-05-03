@@ -52,6 +52,8 @@ defmodule TournamentsApi.Games do
   def create_game(attrs \\ %{}) do
     %Game{}
     |> Game.changeset(attrs)
+    |> Ecto.Changeset.put_change(:home_team_id, attrs["home_team_id"])
+    |> Ecto.Changeset.put_change(:away_team_id, attrs["away_team_id"])
     |> Repo.insert()
   end
 
