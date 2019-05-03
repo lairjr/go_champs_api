@@ -1,11 +1,11 @@
 defmodule TournamentsApi.Teams.Team do
   use Ecto.Schema
+  use TournamentsApi.Schema
   import Ecto.Changeset
 
   schema "teams" do
     field :name, :string
     field :link, :string
-    field :uuid, Ecto.UUID
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule TournamentsApi.Teams.Team do
   @doc false
   def changeset(team, attrs) do
     team
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :link])
     |> validate_required([:name])
   end
 end

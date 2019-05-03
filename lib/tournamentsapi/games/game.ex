@@ -1,5 +1,6 @@
 defmodule TournamentsApi.Games.Game do
   use Ecto.Schema
+  use TournamentsApi.Schema
   import Ecto.Changeset
 
   schema "games" do
