@@ -7,7 +7,7 @@ defmodule TournamentsApi.Tournaments.TournamentTeam do
 
   schema "tournament_teams" do
     field :name, :string
-    field :team_stats, :map
+    field :stats, :map
 
     belongs_to :tournament, Tournament
     belongs_to :tournament_group, TournamentGroup
@@ -18,7 +18,7 @@ defmodule TournamentsApi.Tournaments.TournamentTeam do
   @doc false
   def changeset(tournament_team, attrs) do
     tournament_team
-    |> cast(attrs, [:name, :tournament_id, :team_stats])
+    |> cast(attrs, [:name, :tournament_id, :stats])
     |> validate_required([:name, :tournament_id])
   end
 end
