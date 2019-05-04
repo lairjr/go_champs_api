@@ -22,21 +22,21 @@ defmodule TournamentsApiWeb.GroupController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    group = Tournaments.get_group!(id)
+  def show(conn, %{"id" => id, "tournament_id" => tournament_id}) do
+    group = Tournaments.get_group!(id, tournament_id)
     render(conn, "show.json", group: group)
   end
 
-  def update(conn, %{"id" => id, "group" => group_params}) do
-    group = Tournaments.get_group!(id)
+  def update(conn, %{"id" => id, "group" => group_params, "tournament_id" => tournament_id}) do
+    group = Tournaments.get_group!(id, tournament_id)
 
     with {:ok, %Group{} = group} <- Tournaments.update_group(group, group_params) do
       render(conn, "show.json", group: group)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    group = Tournaments.get_group!(id)
+  def delete(conn, %{"id" => id, "tournament_id" => tournament_id}) do
+    group = Tournaments.get_group!(id, tournament_id)
 
     with {:ok, %Group{}} <- Tournaments.delete_group(group) do
       send_resp(conn, :no_content, "")

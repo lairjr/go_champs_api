@@ -114,7 +114,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_groups(tournament_id) do
-    Repo.all(from g in Group, where: g.tournament_id == ^tournament_id)
+    Repo.all(Group, [tournament_id: tournament_id])
   end
 
   @doc """
@@ -131,7 +131,8 @@ defmodule TournamentsApi.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_group!(id), do: Repo.get!(Group, id)
+  def get_group!(id, tournament_id),
+    do: Repo.get_by!(Group, [id: id, tournament_id: tournament_id])
 
   @doc """
   Creates a group.
