@@ -1,10 +1,10 @@
-defmodule TournamentsApi.Tournaments.Group do
+defmodule TournamentsApi.Tournaments.TournamentGroup do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
 
-  schema "groups" do
+  schema "tournament_groups" do
     field :name, :string
 
     belongs_to :tournament, Tournament
@@ -13,8 +13,8 @@ defmodule TournamentsApi.Tournaments.Group do
   end
 
   @doc false
-  def changeset(group, attrs) do
-    group
+  def changeset(tournament_group, attrs) do
+    tournament_group
     |> cast(attrs, [:name, :tournament_id])
     |> validate_required([:name, :tournament_id])
   end

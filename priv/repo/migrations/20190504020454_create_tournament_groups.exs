@@ -1,8 +1,8 @@
-defmodule TournamentsApi.Repo.Migrations.CreateGroups do
+defmodule TournamentsApi.Repo.Migrations.CreateTournamentGroups do
   use Ecto.Migration
 
   def change do
-    create table(:groups, primary_key: false) do
+    create table(:tournament_groups, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :name, :string
       add :tournament_id, references(:tournaments, on_delete: :nothing, type: :uuid)
@@ -10,6 +10,6 @@ defmodule TournamentsApi.Repo.Migrations.CreateGroups do
       timestamps()
     end
 
-    create index(:groups, [:tournament_id])
+    create index(:tournament_groups, [:tournament_id])
   end
 end
