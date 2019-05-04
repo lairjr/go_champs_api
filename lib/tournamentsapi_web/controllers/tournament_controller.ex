@@ -1,39 +1,44 @@
 defmodule TournamentsApiWeb.TournamentController do
   use TournamentsApiWeb, :controller
 
-  def index(conn, _params) do
-    tournaments = [
-      %{
-        id: "tournamente-one",
-        name: "Liga Municipal de Basquete",
-        link: "liga-municipal-de-basquete"
-      },
-      %{id: "tournamente-two", name: "Liga Municipal de Volei", link: "liga-municipal-de-volei"}
-    ]
+  alias TournamentsApi.Tournaments
+  alias TournamentsApi.Tournaments.Tournament
 
-    json(conn, tournaments)
+  action_fallback TournamentsApiWeb.FallbackController
+
+  def index(conn, _params) do
+    tournaments = Tournaments.list_tournaments()
+    render(conn, "index.json", tournaments: tournaments)
   end
 
-  def show(conn, _params) do
-    tournament = %{
-      id: "tournamente-two",
-      name: "Liga Municipal de Volei",
-      link: "liga-municipal-de-volei",
-      currentGroupView: "standings",
-      groups: [
-        %{
-          name: "Group A",
-          view: "standings",
-          standings: %{
-            0 => %{team: %{id: "panteras", name: "Panteras"}, stats: %{wins: 9, loses: 8}},
-            1 => %{team: %{id: "titios", name: "Titios"}, stats: %{wins: 8, loses: 9}},
-            2 => %{team: %{id: "abpa", name: "ABPA"}, stats: %{wins: 7, loses: 10}}
-          },
-          bracket: nil
-        }
-      ]
-    }
+  def create(conn, %{"tournament" => tournament_params}) do
+    with {:ok, %Tournament{} = tournament} <- Tournaments.create_tournament(tournament_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.tournament_path(conn, :show, tournament))
+      |> render("show.json", tournament: tournament)
+    end
+  end
 
-    json(conn, tournament)
+  def show(conn, %{"id" => id}) do
+    tournament = Tournaments.get_tournament!(id)
+    render(conn, "show.json", tournament: tournament)
+  end
+
+  def update(conn, %{"id" => id, "tournament" => tournament_params}) do
+    tournament = Tournaments.get_tournament!(id)
+
+    with {:ok, %Tournament{} = tournament} <-
+           Tournaments.update_tournament(tournament, tournament_params) do
+      render(conn, "show.json", tournament: tournament)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    tournament = Tournaments.get_tournament!(id)
+
+    with {:ok, %Tournament{}} <- Tournaments.delete_tournament(tournament) do
+      send_resp(conn, :no_content, "")
+    end
   end
 end
