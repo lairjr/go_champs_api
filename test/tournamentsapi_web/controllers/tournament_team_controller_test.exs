@@ -30,7 +30,9 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
 
   describe "create tournament_team" do
     test "renders tournament_team when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.tournament_team_path(conn, :create), tournament_team: @create_attrs)
+      conn =
+        post(conn, Routes.tournament_team_path(conn, :create), tournament_team: @create_attrs)
+
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.tournament_team_path(conn, :show, id))
@@ -42,7 +44,9 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.tournament_team_path(conn, :create), tournament_team: @invalid_attrs)
+      conn =
+        post(conn, Routes.tournament_team_path(conn, :create), tournament_team: @invalid_attrs)
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -50,8 +54,15 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
   describe "update tournament_team" do
     setup [:create_tournament_team]
 
-    test "renders tournament_team when data is valid", %{conn: conn, tournament_team: %TournamentTeam{id: id} = tournament_team} do
-      conn = put(conn, Routes.tournament_team_path(conn, :update, tournament_team), tournament_team: @update_attrs)
+    test "renders tournament_team when data is valid", %{
+      conn: conn,
+      tournament_team: %TournamentTeam{id: id} = tournament_team
+    } do
+      conn =
+        put(conn, Routes.tournament_team_path(conn, :update, tournament_team),
+          tournament_team: @update_attrs
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.tournament_team_path(conn, :show, id))
@@ -63,7 +74,11 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, tournament_team: tournament_team} do
-      conn = put(conn, Routes.tournament_team_path(conn, :update, tournament_team), tournament_team: @invalid_attrs)
+      conn =
+        put(conn, Routes.tournament_team_path(conn, :update, tournament_team),
+          tournament_team: @invalid_attrs
+        )
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

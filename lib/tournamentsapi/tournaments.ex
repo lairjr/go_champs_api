@@ -114,7 +114,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_groups(tournament_id) do
-    Repo.all(TournamentGroup, [tournament_id: tournament_id])
+    Repo.all(TournamentGroup, tournament_id: tournament_id)
   end
 
   @doc """
@@ -132,7 +132,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def get_tournament_group!(id, tournament_id),
-    do: Repo.get_by!(TournamentGroup, [id: id, tournament_id: tournament_id])
+    do: Repo.get_by!(TournamentGroup, id: id, tournament_id: tournament_id)
 
   @doc """
   Creates a tournament_group.
@@ -211,7 +211,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_teams(tournament_id) do
-    Repo.all(TournamentTeam, [tournament_id: tournament_id])
+    Repo.all(TournamentTeam, tournament_id: tournament_id)
   end
 
   @doc """
@@ -229,7 +229,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def get_tournament_team!(id, tournament_id),
-    do: Repo.get_by!(TournamentTeam, [id: id, tournament_id: tournament_id])
+    do: Repo.get_by!(TournamentTeam, id: id, tournament_id: tournament_id)
 
   @doc """
   Creates a tournament_team.

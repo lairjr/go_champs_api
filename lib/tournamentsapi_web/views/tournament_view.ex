@@ -11,6 +11,6 @@ defmodule TournamentsApiWeb.TournamentView do
   end
 
   def render("tournament.json", %{tournament: tournament}) do
-    %{id: tournament.id, name: tournament.name, link: tournament.link}
+    %{id: tournament.id, name: tournament.name, link: tournament.link, team_stats_structure: tournament.team_stats_structure}
   end
 end

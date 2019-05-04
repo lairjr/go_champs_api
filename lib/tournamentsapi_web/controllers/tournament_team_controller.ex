@@ -11,12 +11,21 @@ defmodule TournamentsApiWeb.TournamentTeamController do
     render(conn, "index.json", tournament_teams: tournament_teams)
   end
 
-  def create(conn, %{"tournament_team" => tournament_team_params,"tournament_id" => tournament_id}) do
-    tournament_team_params = Map.merge(tournament_team_params, %{"tournament_id" => tournament_id})
-    with {:ok, %TournamentTeam{} = tournament_team} <- Tournaments.create_tournament_team(tournament_team_params) do
+  def create(conn, %{
+        "tournament_team" => tournament_team_params,
+        "tournament_id" => tournament_id
+      }) do
+    tournament_team_params =
+      Map.merge(tournament_team_params, %{"tournament_id" => tournament_id})
+
+    with {:ok, %TournamentTeam{} = tournament_team} <-
+           Tournaments.create_tournament_team(tournament_team_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.tournament_team_path(conn, :show, tournament_id, tournament_team))
+      |> put_resp_header(
+        "location",
+        Routes.tournament_team_path(conn, :show, tournament_id, tournament_team)
+      )
       |> render("show.json", tournament_team: tournament_team)
     end
   end
@@ -26,10 +35,15 @@ defmodule TournamentsApiWeb.TournamentTeamController do
     render(conn, "show.json", tournament_team: tournament_team)
   end
 
-  def update(conn, %{"id" => id, "tournament_team" => tournament_team_params, "tournament_id" => tournament_id}) do
+  def update(conn, %{
+        "id" => id,
+        "tournament_team" => tournament_team_params,
+        "tournament_id" => tournament_id
+      }) do
     tournament_team = Tournaments.get_tournament_team!(id, tournament_id)
 
-    with {:ok, %TournamentTeam{} = tournament_team} <- Tournaments.update_tournament_team(tournament_team, tournament_team_params) do
+    with {:ok, %TournamentTeam{} = tournament_team} <-
+           Tournaments.update_tournament_team(tournament_team, tournament_team_params) do
       render(conn, "show.json", tournament_team: tournament_team)
     end
   end

@@ -11,13 +11,21 @@ defmodule TournamentsApiWeb.TournamentGroupController do
     render(conn, "index.json", tournament_groups: tournament_groups)
   end
 
-  def create(conn, %{"tournament_group" => tournament_group_params, "tournament_id" => tournament_id}) do
-    tournament_group_params = Map.merge(tournament_group_params, %{"tournament_id" => tournament_id})
+  def create(conn, %{
+        "tournament_group" => tournament_group_params,
+        "tournament_id" => tournament_id
+      }) do
+    tournament_group_params =
+      Map.merge(tournament_group_params, %{"tournament_id" => tournament_id})
 
-    with {:ok, %TournamentGroup{} = tournament_group} <- Tournaments.create_tournament_group(tournament_group_params) do
+    with {:ok, %TournamentGroup{} = tournament_group} <-
+           Tournaments.create_tournament_group(tournament_group_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.tournament_group_path(conn, :show, tournament_id, tournament_group))
+      |> put_resp_header(
+        "location",
+        Routes.tournament_group_path(conn, :show, tournament_id, tournament_group)
+      )
       |> render("show.json", tournament_group: tournament_group)
     end
   end
@@ -27,10 +35,15 @@ defmodule TournamentsApiWeb.TournamentGroupController do
     render(conn, "show.json", tournament_group: tournament_group)
   end
 
-  def update(conn, %{"id" => id, "tournament_group" => tournament_group_params, "tournament_id" => tournament_id}) do
+  def update(conn, %{
+        "id" => id,
+        "tournament_group" => tournament_group_params,
+        "tournament_id" => tournament_id
+      }) do
     tournament_group = Tournaments.get_tournament_group!(id, tournament_id)
 
-    with {:ok, %TournamentGroup{} = tournament_group} <- Tournaments.update_tournament_group(tournament_group, tournament_group_params) do
+    with {:ok, %TournamentGroup{} = tournament_group} <-
+           Tournaments.update_tournament_group(tournament_group, tournament_group_params) do
       render(conn, "show.json", tournament_group: tournament_group)
     end
   end

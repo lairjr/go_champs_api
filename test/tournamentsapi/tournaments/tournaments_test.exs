@@ -92,7 +92,9 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament_group/1 with valid data creates a tournament_group" do
-      assert {:ok, %TournamentGroup{} = tournament_group} = Tournaments.create_tournament_group(@valid_attrs)
+      assert {:ok, %TournamentGroup{} = tournament_group} =
+               Tournaments.create_tournament_group(@valid_attrs)
+
       assert tournament_group.name == "some name"
     end
 
@@ -102,20 +104,29 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "update_tournament_group/2 with valid data updates the tournament_group" do
       tournament_group = tournament_group_fixture()
-      assert {:ok, %TournamentGroup{} = tournament_group} = Tournaments.update_tournament_group(tournament_group, @update_attrs)
+
+      assert {:ok, %TournamentGroup{} = tournament_group} =
+               Tournaments.update_tournament_group(tournament_group, @update_attrs)
+
       assert tournament_group.name == "some updated name"
     end
 
     test "update_tournament_group/2 with invalid data returns error changeset" do
       tournament_group = tournament_group_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tournaments.update_tournament_group(tournament_group, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament_group(tournament_group, @invalid_attrs)
+
       assert tournament_group == Tournaments.get_tournament_group!(tournament_group.id)
     end
 
     test "delete_tournament_group/1 deletes the tournament_group" do
       tournament_group = tournament_group_fixture()
       assert {:ok, %TournamentGroup{}} = Tournaments.delete_tournament_group(tournament_group)
-      assert_raise Ecto.NoResultsError, fn -> Tournaments.get_tournament_group!(tournament_group.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Tournaments.get_tournament_group!(tournament_group.id)
+      end
     end
 
     test "change_tournament_group/1 returns a tournament_group changeset" do
@@ -151,7 +162,9 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament_team/1 with valid data creates a tournament_team" do
-      assert {:ok, %TournamentTeam{} = tournament_team} = Tournaments.create_tournament_team(@valid_attrs)
+      assert {:ok, %TournamentTeam{} = tournament_team} =
+               Tournaments.create_tournament_team(@valid_attrs)
+
       assert tournament_team.name == "some name"
     end
 
@@ -161,20 +174,29 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "update_tournament_team/2 with valid data updates the tournament_team" do
       tournament_team = tournament_team_fixture()
-      assert {:ok, %TournamentTeam{} = tournament_team} = Tournaments.update_tournament_team(tournament_team, @update_attrs)
+
+      assert {:ok, %TournamentTeam{} = tournament_team} =
+               Tournaments.update_tournament_team(tournament_team, @update_attrs)
+
       assert tournament_team.name == "some updated name"
     end
 
     test "update_tournament_team/2 with invalid data returns error changeset" do
       tournament_team = tournament_team_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tournaments.update_tournament_team(tournament_team, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament_team(tournament_team, @invalid_attrs)
+
       assert tournament_team == Tournaments.get_tournament_team!(tournament_team.id)
     end
 
     test "delete_tournament_team/1 deletes the tournament_team" do
       tournament_team = tournament_team_fixture()
       assert {:ok, %TournamentTeam{}} = Tournaments.delete_tournament_team(tournament_team)
-      assert_raise Ecto.NoResultsError, fn -> Tournaments.get_tournament_team!(tournament_team.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Tournaments.get_tournament_team!(tournament_team.id)
+      end
     end
 
     test "change_tournament_team/1 returns a tournament_team changeset" do
