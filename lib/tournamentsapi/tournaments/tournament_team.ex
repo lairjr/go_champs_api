@@ -3,11 +3,13 @@ defmodule TournamentsApi.Tournaments.TournamentTeam do
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
+  alias TournamentsApi.Tournaments.TournamentGroup
 
   schema "tournament_teams" do
     field :name, :string
 
     belongs_to :tournament, Tournament
+    belongs_to :tournament_group, TournamentGroup
     
     timestamps()
   end

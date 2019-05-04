@@ -6,6 +6,7 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournamentTeams do
       add :id, :uuid, primary_key: true
       add :name, :string
       add :tournament_id, references(:tournaments, on_delete: :nothing, type: :uuid)
+      add :tournament_group_id, references(:tournament_groups, on_delete: :nothing, type: :uuid)
 
       timestamps()
     end
