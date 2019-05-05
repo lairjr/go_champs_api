@@ -9,8 +9,9 @@ defmodule TournamentsApiWeb.Router do
     pipe_through :api
 
     resources "/games", GameController
-    resources "/users", UserController
+    resources "/organizations", OrganizationController
     resources "/teams", TeamController
+    resources "/users", UserController
     resources "/tournaments", TournamentController
     resources "/tournaments/:tournament_id/games", TournamentGameController
     resources "/tournaments/:tournament_id/groups", TournamentGroupController
