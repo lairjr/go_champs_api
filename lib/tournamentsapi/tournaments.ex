@@ -7,6 +7,7 @@ defmodule TournamentsApi.Tournaments do
   alias TournamentsApi.Repo
 
   alias TournamentsApi.Tournaments.Tournament
+  alias TournamentsApi.Organizations.Organization
 
   @doc """
   Returns the list of tournaments.
@@ -43,7 +44,7 @@ defmodule TournamentsApi.Tournaments do
   ## Examples
 
       iex> create_tournament(%{field: value})
-      {:ok, %Tournament{}}
+      {:ok, %Tournament{}n
 
       iex> create_tournament(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
@@ -70,6 +71,7 @@ defmodule TournamentsApi.Tournaments do
   def update_tournament(%Tournament{} = tournament, attrs) do
     tournament
     |> Tournament.changeset(attrs)
+    |> Ecto.Changeset.put_change(:organization, attrs["organization_id"])
     |> Repo.update()
   end
 
