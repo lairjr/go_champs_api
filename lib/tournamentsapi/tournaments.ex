@@ -297,4 +297,103 @@ defmodule TournamentsApi.Tournaments do
   def change_tournament_team(%TournamentTeam{} = tournament_team) do
     TournamentTeam.changeset(tournament_team, %{})
   end
+
+  alias TournamentsApi.Tournaments.TournamentGame
+
+  @doc """
+  Returns the list of tournament_games.
+
+  ## Examples
+
+      iex> list_tournament_games()
+      [%TournamentGame{}, ...]
+
+  """
+  def list_tournament_games(tournament_id) do
+    Repo.all(TournamentGame, tournament_id: tournament_id)
+  end
+
+  @doc """
+  Gets a single tournament_game.
+
+  Raises `Ecto.NoResultsError` if the Tournament game does not exist.
+
+  ## Examples
+
+      iex> get_tournament_game!(123)
+      %TournamentGame{}
+
+      iex> get_tournament_game!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tournament_game!(id, tournament_id),
+    do: Repo.get_by!(TournamentGame, id: id, tournament_id: tournament_id)
+
+  @doc """
+  Creates a tournament_game.
+
+  ## Examples
+
+      iex> create_tournament_game(%{field: value})
+      {:ok, %TournamentGame{}}
+
+      iex> create_tournament_game(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tournament_game(attrs \\ %{}) do
+    %TournamentGame{}
+    |> TournamentGame.changeset(attrs)
+    |> Ecto.Changeset.put_change(:game, attrs["game_id"])
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a tournament_game.
+
+  ## Examples
+
+      iex> update_tournament_game(tournament_game, %{field: new_value})
+      {:ok, %TournamentGame{}}
+
+      iex> update_tournament_game(tournament_game, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tournament_game(%TournamentGame{} = tournament_game, attrs) do
+    tournament_game
+    |> TournamentGame.changeset(attrs)
+    |> Ecto.Changeset.put_change(:game, attrs["game_id"])
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TournamentGame.
+
+  ## Examples
+
+      iex> delete_tournament_game(tournament_game)
+      {:ok, %TournamentGame{}}
+
+      iex> delete_tournament_game(tournament_game)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tournament_game(%TournamentGame{} = tournament_game) do
+    Repo.delete(tournament_game)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tournament_game changes.
+
+  ## Examples
+
+      iex> change_tournament_game(tournament_game)
+      %Ecto.Changeset{source: %TournamentGame{}}
+
+  """
+  def change_tournament_game(%TournamentGame{} = tournament_game) do
+    TournamentGame.changeset(tournament_game, %{})
+  end
 end

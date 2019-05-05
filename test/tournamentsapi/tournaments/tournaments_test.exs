@@ -204,4 +204,70 @@ defmodule TournamentsApi.TournamentsTest do
       assert %Ecto.Changeset{} = Tournaments.change_tournament_team(tournament_team)
     end
   end
+
+  describe "tournament_games" do
+    alias TournamentsApi.Tournaments.TournamentGame
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def tournament_game_fixture(attrs \\ %{}) do
+      {:ok, tournament_game} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Tournaments.create_tournament_game()
+
+      tournament_game
+    end
+
+    test "list_tournament_games/0 returns all tournament_games" do
+      tournament_game = tournament_game_fixture()
+      assert Tournaments.list_tournament_games() == [tournament_game]
+    end
+
+    test "get_tournament_game!/1 returns the tournament_game with given id" do
+      tournament_game = tournament_game_fixture()
+      assert Tournaments.get_tournament_game!(tournament_game.id) == tournament_game
+    end
+
+    test "create_tournament_game/1 with valid data creates a tournament_game" do
+      assert {:ok, %TournamentGame{} = tournament_game} =
+               Tournaments.create_tournament_game(@valid_attrs)
+    end
+
+    test "create_tournament_game/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_game(@invalid_attrs)
+    end
+
+    test "update_tournament_game/2 with valid data updates the tournament_game" do
+      tournament_game = tournament_game_fixture()
+
+      assert {:ok, %TournamentGame{} = tournament_game} =
+               Tournaments.update_tournament_game(tournament_game, @update_attrs)
+    end
+
+    test "update_tournament_game/2 with invalid data returns error changeset" do
+      tournament_game = tournament_game_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament_game(tournament_game, @invalid_attrs)
+
+      assert tournament_game == Tournaments.get_tournament_game!(tournament_game.id)
+    end
+
+    test "delete_tournament_game/1 deletes the tournament_game" do
+      tournament_game = tournament_game_fixture()
+      assert {:ok, %TournamentGame{}} = Tournaments.delete_tournament_game(tournament_game)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Tournaments.get_tournament_game!(tournament_game.id)
+      end
+    end
+
+    test "change_tournament_game/1 returns a tournament_game changeset" do
+      tournament_game = tournament_game_fixture()
+      assert %Ecto.Changeset{} = Tournaments.change_tournament_game(tournament_game)
+    end
+  end
 end
