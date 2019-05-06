@@ -4,8 +4,8 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.Tournament
 
-  @create_attrs %{}
-  @update_attrs %{}
+  @create_attrs %{name: "some name"}
+  @update_attrs %{name: "some updated name"}
   @invalid_attrs %{}
 
   def fixture(:tournament) do

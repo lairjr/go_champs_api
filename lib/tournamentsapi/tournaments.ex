@@ -70,7 +70,7 @@ defmodule TournamentsApi.Tournaments do
   def update_tournament(%Tournament{} = tournament, attrs) do
     tournament
     |> Tournament.changeset(attrs)
-    |> Ecto.Changeset.put_change(:organization, attrs["organization_id"])
+    |> Ecto.Changeset.put_assoc(:organization, attrs["organization_id"])
     |> Repo.update()
   end
 

@@ -6,8 +6,8 @@ defmodule TournamentsApi.TournamentsTest do
   describe "tournaments" do
     alias TournamentsApi.Tournaments.Tournament
 
-    @valid_attrs %{}
-    @update_attrs %{}
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
     @invalid_attrs %{}
 
     def tournament_fixture(attrs \\ %{}) do
@@ -67,9 +67,9 @@ defmodule TournamentsApi.TournamentsTest do
 
   describe "tournament_groups" do
     alias TournamentsApi.Tournaments.TournamentGroup
-
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
+    
+    @valid_attrs %{name: "some name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
+    @update_attrs %{name: "some updated name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
     @invalid_attrs %{name: nil}
 
     def tournament_group_fixture(attrs \\ %{}) do
@@ -138,8 +138,8 @@ defmodule TournamentsApi.TournamentsTest do
   describe "tournament_teams" do
     alias TournamentsApi.Tournaments.TournamentTeam
 
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
+    @valid_attrs %{name: "some name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
+    @update_attrs %{name: "some updated name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
     @invalid_attrs %{name: nil}
 
     def tournament_team_fixture(attrs \\ %{}) do
@@ -208,8 +208,8 @@ defmodule TournamentsApi.TournamentsTest do
   describe "tournament_games" do
     alias TournamentsApi.Tournaments.TournamentGame
 
-    @valid_attrs %{}
-    @update_attrs %{}
+    @valid_attrs %{tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
+    @update_attrs %{tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
     @invalid_attrs %{}
 
     def tournament_game_fixture(attrs \\ %{}) do
