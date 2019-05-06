@@ -12,7 +12,9 @@ defmodule TournamentsApiWeb.GameController do
   end
 
   def create(conn, %{"game" => game_params}) do
-    with {:ok, %Game{} = game} <- Games.create_game(game_params) do
+    with {:ok, %Game{} = created_game} <- Games.create_game(game_params) do
+      game = Games.get_game!(created_game.id)
+
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.game_path(conn, :show, game))

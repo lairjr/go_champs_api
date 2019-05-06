@@ -30,7 +30,9 @@ defmodule TournamentsApi.OrganizationsTest do
     end
 
     test "create_organization/1 with valid data creates a organization" do
-      assert {:ok, %Organization{} = organization} = Organizations.create_organization(@valid_attrs)
+      assert {:ok, %Organization{} = organization} =
+               Organizations.create_organization(@valid_attrs)
+
       assert organization.link == "some link"
       assert organization.name == "some name"
     end
@@ -41,14 +43,20 @@ defmodule TournamentsApi.OrganizationsTest do
 
     test "update_organization/2 with valid data updates the organization" do
       organization = organization_fixture()
-      assert {:ok, %Organization{} = organization} = Organizations.update_organization(organization, @update_attrs)
+
+      assert {:ok, %Organization{} = organization} =
+               Organizations.update_organization(organization, @update_attrs)
+
       assert organization.link == "some updated link"
       assert organization.name == "some updated name"
     end
 
     test "update_organization/2 with invalid data returns error changeset" do
       organization = organization_fixture()
-      assert {:error, %Ecto.Changeset{}} = Organizations.update_organization(organization, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Organizations.update_organization(organization, @invalid_attrs)
+
       assert organization == Organizations.get_organization!(organization.id)
     end
 

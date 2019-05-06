@@ -9,6 +9,5 @@ defmodule TournamentsApi.Repo.Migrations.CreateOrganizations do
 
       timestamps()
     end
-
   end
 end

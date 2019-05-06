@@ -22,9 +22,11 @@ defmodule TournamentsApi.Games.Game do
     game
     |> cast(attrs, [
       :away_score,
+      :away_team_id,
       :away_team_name,
       :datetime,
       :home_score,
+      :home_team_id,
       :home_team_name,
       :location
     ])

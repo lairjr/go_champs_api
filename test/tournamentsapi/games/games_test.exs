@@ -29,6 +29,7 @@ defmodule TournamentsApi.GamesTest do
         attrs
         |> Enum.into(@valid_attrs)
         |> Games.create_game()
+
       game
     end
 

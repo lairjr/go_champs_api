@@ -53,8 +53,15 @@ defmodule TournamentsApiWeb.OrganizationControllerTest do
   describe "update organization" do
     setup [:create_organization]
 
-    test "renders organization when data is valid", %{conn: conn, organization: %Organization{id: id} = organization} do
-      conn = put(conn, Routes.organization_path(conn, :update, organization), organization: @update_attrs)
+    test "renders organization when data is valid", %{
+      conn: conn,
+      organization: %Organization{id: id} = organization
+    } do
+      conn =
+        put(conn, Routes.organization_path(conn, :update, organization),
+          organization: @update_attrs
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.organization_path(conn, :show, id))
@@ -67,7 +74,11 @@ defmodule TournamentsApiWeb.OrganizationControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, organization: organization} do
-      conn = put(conn, Routes.organization_path(conn, :update, organization), organization: @invalid_attrs)
+      conn =
+        put(conn, Routes.organization_path(conn, :update, organization),
+          organization: @invalid_attrs
+        )
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
