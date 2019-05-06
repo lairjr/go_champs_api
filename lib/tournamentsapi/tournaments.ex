@@ -7,7 +7,6 @@ defmodule TournamentsApi.Tournaments do
   alias TournamentsApi.Repo
 
   alias TournamentsApi.Tournaments.Tournament
-  alias TournamentsApi.Organizations.Organization
 
   @doc """
   Returns the list of tournaments.

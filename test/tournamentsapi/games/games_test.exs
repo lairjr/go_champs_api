@@ -8,14 +8,18 @@ defmodule TournamentsApi.GamesTest do
 
     @valid_attrs %{
       away_score: 42,
+      away_team_name: "some away team name",
       datetime: "2010-04-17T14:00:00Z",
       home_score: 42,
+      home_team_name: "some home team name",
       location: "some location"
     }
     @update_attrs %{
       away_score: 43,
+      away_team_name: "some updated away team name",
       datetime: "2011-05-18T15:01:01Z",
       home_score: 43,
+      home_team_name: "some updated home team name",
       location: "some updated location"
     }
     @invalid_attrs %{away_score: nil, datetime: nil, home_score: nil, location: nil}
@@ -25,7 +29,6 @@ defmodule TournamentsApi.GamesTest do
         attrs
         |> Enum.into(@valid_attrs)
         |> Games.create_game()
-
       game
     end
 
@@ -36,7 +39,7 @@ defmodule TournamentsApi.GamesTest do
 
     test "get_game!/1 returns the game with given id" do
       game = game_fixture()
-      assert Games.get_game!(game.id) == game
+      assert Games.get_game!(game.id).id == game.id
     end
 
     test "create_game/1 with valid data creates a game" do
@@ -63,7 +66,13 @@ defmodule TournamentsApi.GamesTest do
     test "update_game/2 with invalid data returns error changeset" do
       game = game_fixture()
       assert {:error, %Ecto.Changeset{}} = Games.update_game(game, @invalid_attrs)
-      assert game == Games.get_game!(game.id)
+      result_game = Games.get_game!(game.id)
+      assert game.away_score == result_game.away_score
+      assert game.away_team_name == result_game.away_team_name
+      assert game.datetime == result_game.datetime
+      assert game.home_score == result_game.home_score
+      assert game.home_team_name == result_game.home_team_name
+      assert game.location == result_game.location
     end
 
     test "delete_game/1 deletes the game" do

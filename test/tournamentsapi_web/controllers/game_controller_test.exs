@@ -6,14 +6,18 @@ defmodule TournamentsApiWeb.GameControllerTest do
 
   @create_attrs %{
     away_score: 42,
+    away_team_name: "some away team name",
     datetime: "2010-04-17T14:00:00Z",
     home_score: 42,
+    home_team_name: "some home team name",
     location: "some location"
   }
   @update_attrs %{
     away_score: 43,
+    away_team_name: "some updated away team name",
     datetime: "2011-05-18T15:01:01Z",
     home_score: 43,
+    home_team_name: "some updated home team name",
     location: "some updated location"
   }
   @invalid_attrs %{away_score: nil, datetime: nil, home_score: nil, location: nil}
