@@ -66,10 +66,11 @@ defmodule TournamentsApi.TournamentsTest do
   end
 
   describe "tournament_groups" do
+    alias TournamentsApi.Tournaments.Tournament
     alias TournamentsApi.Tournaments.TournamentGroup
     
-    @valid_attrs %{name: "some name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
-    @update_attrs %{name: "some updated name", tournament_id: "443da70e-3be4-4262-a047-0a21620a57a7"}
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
     def tournament_group_fixture(attrs \\ %{}) do
@@ -91,9 +92,12 @@ defmodule TournamentsApi.TournamentsTest do
       assert Tournaments.get_tournament_group!(tournament_group.id) == tournament_group
     end
 
+    @tag runnable: true
     test "create_tournament_group/1 with valid data creates a tournament_group" do
+      {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(%{name: "some tournament"})
+      attrs = Map.merge(@valid_attrs, %{tournament_id: tournament.id})
       assert {:ok, %TournamentGroup{} = tournament_group} =
-               Tournaments.create_tournament_group(@valid_attrs)
+               Tournaments.create_tournament_group(attrs)
 
       assert tournament_group.name == "some name"
     end
