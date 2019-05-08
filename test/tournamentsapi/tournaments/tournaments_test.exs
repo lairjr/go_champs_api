@@ -18,6 +18,11 @@ defmodule TournamentsApi.TournamentsTest do
 
       tournament
     end
+   
+    def map_tournament_id(attrs \\ %{}) do
+      tournament = tournament_fixture(%{name: "some tournament name"})
+      Map.merge(attrs, %{tournament_id: tournament.id})
+    end
 
     test "list_tournaments/0 returns all tournaments" do
       tournament = tournament_fixture()
@@ -77,6 +82,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_group} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> map_tournament_id()
         |> Tournaments.create_tournament_group()
 
       tournament_group
@@ -84,18 +90,16 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "list_tournament_groups/0 returns all tournament_groups" do
       tournament_group = tournament_group_fixture()
-      assert Tournaments.list_tournament_groups() == [tournament_group]
+      assert Tournaments.list_tournament_groups(tournament_group.tournament_id) == [tournament_group]
     end
 
     test "get_tournament_group!/1 returns the tournament_group with given id" do
       tournament_group = tournament_group_fixture()
-      assert Tournaments.get_tournament_group!(tournament_group.id) == tournament_group
+      assert Tournaments.get_tournament_group!(tournament_group.id, tournament_group.tournament_id) == tournament_group
     end
 
-    @tag runnable: true
     test "create_tournament_group/1 with valid data creates a tournament_group" do
-      {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(%{name: "some tournament"})
-      attrs = Map.merge(@valid_attrs, %{tournament_id: tournament.id})
+      attrs = map_tournament_id(@valid_attrs)
       assert {:ok, %TournamentGroup{} = tournament_group} =
                Tournaments.create_tournament_group(attrs)
 
@@ -129,7 +133,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentGroup{}} = Tournaments.delete_tournament_group(tournament_group)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_group!(tournament_group.id)
+        Tournaments.get_tournament_group!(tournament_group.id, tournament_group.tournament_id)
       end
     end
 
@@ -150,6 +154,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_team} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> map_tournament_id()
         |> Tournaments.create_tournament_team()
 
       tournament_team
@@ -157,12 +162,13 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "list_tournament_teams/0 returns all tournament_teams" do
       tournament_team = tournament_team_fixture()
-      assert Tournaments.list_tournament_teams() == [tournament_team]
+      [result_team] = Tournaments.list_tournament_teams(tournament_team.tournament_id)
+      assert result_team.id == tournament_team.id
     end
 
     test "get_tournament_team!/1 returns the tournament_team with given id" do
       tournament_team = tournament_team_fixture()
-      assert Tournaments.get_tournament_team!(tournament_team.id) == tournament_team
+      assert Tournaments.get_tournament_team!(tournament_team.id, tournament_team.tournament_id) == tournament_team
     end
 
     test "create_tournament_team/1 with valid data creates a tournament_team" do
@@ -185,6 +191,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert tournament_team.name == "some updated name"
     end
 
+    @tag runnable: true
     test "update_tournament_team/2 with invalid data returns error changeset" do
       tournament_team = tournament_team_fixture()
 
@@ -199,7 +206,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentTeam{}} = Tournaments.delete_tournament_team(tournament_team)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_team!(tournament_team.id)
+        Tournaments.get_tournament_team!(tournament_team.id, tournament_team.tournament_id)
       end
     end
 
@@ -220,6 +227,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_game} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> map_tournament_id()
         |> Tournaments.create_tournament_game()
 
       tournament_game
@@ -227,12 +235,13 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "list_tournament_games/0 returns all tournament_games" do
       tournament_game = tournament_game_fixture()
-      assert Tournaments.list_tournament_games() == [tournament_game]
+      [result_game] = Tournaments.list_tournament_games(tournament_game.tournament_id)
+      assert result_game.id == tournament_game.id
     end
 
     test "get_tournament_game!/1 returns the tournament_game with given id" do
       tournament_game = tournament_game_fixture()
-      assert Tournaments.get_tournament_game!(tournament_game.id) == tournament_game
+      assert Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_id) == tournament_game
     end
 
     test "create_tournament_game/1 with valid data creates a tournament_game" do
@@ -265,7 +274,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentGame{}} = Tournaments.delete_tournament_game(tournament_game)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_game!(tournament_game.id)
+        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_id)
       end
     end
 
