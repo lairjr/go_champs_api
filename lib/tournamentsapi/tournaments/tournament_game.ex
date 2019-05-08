@@ -15,7 +15,7 @@ defmodule TournamentsApi.Tournaments.TournamentGame do
   @doc false
   def changeset(tournament_game, attrs) do
     tournament_game
-    |> cast(attrs, [:tournament_id])
+    |> cast(attrs, [:tournament_id, :game_id])
     |> validate_required([:tournament_id])
   end
 end
