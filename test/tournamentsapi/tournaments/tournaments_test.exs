@@ -9,7 +9,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
-    @invalid_attrs %{}
+    @invalid_attrs %{name: nil}
 
     def tournament_fixture(attrs \\ %{}) do
       {:ok, tournament} =
