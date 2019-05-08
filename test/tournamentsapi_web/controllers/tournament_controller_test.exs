@@ -1,15 +1,21 @@
 defmodule TournamentsApiWeb.TournamentControllerTest do
   use TournamentsApiWeb.ConnCase
 
+  alias TournamentsApi.Organizations
+  alias TournamentsApi.Organizations.Organization
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.Tournament
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
-  @invalid_attrs %{}
+  @invalid_attrs %{name: nil}
 
   def fixture(:tournament) do
-    {:ok, tournament} = Tournaments.create_tournament(@create_attrs)
+    {:ok, organization} =
+      Organizations.create_organization(%{name: "some organization", link: "some-link"})
+
+    attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
+    {:ok, tournament} = Tournaments.create_tournament(attrs)
     tournament
   end
 
@@ -26,7 +32,12 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
 
   describe "create tournament" do
     test "renders tournament when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.tournament_path(conn, :create), tournament: @create_attrs)
+      {:ok, organization} =
+        Organizations.create_organization(%{name: "some organization", link: "some-link"})
+
+      attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
+
+      conn = post(conn, Routes.tournament_path(conn, :create), tournament: attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.tournament_path(conn, :show, id))
