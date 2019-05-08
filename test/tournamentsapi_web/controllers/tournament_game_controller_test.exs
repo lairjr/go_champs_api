@@ -7,7 +7,6 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
 
   @create_attrs %{}
   @update_attrs %{}
-  @invalid_attrs %{tournament_id: nil}
 
   def fixture(:tournament_game) do
     attrs = map_tournament_id(@create_attrs)

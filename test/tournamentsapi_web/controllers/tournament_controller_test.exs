@@ -2,7 +2,6 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
   use TournamentsApiWeb.ConnCase
 
   alias TournamentsApi.Organizations
-  alias TournamentsApi.Organizations.Organization
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.Tournament
 

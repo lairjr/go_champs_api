@@ -78,7 +78,6 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
       conn: conn,
       tournament_group: %TournamentGroup{id: id} = tournament_group
     } do
-      # attrs = map_tournament_id(@update_attrs)
       conn =
         put(
           conn,
