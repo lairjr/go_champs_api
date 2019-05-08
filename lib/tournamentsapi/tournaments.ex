@@ -266,7 +266,7 @@ defmodule TournamentsApi.Tournaments do
   def update_tournament_team(%TournamentTeam{} = tournament_team, attrs) do
     tournament_team
     |> TournamentTeam.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:tournament_group, attrs["tournament_group_id"])
+    |> Ecto.Changeset.put_assoc(:tournament_group, attrs["tournament_group_id"])
     |> Repo.update()
   end
 

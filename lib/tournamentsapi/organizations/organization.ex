@@ -8,7 +8,7 @@ defmodule TournamentsApi.Organizations.Organization do
     field :link, :string
     field :name, :string
 
-    has_many :tournaments, Tournament 
+    has_many :tournaments, Tournament
     timestamps()
   end
 

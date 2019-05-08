@@ -14,8 +14,8 @@ defmodule TournamentsApi.Tournaments.Tournament do
 
     belongs_to :organization, Organization
 
-    has_many :games, TournamentGame    
-    has_many :groups, TournamentGroup 
+    has_many :games, TournamentGame
+    has_many :groups, TournamentGroup
     has_many :teams, TournamentTeam
 
     timestamps()
@@ -25,6 +25,6 @@ defmodule TournamentsApi.Tournaments.Tournament do
   def changeset(tournament, attrs) do
     tournament
     |> cast(attrs, [:name, :link, :team_stats_structure, :organization_id])
-    |> validate_required([:name])
+    |> validate_required([:name, :organization_id])
   end
 end
