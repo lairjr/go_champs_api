@@ -364,7 +364,7 @@ defmodule TournamentsApi.Tournaments do
   def update_tournament_game(%TournamentGame{} = tournament_game, attrs) do
     tournament_game
     |> TournamentGame.changeset(attrs)
-    |> Ecto.Changeset.put_change(:game, attrs["game_id"])
+    |> Ecto.Changeset.cast_assoc(:game)
     |> Repo.update()
   end
 
