@@ -23,7 +23,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
 
     Map.merge(attrs, %{tournament_id: tournament.id})
   end
- 
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -40,7 +40,9 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
       attrs = map_tournament_id(@create_attrs)
 
       conn =
-        post(conn, Routes.tournament_game_path(conn, :create, attrs.tournament_id), tournament_game: attrs)
+        post(conn, Routes.tournament_game_path(conn, :create, attrs.tournament_id),
+          tournament_game: attrs
+        )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -60,13 +62,21 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
       tournament_game: %TournamentGame{id: id} = tournament_game
     } do
       conn =
-        put(conn, Routes.tournament_game_path(conn, :update, tournament_game.tournament_id, tournament_game),
+        put(
+          conn,
+          Routes.tournament_game_path(
+            conn,
+            :update,
+            tournament_game.tournament_id,
+            tournament_game
+          ),
           tournament_game: @update_attrs
         )
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.tournament_game_path(conn, :show, tournament_game.tournament_id, id))
+      conn =
+        get(conn, Routes.tournament_game_path(conn, :show, tournament_game.tournament_id, id))
 
       assert %{
                "id" => id
@@ -78,11 +88,24 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
     setup [:create_tournament_game]
 
     test "deletes chosen tournament_game", %{conn: conn, tournament_game: tournament_game} do
-      conn = delete(conn, Routes.tournament_game_path(conn, :delete, tournament_game.tournament_id, tournament_game))
+      conn =
+        delete(
+          conn,
+          Routes.tournament_game_path(
+            conn,
+            :delete,
+            tournament_game.tournament_id,
+            tournament_game
+          )
+        )
+
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.tournament_game_path(conn, :show, tournament_game.tournament_id, tournament_game))
+        get(
+          conn,
+          Routes.tournament_game_path(conn, :show, tournament_game.tournament_id, tournament_game)
+        )
       end
     end
   end

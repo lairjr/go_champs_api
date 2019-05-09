@@ -43,9 +43,11 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
   describe "create tournament_team" do
     test "renders tournament_team when data is valid", %{conn: conn} do
       attrs = map_tournament_id(@create_attrs)
-      
+
       conn =
-        post(conn, Routes.tournament_team_path(conn, :create, attrs.tournament_id), tournament_team: attrs)
+        post(conn, Routes.tournament_team_path(conn, :create, attrs.tournament_id),
+          tournament_team: attrs
+        )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -61,7 +63,9 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
       attrs = map_tournament_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.tournament_team_path(conn, :create, attrs.tournament_id), tournament_team: @invalid_attrs)
+        post(conn, Routes.tournament_team_path(conn, :create, attrs.tournament_id),
+          tournament_team: @invalid_attrs
+        )
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -91,7 +95,14 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn, tournament_team: tournament_team} do
       conn =
-        put(conn, Routes.tournament_team_path(conn, :update, tournament_team.tournament_id, tournament_team),
+        put(
+          conn,
+          Routes.tournament_team_path(
+            conn,
+            :update,
+            tournament_team.tournament_id,
+            tournament_team
+          ),
           tournament_team: @invalid_attrs
         )
 
@@ -103,11 +114,24 @@ defmodule TournamentsApiWeb.TournamentTeamControllerTest do
     setup [:create_tournament_team]
 
     test "deletes chosen tournament_team", %{conn: conn, tournament_team: tournament_team} do
-      conn = delete(conn, Routes.tournament_team_path(conn, :delete, tournament_team.tournament_id, tournament_team))
+      conn =
+        delete(
+          conn,
+          Routes.tournament_team_path(
+            conn,
+            :delete,
+            tournament_team.tournament_id,
+            tournament_team
+          )
+        )
+
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.tournament_team_path(conn, :show, tournament_team.tournament_id, tournament_team))
+        get(
+          conn,
+          Routes.tournament_team_path(conn, :show, tournament_team.tournament_id, tournament_team)
+        )
       end
     end
   end
