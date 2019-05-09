@@ -11,7 +11,7 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
 
   def fixture(:tournament) do
     {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", link: "some-link"})
+      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
     attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(attrs)
@@ -32,7 +32,7 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
   describe "create tournament" do
     test "renders tournament when data is valid", %{conn: conn} do
       {:ok, organization} =
-        Organizations.create_organization(%{name: "some organization", link: "some-link"})
+        Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
       attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
 

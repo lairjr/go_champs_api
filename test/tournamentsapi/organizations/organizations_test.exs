@@ -6,9 +6,9 @@ defmodule TournamentsApi.OrganizationsTest do
   describe "organizations" do
     alias TournamentsApi.Organizations.Organization
 
-    @valid_attrs %{link: "some link", name: "some name"}
-    @update_attrs %{link: "some updated link", name: "some updated name"}
-    @invalid_attrs %{link: nil, name: nil}
+    @valid_attrs %{slug: "some slug", name: "some name"}
+    @update_attrs %{slug: "some updated slug", name: "some updated name"}
+    @invalid_attrs %{slug: nil, name: nil}
 
     def organization_fixture(attrs \\ %{}) do
       {:ok, organization} =
@@ -33,7 +33,7 @@ defmodule TournamentsApi.OrganizationsTest do
       assert {:ok, %Organization{} = organization} =
                Organizations.create_organization(@valid_attrs)
 
-      assert organization.link == "some link"
+      assert organization.slug == "some slug"
       assert organization.name == "some name"
     end
 
@@ -47,7 +47,7 @@ defmodule TournamentsApi.OrganizationsTest do
       assert {:ok, %Organization{} = organization} =
                Organizations.update_organization(organization, @update_attrs)
 
-      assert organization.link == "some updated link"
+      assert organization.slug == "some updated slug"
       assert organization.name == "some updated name"
     end
 

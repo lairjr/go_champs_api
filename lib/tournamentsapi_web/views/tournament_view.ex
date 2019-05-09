@@ -14,7 +14,7 @@ defmodule TournamentsApiWeb.TournamentView do
     %{
       id: tournament.id,
       name: tournament.name,
-      link: tournament.link,
+      slug: tournament.slug,
       team_stats_structure: tournament.team_stats_structure
     }
   end

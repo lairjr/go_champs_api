@@ -5,7 +5,7 @@ defmodule TournamentsApi.Teams.Team do
 
   schema "teams" do
     field :name, :string
-    field :link, :string
+    field :slug, :string
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule TournamentsApi.Teams.Team do
   @doc false
   def changeset(team, attrs) do
     team
-    |> cast(attrs, [:name, :link])
+    |> cast(attrs, [:name, :slug])
     |> validate_required([:name])
   end
 end

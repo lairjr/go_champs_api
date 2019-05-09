@@ -23,7 +23,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     def map_organization_id(attrs \\ %{}) do
       {:ok, %Organizations.Organization{} = organization} =
-        Organizations.create_organization(%{name: "some organization name", link: "some-link"})
+        Organizations.create_organization(%{name: "some organization name", slug: "some-slug"})
 
       Map.merge(attrs, %{organization_id: organization.id})
     end

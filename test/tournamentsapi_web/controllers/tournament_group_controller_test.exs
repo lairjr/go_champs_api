@@ -21,7 +21,7 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
 
   def map_tournament_id(attrs \\ %{}) do
     {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", link: "some-link"})
+      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
     tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)

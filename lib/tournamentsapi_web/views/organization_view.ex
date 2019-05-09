@@ -11,6 +11,6 @@ defmodule TournamentsApiWeb.OrganizationView do
   end
 
   def render("organization.json", %{organization: organization}) do
-    %{id: organization.id, name: organization.name, link: organization.link}
+    %{id: organization.id, name: organization.name, slug: organization.slug}
   end
 end

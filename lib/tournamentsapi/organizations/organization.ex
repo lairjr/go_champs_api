@@ -5,7 +5,7 @@ defmodule TournamentsApi.Organizations.Organization do
   alias TournamentsApi.Tournaments.Tournament
 
   schema "organizations" do
-    field :link, :string
+    field :slug, :string
     field :name, :string
 
     has_many :tournaments, Tournament
@@ -15,7 +15,7 @@ defmodule TournamentsApi.Organizations.Organization do
   @doc false
   def changeset(organization, attrs) do
     organization
-    |> cast(attrs, [:name, :link])
-    |> validate_required([:name, :link])
+    |> cast(attrs, [:name, :slug])
+    |> validate_required([:name, :slug])
   end
 end

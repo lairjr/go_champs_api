@@ -5,14 +5,14 @@ defmodule TournamentsApiWeb.OrganizationControllerTest do
   alias TournamentsApi.Organizations.Organization
 
   @create_attrs %{
-    link: "some link",
+    slug: "some slug",
     name: "some name"
   }
   @update_attrs %{
-    link: "some updated link",
+    slug: "some updated slug",
     name: "some updated name"
   }
-  @invalid_attrs %{link: nil, name: nil}
+  @invalid_attrs %{slug: nil, name: nil}
 
   def fixture(:organization) do
     {:ok, organization} = Organizations.create_organization(@create_attrs)
@@ -39,7 +39,7 @@ defmodule TournamentsApiWeb.OrganizationControllerTest do
 
       assert %{
                "id" => id,
-               "link" => "some link",
+               "slug" => "some slug",
                "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
@@ -68,7 +68,7 @@ defmodule TournamentsApiWeb.OrganizationControllerTest do
 
       assert %{
                "id" => id,
-               "link" => "some updated link",
+               "slug" => "some updated slug",
                "name" => "some updated name"
              } = json_response(conn, 200)["data"]
     end
