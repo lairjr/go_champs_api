@@ -7,6 +7,7 @@ defmodule TournamentsApi.Tournaments do
   alias TournamentsApi.Repo
 
   alias TournamentsApi.Tournaments.Tournament
+  alias TournamentsApi.Organizations.Organization
 
   @doc """
   Returns the list of tournaments.
@@ -52,7 +53,19 @@ defmodule TournamentsApi.Tournaments do
   def create_tournament(attrs \\ %{}) do
     %Tournament{}
     |> Tournament.changeset(attrs)
+    |> map_organization_slug()
     |> Repo.insert()
+  end
+
+  defp map_organization_slug(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        organization_id = Ecto.Changeset.get_change(changeset, :organization_id)
+        organization = Repo.get(Organization, organization_id)
+        Ecto.Changeset.put_change(changeset, :organization_slug, organization.slug)
+      _ ->
+        changeset
+    end
   end
 
   @doc """

@@ -26,9 +26,9 @@ clube_esportivo =
 
 alias TournamentsApi.Tournaments.Tournament
 
-municipal = Repo.insert!(%Tournament{name: "Liga Municipal", slug: "liga-municipal"})
-lawson = Repo.insert!(%Tournament{name: "Taca Eduardo Lawson", slug: "taca-lawson"})
-liga_amizade = Repo.insert!(%Tournament{name: "Liga de Amizade", slug: "liga-da-amizade"})
+municipal = Repo.insert!(%Tournament{name: "Liga Municipal", slug: "liga-municipal", organization_id: sec_organization.id, organization_slug: sec_organization.slug})
+lawson = Repo.insert!(%Tournament{name: "Taca Eduardo Lawson", slug: "taca-lawson", organization_id: sec_organization.id, organization_slug: sec_organization.slug})
+liga_amizade = Repo.insert!(%Tournament{name: "Liga de Amizade", slug: "liga-da-amizade", organization_id: clube_esportivo.id, organization_slug: clube_esportivo.slug})
 
 # Add teams
 

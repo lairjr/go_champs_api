@@ -4,6 +4,7 @@ defmodule TournamentsApi.Repo.Migrations.ReferenceTournamentToOrganization do
   def change do
     alter table(:tournaments) do
       add :organization_id, references(:organizations, on_delete: :nothing, type: :uuid)
+      add :organization_slug, :string
     end
   end
 end

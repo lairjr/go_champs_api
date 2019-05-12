@@ -11,6 +11,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
     field :name, :string
     field :slug, :string
     field :team_stats_structure, :map
+    field :organization_slug, :string
 
     belongs_to :organization, Organization
 
@@ -24,7 +25,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
   @doc false
   def changeset(tournament, attrs) do
     tournament
-    |> cast(attrs, [:name, :slug, :team_stats_structure, :organization_id])
+    |> cast(attrs, [:name, :slug, :team_stats_structure, :organization_id, :organization_slug])
     |> validate_required([:name, :organization_id])
   end
 end
