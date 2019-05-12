@@ -27,6 +27,18 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
       conn = get(conn, Routes.tournament_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
+
+    @tag runnable: true
+    test "lists all tournaments matching where", %{conn: conn} do
+      fixture(:tournament)
+      second_tournament = fixture(:tournament)
+
+      where = %{ "organization_id" => second_tournament.organization_id}
+
+      conn = get(conn, Routes.tournament_path(conn, :index, where: where))
+      [tournament_result] = json_response(conn, 200)["data"]
+      assert tournament_result["id"] == second_tournament.id
+    end
   end
 
   describe "create tournament" do

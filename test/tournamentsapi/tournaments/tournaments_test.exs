@@ -38,6 +38,14 @@ defmodule TournamentsApi.TournamentsTest do
       assert Tournaments.list_tournaments() == [tournament]
     end
 
+    @tag runnable: true
+    test "list_tournaments/1 returns all tournaments pertaining to some organization" do
+      tournament_fixture()
+      second_tournament = tournament_fixture()
+      where = [organization_id: second_tournament.organization_id]
+      assert Tournaments.list_tournaments(where) == [second_tournament]
+    end
+
     test "get_tournament!/1 returns the tournament with given id" do
       tournament = tournament_fixture()
       assert Tournaments.get_tournament!(tournament.id) == tournament

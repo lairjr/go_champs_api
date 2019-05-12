@@ -6,8 +6,19 @@ defmodule TournamentsApiWeb.TournamentController do
 
   action_fallback TournamentsApiWeb.FallbackController
 
-  def index(conn, _params) do
-    tournaments = Tournaments.list_tournaments()
+  defp map_to_keyword(map) do
+    Enum.map(map, fn({key, value}) -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
+    tournaments = case params do
+      %{"where" => where} ->
+        where 
+        |> map_to_keyword()
+        |> Tournaments.list_tournaments()
+      _ -> 
+        Tournaments.list_tournaments()
+    end
     render(conn, "index.json", tournaments: tournaments)
   end
 

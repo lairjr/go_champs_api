@@ -23,6 +23,20 @@ defmodule TournamentsApi.Tournaments do
   end
 
   @doc """
+  Returns the list of tournaments filter by keywork param.
+
+  ## Examples
+
+      iex> list_tournaments([name: "some name"])
+      [%Tournament{}, ...]
+
+  """
+  def list_tournaments(where) do
+    query = from t in Tournament, where: ^where
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single tournament.
 
   Raises `Ecto.NoResultsError` if the Tournament does not exist.
