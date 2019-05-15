@@ -3,7 +3,6 @@ defmodule TournamentsApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    plug Corsica, origins: "*"
   end
 
   scope "/api", TournamentsApiWeb do
