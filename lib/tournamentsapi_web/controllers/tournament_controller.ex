@@ -23,7 +23,9 @@ defmodule TournamentsApiWeb.TournamentController do
   end
 
   def create(conn, %{"tournament" => tournament_params}) do
-    with {:ok, %Tournament{} = tournament} <- Tournaments.create_tournament(tournament_params) do
+    with {:ok, %Tournament{} = created_tournament} <- Tournaments.create_tournament(tournament_params) do
+      tournament = Tournaments.get_tournament!(created_tournament.id)
+
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.tournament_path(conn, :show, tournament))

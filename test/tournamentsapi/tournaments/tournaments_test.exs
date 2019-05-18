@@ -48,7 +48,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "get_tournament!/1 returns the tournament with given id" do
       tournament = tournament_fixture()
-      assert Tournaments.get_tournament!(tournament.id) == tournament
+      assert Tournaments.get_tournament!(tournament.id).id == tournament.id
     end
 
     test "create_tournament/1 with valid data creates a tournament" do
@@ -73,7 +73,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:error, %Ecto.Changeset{}} =
                Tournaments.update_tournament(tournament, @invalid_attrs)
 
-      assert tournament == Tournaments.get_tournament!(tournament.id)
+      assert tournament.id == Tournaments.get_tournament!(tournament.id).id
     end
 
     test "delete_tournament/1 deletes the tournament" do
