@@ -17,7 +17,7 @@ defmodule TournamentsApiWeb.TournamentView do
         slug: tournament.slug,
         team_stats_structure: tournament.team_stats_structure,
         games: render_many(tournament.games, TournamentGameView, "tournament_game.json"),
-        groups: render_many(tournament.teams, TournamentGroupView, "tournament_group.json"),
+        groups: render_many(tournament.groups, TournamentGroupView, "tournament_group.json"),
         teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json"),
       }
     } 
