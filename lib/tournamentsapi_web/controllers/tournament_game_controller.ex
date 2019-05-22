@@ -18,7 +18,7 @@ defmodule TournamentsApiWeb.TournamentGameController do
     tournament_game_params =
       Map.merge(tournament_game_params, %{"tournament_id" => tournament_id})
 
-    with {:ok, %TournamentGame{} = tournament_game} <-
+    with {:ok, %{tournament_game: tournament_game} } <-
            Tournaments.create_tournament_game(tournament_game_params) do
       conn
       |> put_status(:created)

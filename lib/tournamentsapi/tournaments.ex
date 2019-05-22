@@ -6,6 +6,7 @@ defmodule TournamentsApi.Tournaments do
   import Ecto.Query, warn: false
   alias TournamentsApi.Repo
 
+  alias TournamentsApi.Games.Game
   alias TournamentsApi.Tournaments.Tournament
   alias TournamentsApi.Organizations.Organization
 
@@ -373,9 +374,16 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def create_tournament_game(attrs \\ %{}) do
-    %TournamentGame{}
-    |> TournamentGame.changeset(attrs)
-    |> Repo.insert()
+    multi_struct = Ecto.Multi.new
+    |> Ecto.Multi.insert(:game, Game.changeset(%Game{}, attrs["game"]))
+    |> Ecto.Multi.run(:tournament_game, fn repo, %{game: game} -> 
+      IO.inspect(game)
+      %TournamentGame{game_id: game.id}
+      |> TournamentGame.changeset(attrs)
+      |> repo.insert()
+    end)
+
+    Repo.transaction(multi_struct)
   end
 
   @doc """
