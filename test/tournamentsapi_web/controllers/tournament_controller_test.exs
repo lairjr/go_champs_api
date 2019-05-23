@@ -33,7 +33,7 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
       fixture(:tournament)
       second_tournament = fixture(:tournament)
 
-      where = %{ "organization_id" => second_tournament.organization_id}
+      where = %{"organization_id" => second_tournament.organization_id}
 
       conn = get(conn, Routes.tournament_path(conn, :index, where: where))
       [tournament_result] = json_response(conn, 200)["data"]

@@ -82,6 +82,7 @@ defmodule TournamentsApi.Tournaments do
         organization_id = Ecto.Changeset.get_change(changeset, :organization_id)
         organization = Repo.get(Organization, organization_id)
         Ecto.Changeset.put_change(changeset, :organization_slug, organization.slug)
+
       _ ->
         changeset
     end
@@ -360,7 +361,9 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def get_tournament_game!(id, tournament_id),
-    do: Repo.get_by!(TournamentGame, id: id, tournament_id: tournament_id)
+    do:
+      Repo.get_by!(TournamentGame, id: id, tournament_id: tournament_id)
+      |> Repo.preload([:game])
 
   @doc """
   Creates a tournament_game.
@@ -375,14 +378,16 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def create_tournament_game(attrs \\ %{}) do
-    multi_struct = Ecto.Multi.new
-    |> Ecto.Multi.insert(:game, Game.changeset(%Game{}, attrs["game"]))
-    |> Ecto.Multi.run(:tournament_game, fn repo, %{game: game} -> 
-      IO.inspect(game)
-      %TournamentGame{game_id: game.id}
-      |> TournamentGame.changeset(attrs)
-      |> repo.insert()
-    end)
+    multi_struct =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:game, Game.changeset(%Game{}, attrs["game"]))
+      |> Ecto.Multi.run(:tournament_game, fn repo, %{game: game} ->
+        IO.inspect(game)
+
+        %TournamentGame{game_id: game.id}
+        |> TournamentGame.changeset(attrs)
+        |> repo.insert()
+      end)
 
     Repo.transaction(multi_struct)
   end

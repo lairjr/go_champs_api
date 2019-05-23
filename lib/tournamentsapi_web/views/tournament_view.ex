@@ -10,17 +10,17 @@ defmodule TournamentsApiWeb.TournamentView do
   end
 
   def render("show.json", %{tournament: tournament}) do
-    %{data: 
-      %{
+    %{
+      data: %{
         id: tournament.id,
         name: tournament.name,
         slug: tournament.slug,
         team_stats_structure: tournament.team_stats_structure,
         games: render_many(tournament.games, TournamentGameView, "tournament_game.json"),
         groups: render_many(tournament.groups, TournamentGroupView, "tournament_group.json"),
-        teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json"),
+        teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json")
       }
-    } 
+    }
   end
 
   def render("tournament.json", %{tournament: tournament}) do

@@ -40,11 +40,11 @@ defmodule TournamentsApiWeb.Endpoint do
     key: "_tournamentsapi_key",
     signing_salt: "oLnPiZZN"
 
-  plug Corsica, origins: "*",
+  plug Corsica,
+    origins: "*",
     log: [rejected: :error, invalid: :warn, accepted: :debug],
     allow_headers: ["content-type"],
     allow_credentials: true
 
   plug TournamentsApiWeb.Router
-
 end
