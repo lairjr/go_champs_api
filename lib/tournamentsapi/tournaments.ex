@@ -342,6 +342,7 @@ defmodule TournamentsApi.Tournaments do
   """
   def list_tournament_games(tournament_id) do
     Repo.all(TournamentGame, tournament_id: tournament_id)
+    |> Repo.preload([:game])
   end
 
   @doc """
