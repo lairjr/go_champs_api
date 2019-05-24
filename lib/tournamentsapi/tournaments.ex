@@ -342,7 +342,8 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_games(tournament_id) do
-    Repo.all(TournamentGame, tournament_id: tournament_id)
+    query = from t in TournamentGame, where: [tournament_id: ^tournament_id]
+    Repo.all(query)
     |> Repo.preload([:game])
   end
 
@@ -382,8 +383,6 @@ defmodule TournamentsApi.Tournaments do
       Ecto.Multi.new()
       |> Ecto.Multi.insert(:game, Game.changeset(%Game{}, attrs["game"]))
       |> Ecto.Multi.run(:tournament_game, fn repo, %{game: game} ->
-        IO.inspect(game)
-
         %TournamentGame{game_id: game.id}
         |> TournamentGame.changeset(attrs)
         |> repo.insert()

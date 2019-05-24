@@ -2,7 +2,6 @@ defmodule TournamentsApiWeb.TournamentView do
   use TournamentsApiWeb, :view
   alias TournamentsApiWeb.TournamentView
   alias TournamentsApiWeb.TournamentTeamView
-  alias TournamentsApiWeb.TournamentGameView
   alias TournamentsApiWeb.TournamentGroupView
 
   def render("index.json", %{tournaments: tournaments}) do
