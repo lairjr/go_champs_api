@@ -30,7 +30,8 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
 
   describe "index" do
     test "lists all tournament_games", %{conn: conn} do
-      conn = get(conn, Routes.tournament_game_path(conn, :index, "tournament-id"))
+      attrs = map_tournament_id(@create_attrs)
+      conn = get(conn, Routes.tournament_game_path(conn, :index, attrs.tournament_id))
       assert json_response(conn, 200)["data"] == []
     end
   end
