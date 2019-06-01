@@ -344,7 +344,7 @@ defmodule TournamentsApi.Tournaments do
   def list_tournament_games(tournament_id) do
     query = from t in TournamentGame, where: [tournament_id: ^tournament_id]
     Repo.all(query)
-    |> Repo.preload([:game])
+    |> Repo.preload([:away_team, :home_team])
   end
 
   @doc """
@@ -364,7 +364,7 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament_game!(id, tournament_id),
     do:
       Repo.get_by!(TournamentGame, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:game])
+      |> Repo.preload([:away_team, :home_team])
 
   @doc """
   Creates a tournament_game.
@@ -379,16 +379,9 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def create_tournament_game(attrs \\ %{}) do
-    multi_struct =
-      Ecto.Multi.new()
-      |> Ecto.Multi.insert(:game, Game.changeset(%Game{}, attrs["game"]))
-      |> Ecto.Multi.run(:tournament_game, fn repo, %{game: game} ->
-        %TournamentGame{game_id: game.id}
-        |> TournamentGame.changeset(attrs)
-        |> repo.insert()
-      end)
-
-    Repo.transaction(multi_struct)
+    %TournamentGame{}
+    |> TournamentGame.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """

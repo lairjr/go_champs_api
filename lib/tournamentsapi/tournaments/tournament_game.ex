@@ -3,11 +3,18 @@ defmodule TournamentsApi.Tournaments.TournamentGame do
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
-  alias TournamentsApi.Games.Game
+  alias TournamentsApi.Tournaments.TournamentTeam
 
   schema "tournament_games" do
     belongs_to :tournament, Tournament
-    belongs_to :game, Game
+    field :away_score, :integer
+    field :datetime, :utc_datetime
+    field :home_score, :integer
+    field :location, :string
+
+    belongs_to :away_team, TournamentTeam
+    belongs_to :home_team, TournamentTeam
+
 
     timestamps()
   end
@@ -15,7 +22,7 @@ defmodule TournamentsApi.Tournaments.TournamentGame do
   @doc false
   def changeset(tournament_game, attrs) do
     tournament_game
-    |> cast(attrs, [:tournament_id, :game_id])
+    |> cast(attrs, [:tournament_id, :away_team_id, :home_team_id])
     |> validate_required([:tournament_id])
   end
 end
