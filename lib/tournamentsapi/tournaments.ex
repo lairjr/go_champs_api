@@ -6,7 +6,6 @@ defmodule TournamentsApi.Tournaments do
   import Ecto.Query, warn: false
   alias TournamentsApi.Repo
 
-  alias TournamentsApi.Games.Game
   alias TournamentsApi.Tournaments.Tournament
   alias TournamentsApi.Organizations.Organization
 
