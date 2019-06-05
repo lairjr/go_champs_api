@@ -1,5 +1,6 @@
 defmodule TournamentsApiWeb.TournamentView do
   use TournamentsApiWeb, :view
+  alias TournamentsApiWeb.OrganizationView
   alias TournamentsApiWeb.TournamentView
   alias TournamentsApiWeb.TournamentTeamView
   alias TournamentsApiWeb.TournamentGroupView
@@ -15,6 +16,7 @@ defmodule TournamentsApiWeb.TournamentView do
         name: tournament.name,
         slug: tournament.slug,
         team_stats_structure: tournament.team_stats_structure,
+        organization: render_one(tournament.organization, OrganizationView, "organization.json"),
         groups: render_many(tournament.groups, TournamentGroupView, "tournament_group.json"),
         teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json")
       }
