@@ -10,5 +10,7 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournaments do
 
       timestamps()
     end
+
+    create index(:tournaments, [:slug])
   end
 end
