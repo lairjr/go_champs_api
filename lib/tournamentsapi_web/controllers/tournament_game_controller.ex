@@ -20,7 +20,9 @@ defmodule TournamentsApiWeb.TournamentGameController do
 
     with {:ok, %TournamentGame{} = created_tournament_game} <-
            Tournaments.create_tournament_game(tournament_game_params) do
-      tournament_game = Tournaments.get_tournament_game!(created_tournament_game.id, tournament_id)
+      tournament_game =
+        Tournaments.get_tournament_game!(created_tournament_game.id, tournament_id)
+
       conn
       |> put_status(:created)
       |> put_resp_header(

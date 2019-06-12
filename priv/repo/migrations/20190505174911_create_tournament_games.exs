@@ -4,7 +4,7 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournamentGames do
   def change do
     create table(:tournament_games, primary_key: false) do
       add :id, :uuid, primary_key: true
-      
+
       add :home_score, :integer
       add :away_score, :integer
       add :location, :string

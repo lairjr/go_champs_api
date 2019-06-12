@@ -9,9 +9,10 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
-  def fixture(:tournament) do
-    {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", slug: "some-org-slug"})
+  @organization_attrs %{name: "some organization", slug: "some-org-slug"}
+
+  def fixture(:tournament, organization_params \\ @organization_attrs) do
+    {:ok, organization} = Organizations.create_organization(organization_params)
 
     attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(attrs)
@@ -31,7 +32,9 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
     @tag runnable: true
     test "lists all tournaments matching where", %{conn: conn} do
       fixture(:tournament)
-      second_tournament = fixture(:tournament)
+
+      second_tournament =
+        fixture(:tournament, %{name: "another organization", slug: "another-org-slug"})
 
       where = %{"organization_id" => second_tournament.organization_id}
 

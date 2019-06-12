@@ -342,6 +342,7 @@ defmodule TournamentsApi.Tournaments do
   """
   def list_tournament_games(tournament_id) do
     query = from t in TournamentGame, where: [tournament_id: ^tournament_id]
+
     Repo.all(query)
     |> Repo.preload([:away_team, :home_team])
   end

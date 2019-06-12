@@ -11,19 +11,21 @@ defmodule TournamentsApi.TournamentsTest do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    def tournament_fixture(attrs \\ %{}) do
+    @organization_attrs %{name: "some organization name", slug: "some-slug"}
+
+    def tournament_fixture(attrs \\ %{}, organization_attrs \\ @organization_attrs) do
       {:ok, tournament} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_organization_id()
+        |> map_organization_id(organization_attrs)
         |> Tournaments.create_tournament()
 
       tournament
     end
 
-    def map_organization_id(attrs \\ %{}) do
+    def map_organization_id(attrs, organization_attrs) do
       {:ok, %Organizations.Organization{} = organization} =
-        Organizations.create_organization(%{name: "some organization name", slug: "some-slug"})
+        Organizations.create_organization(organization_attrs)
 
       Map.merge(attrs, %{organization_id: organization.id})
     end
@@ -40,7 +42,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     @tag runnable: true
     test "list_tournaments/1 returns all tournaments pertaining to some organization" do
-      tournament_fixture()
+      tournament_fixture(%{}, %{name: "another organization name", slug: "another-slug"})
       second_tournament = tournament_fixture()
       where = [organization_id: second_tournament.organization_id]
       assert Tournaments.list_tournaments(where) == [second_tournament]
@@ -52,7 +54,7 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament/1 with valid data creates a tournament" do
-      valid_tournament = map_organization_id(@valid_attrs)
+      valid_tournament = map_organization_id(@valid_attrs, @organization_attrs)
       assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
     end
 
