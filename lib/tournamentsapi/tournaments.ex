@@ -430,4 +430,101 @@ defmodule TournamentsApi.Tournaments do
   def change_tournament_game(%TournamentGame{} = tournament_game) do
     TournamentGame.changeset(tournament_game, %{})
   end
+
+  alias TournamentsApi.Tournaments.TournamentStat
+
+  @doc """
+  Returns the list of tournament_stats.
+
+  ## Examples
+
+      iex> list_tournament_stats()
+      [%TournamentStat{}, ...]
+
+  """
+  def list_tournament_stats(tournament_id) do
+    Repo.all(TournamentStat, tournament_id: tournament_id)
+  end
+
+  @doc """
+  Gets a single tournament_stat.
+
+  Raises `Ecto.NoResultsError` if the Tournament stat does not exist.
+
+  ## Examples
+
+      iex> get_tournament_stat!(123)
+      %TournamentStat{}
+
+      iex> get_tournament_stat!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tournament_stat!(id, tournament_id),
+    do: Repo.get_by!(TournamentStat, id: id, tournament_id: tournament_id)
+
+  @doc """
+  Creates a tournament_stat.
+
+  ## Examples
+
+      iex> create_tournament_stat(%{field: value})
+      {:ok, %TournamentStat{}}
+
+      iex> create_tournament_stat(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_tournament_stat(attrs \\ %{}) do
+    %TournamentStat{}
+    |> TournamentStat.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a tournament_stat.
+
+  ## Examples
+
+      iex> update_tournament_stat(tournament_stat, %{field: new_value})
+      {:ok, %TournamentStat{}}
+
+      iex> update_tournament_stat(tournament_stat, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_tournament_stat(%TournamentStat{} = tournament_stat, attrs) do
+    tournament_stat
+    |> TournamentStat.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TournamentStat.
+
+  ## Examples
+
+      iex> delete_tournament_stat(tournament_stat)
+      {:ok, %TournamentStat{}}
+
+      iex> delete_tournament_stat(tournament_stat)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_tournament_stat(%TournamentStat{} = tournament_stat) do
+    Repo.delete(tournament_stat)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking tournament_stat changes.
+
+  ## Examples
+
+      iex> change_tournament_stat(tournament_stat)
+      %Ecto.Changeset{source: %TournamentStat{}}
+
+  """
+  def change_tournament_stat(%TournamentStat{} = tournament_stat) do
+    TournamentStat.changeset(tournament_stat, %{})
+  end
 end
