@@ -6,11 +6,11 @@ defmodule TournamentsApi.Tournaments.Tournament do
   alias TournamentsApi.Tournaments.TournamentGame
   alias TournamentsApi.Tournaments.TournamentGroup
   alias TournamentsApi.Tournaments.TournamentTeam
+  alias TournamentsApi.Tournaments.TournamentStat
 
   schema "tournaments" do
     field :name, :string
     field :slug, :string
-    field :team_stats_structure, :map
     field :organization_slug, :string
 
     belongs_to :organization, Organization
@@ -18,6 +18,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
     has_many :games, TournamentGame
     has_many :groups, TournamentGroup
     has_many :teams, TournamentTeam
+    has_many :stats, TournamentStat
 
     timestamps()
   end
@@ -25,7 +26,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
   @doc false
   def changeset(tournament, attrs) do
     tournament
-    |> cast(attrs, [:name, :slug, :team_stats_structure, :organization_id, :organization_slug])
+    |> cast(attrs, [:name, :slug, :organization_id, :organization_slug])
     |> validate_required([:name, :organization_id])
   end
 end

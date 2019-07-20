@@ -6,7 +6,6 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournaments do
       add :id, :uuid, primary_key: true
       add :name, :string
       add :slug, :string
-      add :team_stats_structure, :map
 
       timestamps()
     end
