@@ -35,6 +35,22 @@ defmodule TournamentsApi.TournamentsTest do
       Map.merge(attrs, %{tournament_id: tournament.id})
     end
 
+    def map_tournament_team_id(attrs \\ %{}) do
+      {:ok, tournament_team} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> map_organization_id(@organization_attrs)
+        |> Tournaments.create_tournament()
+        |> map_tournament_team()
+        |> Tournaments.create_tournament_team()
+
+      Map.merge(attrs, %{tournament_team_id: tournament_team.id})
+    end
+
+    def map_tournament_team({:ok, tournament}) do
+      %{name: "some team name", tournament_id: tournament.id}
+    end
+
     test "list_tournaments/0 returns all tournaments" do
       tournament = tournament_fixture()
       assert Tournaments.list_tournaments() == [tournament]
@@ -419,6 +435,89 @@ defmodule TournamentsApi.TournamentsTest do
     test "change_tournament_stat/1 returns a tournament_stat changeset" do
       tournament_stat = tournament_stat_fixture()
       assert %Ecto.Changeset{} = Tournaments.change_tournament_stat(tournament_stat)
+    end
+  end
+
+  describe "tournament_team_stats" do
+    alias TournamentsApi.Tournaments.TournamentTeamStat
+
+    @valid_attrs %{value: "some value"}
+    @update_attrs %{value: "some updated value"}
+    @invalid_attrs %{value: nil}
+
+    def tournament_team_stat_fixture(attrs \\ %{}) do
+      {:ok, tournament_team_stat} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> map_tournament_team_id()
+        |> Tournaments.create_tournament_team_stat()
+
+      tournament_team_stat
+    end
+
+    test "list_tournament_team_stats/0 returns all tournament_team_stats" do
+      tournament_team_stat = tournament_team_stat_fixture()
+
+      assert Tournaments.list_tournament_team_stats(tournament_team_stat.tournament_team_id) == [
+               tournament_team_stat
+             ]
+    end
+
+    test "get_tournament_team_stat!/1 returns the tournament_team_stat with given id" do
+      tournament_team_stat = tournament_team_stat_fixture()
+
+      assert Tournaments.get_tournament_team_stat!(tournament_team_stat.id) ==
+               tournament_team_stat
+    end
+
+    test "create_tournament_team_stat/1 with valid data creates a tournament_team_stat" do
+      attrs =
+        tournament_team_stat_fixture()
+        |> Map.from_struct()
+
+      assert {:ok, %TournamentTeamStat{} = tournament_team_stat} =
+               Tournaments.create_tournament_team_stat(attrs)
+
+      assert tournament_team_stat.value == "some value"
+    end
+
+    test "create_tournament_team_stat/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_team_stat(@invalid_attrs)
+    end
+
+    test "update_tournament_team_stat/2 with valid data updates the tournament_team_stat" do
+      tournament_team_stat = tournament_team_stat_fixture()
+
+      assert {:ok, %TournamentTeamStat{} = tournament_team_stat} =
+               Tournaments.update_tournament_team_stat(tournament_team_stat, @update_attrs)
+
+      assert tournament_team_stat.value == "some updated value"
+    end
+
+    test "update_tournament_team_stat/2 with invalid data returns error changeset" do
+      tournament_team_stat = tournament_team_stat_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament_team_stat(tournament_team_stat, @invalid_attrs)
+
+      assert tournament_team_stat ==
+               Tournaments.get_tournament_team_stat!(tournament_team_stat.id)
+    end
+
+    test "delete_tournament_team_stat/1 deletes the tournament_team_stat" do
+      tournament_team_stat = tournament_team_stat_fixture()
+
+      assert {:ok, %TournamentTeamStat{}} =
+               Tournaments.delete_tournament_team_stat(tournament_team_stat)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Tournaments.get_tournament_team_stat!(tournament_team_stat.id)
+      end
+    end
+
+    test "change_tournament_team_stat/1 returns a tournament_team_stat changeset" do
+      tournament_team_stat = tournament_team_stat_fixture()
+      assert %Ecto.Changeset{} = Tournaments.change_tournament_team_stat(tournament_team_stat)
     end
   end
 end
