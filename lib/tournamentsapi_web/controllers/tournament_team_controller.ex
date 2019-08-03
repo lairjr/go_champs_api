@@ -20,7 +20,8 @@ defmodule TournamentsApiWeb.TournamentTeamController do
 
     with {:ok, %TournamentTeam{} = created_tournament_team} <-
            Tournaments.create_tournament_team(tournament_team_params) do
-            tournament_team = Tournaments.get_tournament_team!( created_tournament_team.id, tournament_id)
+      tournament_team =
+        Tournaments.get_tournament_team!(created_tournament_team.id, tournament_id)
 
       conn
       |> put_status(:created)

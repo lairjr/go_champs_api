@@ -278,7 +278,6 @@ defmodule TournamentsApi.Tournaments do
   def create_tournament_team(attrs \\ %{}) do
     %TournamentTeam{}
     |> TournamentTeam.changeset(attrs)
-    |> Ecto.Changeset.put_change(:tournament_group, attrs["tournament_group_id"])
     |> Repo.insert()
   end
 

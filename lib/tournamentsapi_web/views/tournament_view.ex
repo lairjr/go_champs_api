@@ -28,7 +28,7 @@ defmodule TournamentsApiWeb.TournamentView do
     %{
       id: tournament.id,
       name: tournament.name,
-      slug: tournament.slug,
+      slug: tournament.slug
     }
   end
 end
