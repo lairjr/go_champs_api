@@ -45,8 +45,11 @@ defmodule TournamentsApiWeb.TournamentTeamController do
       }) do
     tournament_team = Tournaments.get_tournament_team!(id, tournament_id)
 
-    with {:ok, %TournamentTeam{} = tournament_team} <-
+    with {:ok, %TournamentTeam{} = updated_tournament_team} <-
            Tournaments.update_tournament_team(tournament_team, tournament_team_params) do
+      tournament_team =
+        Tournaments.get_tournament_team!(updated_tournament_team.id, tournament_id)
+
       render(conn, "show.json", tournament_team: tournament_team)
     end
   end
