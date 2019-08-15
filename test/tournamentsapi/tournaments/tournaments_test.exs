@@ -438,86 +438,88 @@ defmodule TournamentsApi.TournamentsTest do
     end
   end
 
-  describe "tournament_team_stats" do
-    alias TournamentsApi.Tournaments.TournamentTeamStat
+  describe "tournament_phases" do
+    alias TournamentsApi.Tournaments.TournamentPhase
 
-    @valid_attrs %{value: "some value"}
-    @update_attrs %{value: "some updated value"}
-    @invalid_attrs %{value: nil}
+    @valid_attrs %{title: "some title", type: "standings"}
+    @update_attrs %{title: "some updated title", type: "standings"}
+    @invalid_attrs %{title: nil, type: nil}
 
-    def tournament_team_stat_fixture(attrs \\ %{}) do
-      {:ok, tournament_team_stat} =
+    def tournament_phase_fixture(attrs \\ %{}) do
+      {:ok, tournament_phase} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_team_id()
-        |> Tournaments.create_tournament_team_stat()
+        |> map_tournament_id()
+        |> Tournaments.create_tournament_phase()
 
-      tournament_team_stat
+      tournament_phase
     end
 
-    test "list_tournament_team_stats/0 returns all tournament_team_stats" do
-      tournament_team_stat = tournament_team_stat_fixture()
+    test "list_tournament_phases/0 returns all tournament_phases" do
+      tournament_phase = tournament_phase_fixture()
 
-      assert Tournaments.list_tournament_team_stats(tournament_team_stat.tournament_team_id) == [
-               tournament_team_stat
+      assert Tournaments.list_tournament_phases(tournament_phase.tournament_id) == [
+               tournament_phase
              ]
     end
 
-    test "get_tournament_team_stat!/1 returns the tournament_team_stat with given id" do
-      tournament_team_stat = tournament_team_stat_fixture()
+    test "get_tournament_phase!/1 returns the tournament_phase with given id" do
+      tournament_phase = tournament_phase_fixture()
 
-      assert Tournaments.get_tournament_team_stat!(tournament_team_stat.id) ==
-               tournament_team_stat
+      assert Tournaments.get_tournament_phase!(
+               tournament_phase.id,
+               tournament_phase.tournament_id
+             ) == tournament_phase
     end
 
-    test "create_tournament_team_stat/1 with valid data creates a tournament_team_stat" do
-      attrs =
-        tournament_team_stat_fixture()
-        |> Map.from_struct()
+    test "create_tournament_phase/1 with valid data creates a tournament_phase" do
+      attrs = map_tournament_id(@valid_attrs)
 
-      assert {:ok, %TournamentTeamStat{} = tournament_team_stat} =
-               Tournaments.create_tournament_team_stat(attrs)
+      assert {:ok, %TournamentPhase{} = tournament_phase} =
+               Tournaments.create_tournament_phase(attrs)
 
-      assert tournament_team_stat.value == "some value"
+      assert tournament_phase.title == "some title"
+      assert tournament_phase.type == "standings"
     end
 
-    test "create_tournament_team_stat/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_team_stat(@invalid_attrs)
+    test "create_tournament_phase/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_phase(@invalid_attrs)
     end
 
-    test "update_tournament_team_stat/2 with valid data updates the tournament_team_stat" do
-      tournament_team_stat = tournament_team_stat_fixture()
+    test "update_tournament_phase/2 with valid data updates the tournament_phase" do
+      tournament_phase = tournament_phase_fixture()
 
-      assert {:ok, %TournamentTeamStat{} = tournament_team_stat} =
-               Tournaments.update_tournament_team_stat(tournament_team_stat, @update_attrs)
+      assert {:ok, %TournamentPhase{} = tournament_phase} =
+               Tournaments.update_tournament_phase(tournament_phase, @update_attrs)
 
-      assert tournament_team_stat.value == "some updated value"
+      assert tournament_phase.title == "some updated title"
+      assert tournament_phase.type == "standings"
     end
 
-    test "update_tournament_team_stat/2 with invalid data returns error changeset" do
-      tournament_team_stat = tournament_team_stat_fixture()
+    test "update_tournament_phase/2 with invalid data returns error changeset" do
+      tournament_phase = tournament_phase_fixture()
 
       assert {:error, %Ecto.Changeset{}} =
-               Tournaments.update_tournament_team_stat(tournament_team_stat, @invalid_attrs)
+               Tournaments.update_tournament_phase(tournament_phase, @invalid_attrs)
 
-      assert tournament_team_stat ==
-               Tournaments.get_tournament_team_stat!(tournament_team_stat.id)
+      result_phase =
+        Tournaments.get_tournament_phase!(tournament_phase.id, tournament_phase.tournament_id)
+
+      assert tournament_phase.id == result_phase.id
     end
 
-    test "delete_tournament_team_stat/1 deletes the tournament_team_stat" do
-      tournament_team_stat = tournament_team_stat_fixture()
-
-      assert {:ok, %TournamentTeamStat{}} =
-               Tournaments.delete_tournament_team_stat(tournament_team_stat)
+    test "delete_tournament_phase/1 deletes the tournament_phase" do
+      tournament_phase = tournament_phase_fixture()
+      assert {:ok, %TournamentPhase{}} = Tournaments.delete_tournament_phase(tournament_phase)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_team_stat!(tournament_team_stat.id)
+        Tournaments.get_tournament_phase!(tournament_phase.id, tournament_phase.tournament_id)
       end
     end
 
-    test "change_tournament_team_stat/1 returns a tournament_team_stat changeset" do
-      tournament_team_stat = tournament_team_stat_fixture()
-      assert %Ecto.Changeset{} = Tournaments.change_tournament_team_stat(tournament_team_stat)
+    test "change_tournament_phase/1 returns a tournament_phase changeset" do
+      tournament_phase = tournament_phase_fixture()
+      assert %Ecto.Changeset{} = Tournaments.change_tournament_phase(tournament_phase)
     end
   end
 end

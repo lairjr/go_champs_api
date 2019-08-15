@@ -529,99 +529,100 @@ defmodule TournamentsApi.Tournaments do
     TournamentStat.changeset(tournament_stat, %{})
   end
 
-  alias TournamentsApi.Tournaments.TournamentTeamStat
+  alias TournamentsApi.Tournaments.TournamentPhase
 
   @doc """
-  Returns the list of tournament_team_stats.
+  Returns the list of tournament_phases.
 
   ## Examples
 
-      iex> list_tournament_team_stats()
-      [%TournamentTeamStat{}, ...]
+      iex> list_tournament_phases()
+      [%TournamentPhase{}, ...]
 
   """
-  def list_tournament_team_stats(tournament_team_id) do
-    Repo.all(TournamentTeamStat, tournament_team_id: tournament_team_id)
+  def list_tournament_phases(tournament_id) do
+    Repo.all(TournamentPhase, tournament_id: tournament_id)
   end
 
   @doc """
-  Gets a single tournament_team_stat.
+  Gets a single tournament_phase.
 
-  Raises `Ecto.NoResultsError` if the Tournament team stat does not exist.
+  Raises `Ecto.NoResultsError` if the Tournament phase does not exist.
 
   ## Examples
 
-      iex> get_tournament_team_stat!(123)
-      %TournamentTeamStat{}
+      iex> get_tournament_phase!(123)
+      %TournamentPhase{}
 
-      iex> get_tournament_team_stat!(456)
+      iex> get_tournament_phase!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament_team_stat!(id), do: Repo.get!(TournamentTeamStat, id)
+  def get_tournament_phase!(id, tournament_id),
+    do: Repo.get_by!(TournamentPhase, id: id, tournament_id: tournament_id)
 
   @doc """
-  Creates a tournament_team_stat.
+  Creates a tournament_phase.
 
   ## Examples
 
-      iex> create_tournament_team_stat(%{field: value})
-      {:ok, %TournamentTeamStat{}}
+      iex> create_tournament_phase(%{field: value})
+      {:ok, %TournamentPhase{}}
 
-      iex> create_tournament_team_stat(%{field: bad_value})
+      iex> create_tournament_phase(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_tournament_team_stat(attrs \\ %{}) do
-    %TournamentTeamStat{}
-    |> TournamentTeamStat.changeset(attrs)
+  def create_tournament_phase(attrs \\ %{}) do
+    %TournamentPhase{}
+    |> TournamentPhase.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a tournament_team_stat.
+  Updates a tournament_phase.
 
   ## Examples
 
-      iex> update_tournament_team_stat(tournament_team_stat, %{field: new_value})
-      {:ok, %TournamentTeamStat{}}
+      iex> update_tournament_phase(tournament_phase, %{field: new_value})
+      {:ok, %TournamentPhase{}}
 
-      iex> update_tournament_team_stat(tournament_team_stat, %{field: bad_value})
+      iex> update_tournament_phase(tournament_phase, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_tournament_team_stat(%TournamentTeamStat{} = tournament_team_stat, attrs) do
-    tournament_team_stat
-    |> TournamentTeamStat.changeset(attrs)
+  def update_tournament_phase(%TournamentPhase{} = tournament_phase, attrs) do
+    tournament_phase
+    |> TournamentPhase.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a TournamentTeamStat.
+  Deletes a TournamentPhase.
 
   ## Examples
 
-      iex> delete_tournament_team_stat(tournament_team_stat)
-      {:ok, %TournamentTeamStat{}}
+      iex> delete_tournament_phase(tournament_phase)
+      {:ok, %TournamentPhase{}}
 
-      iex> delete_tournament_team_stat(tournament_team_stat)
+      iex> delete_tournament_phase(tournament_phase)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_tournament_team_stat(%TournamentTeamStat{} = tournament_team_stat) do
-    Repo.delete(tournament_team_stat)
+  def delete_tournament_phase(%TournamentPhase{} = tournament_phase) do
+    Repo.delete(tournament_phase)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking tournament_team_stat changes.
+  Returns an `%Ecto.Changeset{}` for tracking tournament_phase changes.
 
   ## Examples
 
-      iex> change_tournament_team_stat(tournament_team_stat)
-      %Ecto.Changeset{source: %TournamentTeamStat{}}
+      iex> change_tournament_phase(tournament_phase)
+      %Ecto.Changeset{source: %TournamentPhase{}}
 
   """
-  def change_tournament_team_stat(%TournamentTeamStat{} = tournament_team_stat) do
-    TournamentTeamStat.changeset(tournament_team_stat, %{})
+  def change_tournament_phase(%TournamentPhase{} = tournament_phase) do
+    TournamentPhase.changeset(tournament_phase, %{})
   end
 end
