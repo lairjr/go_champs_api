@@ -53,7 +53,13 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament!(id) do
     Tournament
     |> Repo.get!(id)
-    |> Repo.preload(groups: [], organization: [], teams: [:tournament_group], stats: [])
+    |> Repo.preload(
+      groups: [],
+      organization: [],
+      teams: [:tournament_group],
+      stats: [],
+      phases: []
+    )
   end
 
   @doc """
