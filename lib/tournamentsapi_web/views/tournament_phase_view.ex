@@ -11,6 +11,11 @@ defmodule TournamentsApiWeb.TournamentPhaseView do
   end
 
   def render("tournament_phase.json", %{tournament_phase: tournament_phase}) do
-    %{id: tournament_phase.id, title: tournament_phase.title, type: tournament_phase.type}
+    %{
+      id: tournament_phase.id,
+      title: tournament_phase.title,
+      type: tournament_phase.type,
+      order: tournament_phase.order
+    }
   end
 end

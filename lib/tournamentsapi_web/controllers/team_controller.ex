@@ -6,7 +6,7 @@ defmodule TournamentsApiWeb.TeamController do
 
   action_fallback TournamentsApiWeb.FallbackController
 
-  def index(conn, params) do
+  def index(conn, _params) do
     teams = Teams.list_teams()
     render(conn, "index.json", teams: teams)
   end

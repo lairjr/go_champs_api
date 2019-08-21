@@ -7,6 +7,7 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   schema "tournament_phases" do
     field :title, :string
     field :type, :string
+    field :order, :integer
 
     belongs_to :tournament, Tournament
 
@@ -16,7 +17,7 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   @doc false
   def changeset(tournament_phase, attrs) do
     tournament_phase
-    |> cast(attrs, [:title, :type, :tournament_id])
+    |> cast(attrs, [:title, :type, :order, :tournament_id])
     |> validate_required([:title, :type, :tournament_id])
   end
 end

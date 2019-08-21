@@ -480,10 +480,47 @@ defmodule TournamentsApi.TournamentsTest do
 
       assert tournament_phase.title == "some title"
       assert tournament_phase.type == "standings"
+      assert tournament_phase.order == 1
     end
 
     test "create_tournament_phase/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_phase(@invalid_attrs)
+    end
+
+    test "create_tournament_phase/1 select order for second item" do
+      attrs = map_tournament_id(@valid_attrs)
+
+      assert {:ok, %TournamentPhase{} = first_tournament_phase} =
+               Tournaments.create_tournament_phase(attrs)
+
+      assert {:ok, %TournamentPhase{} = second_tournament_phase} =
+               Tournaments.create_tournament_phase(attrs)
+
+      assert first_tournament_phase.order == 1
+      assert second_tournament_phase.order == 2
+    end
+
+    test "create_tournament_phase/1 set order as 1 for new tournament_phase" do
+      first_attrs = map_tournament_id(@valid_attrs)
+
+      assert {:ok, %TournamentPhase{} = first_tournament_phase} =
+               Tournaments.create_tournament_phase(first_attrs)
+
+      [organization] = Organizations.list_organizations()
+
+      {:ok, second_tournament} =
+        Tournaments.create_tournament(%{
+          name: "some other tournament name",
+          organization_id: organization.id
+        })
+
+      second_attrs = Map.merge(@valid_attrs, %{tournament_id: second_tournament.id})
+
+      assert {:ok, %TournamentPhase{} = second_tournament_phase} =
+               Tournaments.create_tournament_phase(second_attrs)
+
+      assert first_tournament_phase.order == 1
+      assert second_tournament_phase.order == 2
     end
 
     test "update_tournament_phase/2 with valid data updates the tournament_phase" do

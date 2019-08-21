@@ -582,7 +582,14 @@ defmodule TournamentsApi.Tournaments do
   def create_tournament_phase(attrs \\ %{}) do
     %TournamentPhase{}
     |> TournamentPhase.changeset(attrs)
+    |> get_tournament_phase_next_order()
     |> Repo.insert()
+  end
+
+  defp get_tournament_phase_next_order(changeset) do
+    tournament_id = Ecto.Changeset.get_field(changeset, :tournament_id)
+    number_of_records = Repo.aggregate(TournamentPhase, :count, :id, tournament_id: tournament_id)
+    Ecto.Changeset.put_change(changeset, :order, Enum.sum([number_of_records, 1]))
   end
 
   @doc """
