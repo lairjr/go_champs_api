@@ -14,19 +14,24 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
   @invalid_attrs %{name: nil}
 
   def fixture(:tournament_group) do
-    attrs = map_tournament_id(@create_attrs)
+    attrs = map_tournament_phase_id(@create_attrs)
     {:ok, tournament_group} = Tournaments.create_tournament_group(attrs)
     tournament_group
   end
 
-  def map_tournament_id(attrs \\ %{}) do
+  def map_tournament_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
     tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    Map.merge(attrs, %{tournament_id: tournament.id})
+    tournament_phase_attrs =
+      Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
+
+    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+
+    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
   end
 
   setup %{conn: conn} do
@@ -42,16 +47,16 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
 
   describe "create tournament_group" do
     test "renders tournament_group when data is valid", %{conn: conn} do
-      attrs = map_tournament_id(@create_attrs)
+      attrs = map_tournament_phase_id(@create_attrs)
 
       conn =
-        post(conn, Routes.tournament_group_path(conn, :create, attrs.tournament_id),
+        post(conn, Routes.tournament_group_path(conn, :create, attrs.tournament_phase_id),
           tournament_group: attrs
         )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.tournament_group_path(conn, :show, attrs.tournament_id, id))
+      conn = get(conn, Routes.tournament_group_path(conn, :show, attrs.tournament_phase_id, id))
 
       assert %{
                "id" => id,
@@ -60,10 +65,10 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_tournament_id(@invalid_attrs)
+      attrs = map_tournament_phase_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.tournament_group_path(conn, :create, attrs.tournament_id),
+        post(conn, Routes.tournament_group_path(conn, :create, attrs.tournament_phase_id),
           tournament_group: attrs
         )
 
@@ -84,7 +89,7 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
           Routes.tournament_group_path(
             conn,
             :update,
-            tournament_group.tournament_id,
+            tournament_group.tournament_phase_id,
             tournament_group
           ),
           tournament_group: @update_attrs
@@ -93,7 +98,10 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn =
-        get(conn, Routes.tournament_group_path(conn, :show, tournament_group.tournament_id, id))
+        get(
+          conn,
+          Routes.tournament_group_path(conn, :show, tournament_group.tournament_phase_id, id)
+        )
 
       assert %{
                "id" => id,
@@ -108,7 +116,7 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
           Routes.tournament_group_path(
             conn,
             :update,
-            tournament_group.tournament_id,
+            tournament_group.tournament_phase_id,
             tournament_group
           ),
           tournament_group: @invalid_attrs
@@ -128,7 +136,7 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
           Routes.tournament_group_path(
             conn,
             :delete,
-            tournament_group.tournament_id,
+            tournament_group.tournament_phase_id,
             tournament_group
           )
         )
@@ -141,7 +149,7 @@ defmodule TournamentsApiWeb.TournamentGroupControllerTest do
           Routes.tournament_group_path(
             conn,
             :show,
-            tournament_group.tournament_id,
+            tournament_group.tournament_phase_id,
             tournament_group
           )
         )

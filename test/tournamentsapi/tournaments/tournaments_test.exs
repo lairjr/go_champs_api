@@ -66,7 +66,6 @@ defmodule TournamentsApi.TournamentsTest do
       assert Tournaments.list_tournaments() == [tournament]
     end
 
-    @tag runnable: true
     test "list_tournaments/1 returns all tournaments pertaining to some organization" do
       tournament_fixture(%{}, %{name: "another organization name", slug: "another-slug"})
       second_tournament = tournament_fixture()
@@ -128,7 +127,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_group} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_id()
+        |> map_tournament_phase_id()
         |> Tournaments.create_tournament_group()
 
       tournament_group
@@ -137,9 +136,8 @@ defmodule TournamentsApi.TournamentsTest do
     test "list_tournament_groups/0 returns all tournament_groups" do
       tournament_group = tournament_group_fixture()
 
-      assert Tournaments.list_tournament_groups(tournament_group.tournament_id) == [
-               tournament_group
-             ]
+      [result_group] = Tournaments.list_tournament_groups(tournament_group.tournament_phase_id)
+      assert result_group.id == tournament_group.id
     end
 
     test "get_tournament_group!/1 returns the tournament_group with given id" do
@@ -147,12 +145,12 @@ defmodule TournamentsApi.TournamentsTest do
 
       assert Tournaments.get_tournament_group!(
                tournament_group.id,
-               tournament_group.tournament_id
+               tournament_group.tournament_phase_id
              ) == tournament_group
     end
 
     test "create_tournament_group/1 with valid data creates a tournament_group" do
-      attrs = map_tournament_id(@valid_attrs)
+      attrs = map_tournament_phase_id(@valid_attrs)
 
       assert {:ok, %TournamentGroup{} = tournament_group} =
                Tournaments.create_tournament_group(attrs)
@@ -180,7 +178,10 @@ defmodule TournamentsApi.TournamentsTest do
                Tournaments.update_tournament_group(tournament_group, @invalid_attrs)
 
       result_group =
-        Tournaments.get_tournament_group!(tournament_group.id, tournament_group.tournament_id)
+        Tournaments.get_tournament_group!(
+          tournament_group.id,
+          tournament_group.tournament_phase_id
+        )
 
       assert result_group.id == tournament_group.id
     end
@@ -190,7 +191,10 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentGroup{}} = Tournaments.delete_tournament_group(tournament_group)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_group!(tournament_group.id, tournament_group.tournament_id)
+        Tournaments.get_tournament_group!(
+          tournament_group.id,
+          tournament_group.tournament_phase_id
+        )
       end
     end
 

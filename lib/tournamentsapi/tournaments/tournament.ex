@@ -4,9 +4,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
   import Ecto.Changeset
   alias TournamentsApi.Organizations.Organization
   alias TournamentsApi.Tournaments.TournamentGame
-  alias TournamentsApi.Tournaments.TournamentGroup
   alias TournamentsApi.Tournaments.TournamentPhase
-  alias TournamentsApi.Tournaments.TournamentStat
   alias TournamentsApi.Tournaments.TournamentTeam
 
   schema "tournaments" do
@@ -17,7 +15,6 @@ defmodule TournamentsApi.Tournaments.Tournament do
     belongs_to :organization, Organization
 
     has_many :games, TournamentGame
-    has_many :groups, TournamentGroup
     has_many :phases, TournamentPhase
     has_many :teams, TournamentTeam
 

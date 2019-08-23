@@ -3,6 +3,7 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
+  alias TournamentsApi.Tournaments.TournamentGroup
   alias TournamentsApi.Tournaments.TournamentStat
 
   schema "tournament_phases" do
@@ -11,6 +12,7 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
     field :order, :integer
 
     belongs_to :tournament, Tournament
+    has_many :groups, TournamentGroup
     has_many :stats, TournamentStat
 
     timestamps()

@@ -54,7 +54,6 @@ defmodule TournamentsApi.Tournaments do
     Tournament
     |> Repo.get!(id)
     |> Repo.preload(
-      groups: [],
       organization: [],
       teams: [:tournament_group],
       phases: []
@@ -150,8 +149,8 @@ defmodule TournamentsApi.Tournaments do
       [%TournamentGroup{}, ...]
 
   """
-  def list_tournament_groups(tournament_id) do
-    Repo.all(TournamentGroup, tournament_id: tournament_id)
+  def list_tournament_groups(tournament_phase_id) do
+    Repo.all(TournamentGroup, tournament_phase_id: tournament_phase_id)
   end
 
   @doc """
@@ -168,8 +167,8 @@ defmodule TournamentsApi.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament_group!(id, tournament_id),
-    do: Repo.get_by!(TournamentGroup, id: id, tournament_id: tournament_id)
+  def get_tournament_group!(id, tournament_phase_id),
+    do: Repo.get_by!(TournamentGroup, id: id, tournament_phase_id: tournament_phase_id)
 
   @doc """
   Creates a tournament_group.
@@ -566,7 +565,7 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament_phase!(id, tournament_id),
     do:
       Repo.get_by!(TournamentPhase, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:stats])
+      |> Repo.preload([:stats, :groups])
 
   @doc """
   Creates a tournament_phase.
