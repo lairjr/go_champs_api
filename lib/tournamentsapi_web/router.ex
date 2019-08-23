@@ -12,11 +12,11 @@ defmodule TournamentsApiWeb.Router do
     resources "/organizations", OrganizationController
     resources "/teams", TeamController
     resources "/users", UserController
+    resources "/phases/:tournament_phase_id/stats", TournamentStatController
     resources "/tournaments", TournamentController
     resources "/tournaments/:tournament_id/games", TournamentGameController
     resources "/tournaments/:tournament_id/groups", TournamentGroupController
     resources "/tournaments/:tournament_id/phases", TournamentPhaseController
-    resources "/tournaments/:tournament_id/stats", TournamentStatController
     resources "/tournaments/:tournament_id/teams", TournamentTeamController
   end
 end

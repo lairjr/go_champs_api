@@ -20,7 +20,6 @@ defmodule TournamentsApiWeb.TournamentView do
         groups: render_many(tournament.groups, TournamentGroupView, "tournament_group.json"),
         organization: render_one(tournament.organization, OrganizationView, "organization.json"),
         phases: render_many(tournament.phases, TournamentPhaseView, "tournament_phase.json"),
-        stats: render_many(tournament.stats, TournamentStatView, "tournament_stat.json"),
         teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json")
       }
     }

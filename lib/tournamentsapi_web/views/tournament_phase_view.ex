@@ -1,6 +1,7 @@
 defmodule TournamentsApiWeb.TournamentPhaseView do
   use TournamentsApiWeb, :view
   alias TournamentsApiWeb.TournamentPhaseView
+  alias TournamentsApiWeb.TournamentStatView
 
   def render("index.json", %{tournament_phases: tournament_phases}) do
     %{data: render_many(tournament_phases, TournamentPhaseView, "tournament_phase.json")}
@@ -13,9 +14,10 @@ defmodule TournamentsApiWeb.TournamentPhaseView do
   def render("tournament_phase.json", %{tournament_phase: tournament_phase}) do
     %{
       id: tournament_phase.id,
+      order: tournament_phase.order,
       title: tournament_phase.title,
       type: tournament_phase.type,
-      order: tournament_phase.order
+      stats: render_many(tournament_phase.stats, TournamentStatView, "tournament_stat.json")
     }
   end
 end

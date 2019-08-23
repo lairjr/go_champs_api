@@ -18,8 +18,11 @@ defmodule TournamentsApiWeb.TournamentPhaseController do
     tournament_phase_params =
       Map.merge(tournament_phase_params, %{"tournament_id" => tournament_id})
 
-    with {:ok, %TournamentPhase{} = tournament_phase} <-
+    with {:ok, %TournamentPhase{} = created_tournament_phase} <-
            Tournaments.create_tournament_phase(tournament_phase_params) do
+      tournament_phase =
+        Tournaments.get_tournament_phase!(created_tournament_phase.id, tournament_id)
+
       conn
       |> put_status(:created)
       |> put_resp_header(

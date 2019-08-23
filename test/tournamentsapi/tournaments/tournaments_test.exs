@@ -51,6 +51,16 @@ defmodule TournamentsApi.TournamentsTest do
       %{name: "some team name", tournament_id: tournament.id}
     end
 
+    def map_tournament_phase_id(attrs \\ %{}) do
+      tournament_phase_attrs = map_tournament_id(%{title: "tournament phase", type: "standings"})
+
+      {:ok, tournament_phase} =
+        tournament_phase_attrs
+        |> Tournaments.create_tournament_phase()
+
+      Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    end
+
     test "list_tournaments/0 returns all tournaments" do
       tournament = tournament_fixture()
       assert Tournaments.list_tournaments() == [tournament]
@@ -365,7 +375,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_stat} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_id()
+        |> map_tournament_phase_id()
         |> Tournaments.create_tournament_stat()
 
       tournament_stat
@@ -373,7 +383,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "list_tournament_stats/0 returns all tournament_stats" do
       tournament_stat = tournament_stat_fixture()
-      [result_stat] = Tournaments.list_tournament_stats(tournament_stat.tournament_id)
+      [result_stat] = Tournaments.list_tournament_stats(tournament_stat.tournament_phase_id)
       assert result_stat.id == tournament_stat.id
     end
 
@@ -381,7 +391,7 @@ defmodule TournamentsApi.TournamentsTest do
       tournament_stat = tournament_stat_fixture()
 
       result_stat =
-        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_id)
+        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_phase_id)
 
       assert result_stat.id == tournament_stat.id
     end
@@ -403,7 +413,9 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "update_tournament_stat/2 with valid data updates the tournament_stat" do
       tournament_stat = tournament_stat_fixture()
-      attrs = Map.merge(@update_attrs, %{tournament_id: tournament_stat.tournament_id})
+
+      attrs =
+        Map.merge(@update_attrs, %{tournament_phase_id: tournament_stat.tournament_phase_id})
 
       assert {:ok, %TournamentStat{} = tournament_stat} =
                Tournaments.update_tournament_stat(tournament_stat, attrs)
@@ -418,7 +430,7 @@ defmodule TournamentsApi.TournamentsTest do
                Tournaments.update_tournament_stat(tournament_stat, @invalid_attrs)
 
       result_stat =
-        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_id)
+        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_phase_id)
 
       assert result_stat.id == tournament_stat.id
     end
@@ -428,7 +440,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentStat{}} = Tournaments.delete_tournament_stat(tournament_stat)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_id)
+        Tournaments.get_tournament_stat!(tournament_stat.id, tournament_stat.tournament_phase_id)
       end
     end
 
@@ -469,7 +481,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert Tournaments.get_tournament_phase!(
                tournament_phase.id,
                tournament_phase.tournament_id
-             ) == tournament_phase
+             ).id == tournament_phase.id
     end
 
     test "create_tournament_phase/1 with valid data creates a tournament_phase" do

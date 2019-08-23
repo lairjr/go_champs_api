@@ -19,7 +19,6 @@ defmodule TournamentsApi.Tournaments.Tournament do
     has_many :games, TournamentGame
     has_many :groups, TournamentGroup
     has_many :phases, TournamentPhase
-    has_many :stats, TournamentStat
     has_many :teams, TournamentTeam
 
     timestamps()
