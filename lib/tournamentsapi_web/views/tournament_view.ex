@@ -18,7 +18,7 @@ defmodule TournamentsApiWeb.TournamentView do
         name: tournament.name,
         slug: tournament.slug,
         organization: render_one(tournament.organization, OrganizationView, "organization.json"),
-        phases: render_many(tournament.phases, TournamentPhaseView, "tournament_phase.json"),
+        phases: render_many(tournament.phases, TournamentView, "tournament_phase.json"),
         teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json")
       }
     }
@@ -29,6 +29,15 @@ defmodule TournamentsApiWeb.TournamentView do
       id: tournament.id,
       name: tournament.name,
       slug: tournament.slug
+    }
+  end
+
+  def render("tournament_phase.json", %{tournament_phase: tournament_phase}) do
+    %{
+      id: tournament_phase.id,
+      order: tournament_phase.order,
+      title: tournament_phase.title,
+      type: tournament_phase.type
     }
   end
 end
