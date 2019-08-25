@@ -19,4 +19,13 @@ defmodule TournamentsApiWeb.Router do
     resources "/tournaments/:tournament_id/phases", TournamentPhaseController
     resources "/tournaments/:tournament_id/teams", TournamentTeamController
   end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "Go Champs API Docs"
+      }
+    }
+  end
 end
