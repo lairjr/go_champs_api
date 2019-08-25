@@ -13,8 +13,6 @@ defmodule TournamentsApi.Tournaments.Tournament do
     field :organization_slug, :string
 
     belongs_to :organization, Organization
-
-    has_many :games, TournamentGame
     has_many :phases, TournamentPhase
     has_many :teams, TournamentTeam
 

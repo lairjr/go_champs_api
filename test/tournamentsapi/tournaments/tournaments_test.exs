@@ -291,15 +291,25 @@ defmodule TournamentsApi.TournamentsTest do
   describe "tournament_games" do
     alias TournamentsApi.Tournaments.TournamentGame
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{tournament_id: nil}
+    @valid_attrs %{
+      away_score: 10,
+      datetime: "2019-08-25T16:59:27.116Z",
+      home_score: 20,
+      location: "some location"
+    }
+    @update_attrs %{
+      away_score: 20,
+      datetime: "2019-08-25T16:59:27.116Z",
+      home_score: 30,
+      location: "another location"
+    }
+    @invalid_attrs %{tournament_phase_id: nil}
 
     def tournament_game_fixture(attrs \\ %{}) do
       {:ok, tournament_game} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_id()
+        |> map_tournament_phase_id()
         |> Tournaments.create_tournament_game()
 
       tournament_game
@@ -307,7 +317,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "list_tournament_games/0 returns all tournament_games" do
       tournament_game = tournament_game_fixture()
-      [result_game] = Tournaments.list_tournament_games(tournament_game.tournament_id)
+      [result_game] = Tournaments.list_tournament_games(tournament_game.tournament_phase_id)
       assert result_game.id == tournament_game.id
     end
 
@@ -315,7 +325,7 @@ defmodule TournamentsApi.TournamentsTest do
       tournament_game = tournament_game_fixture()
 
       result_game =
-        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_id)
+        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_phase_id)
 
       assert result_game.id == tournament_game.id
     end
@@ -335,10 +345,16 @@ defmodule TournamentsApi.TournamentsTest do
 
     test "update_tournament_game/2 with valid data updates the tournament_game" do
       tournament_game = tournament_game_fixture()
-      attrs = Map.merge(@update_attrs, %{tournament_id: tournament_game.tournament_id})
 
-      assert {:ok, %TournamentGame{} = tournament_game} =
-               Tournaments.update_tournament_game(tournament_game, attrs)
+      attrs =
+        Map.merge(@update_attrs, %{tournament_phase_id: tournament_game.tournament_phase_id})
+
+      {:ok, %TournamentGame{} = updated_tournament_game} =
+        Tournaments.update_tournament_game(tournament_game, attrs)
+
+      assert updated_tournament_game.away_score == attrs.away_score
+      assert updated_tournament_game.home_score == attrs.home_score
+      assert updated_tournament_game.location == attrs.location
     end
 
     test "update_tournament_game/2 with invalid data returns error changeset" do
@@ -348,7 +364,7 @@ defmodule TournamentsApi.TournamentsTest do
                Tournaments.update_tournament_game(tournament_game, @invalid_attrs)
 
       result_game =
-        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_id)
+        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_phase_id)
 
       assert result_game.id == tournament_game.id
     end
@@ -358,7 +374,7 @@ defmodule TournamentsApi.TournamentsTest do
       assert {:ok, %TournamentGame{}} = Tournaments.delete_tournament_game(tournament_game)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_id)
+        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.tournament_phase_id)
       end
     end
 

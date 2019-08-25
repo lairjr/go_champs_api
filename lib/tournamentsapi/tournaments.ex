@@ -345,10 +345,8 @@ defmodule TournamentsApi.Tournaments do
       [%TournamentGame{}, ...]
 
   """
-  def list_tournament_games(tournament_id) do
-    query = from t in TournamentGame, where: [tournament_id: ^tournament_id]
-
-    Repo.all(query)
+  def list_tournament_games(tournament_phase_id) do
+    Repo.all(TournamentGame, tournament_phase_id: tournament_phase_id)
     |> Repo.preload([:away_team, :home_team])
   end
 
@@ -366,9 +364,9 @@ defmodule TournamentsApi.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament_game!(id, tournament_id),
+  def get_tournament_game!(id, tournament_phase_id),
     do:
-      Repo.get_by!(TournamentGame, id: id, tournament_id: tournament_id)
+      Repo.get_by!(TournamentGame, id: id, tournament_phase_id: tournament_phase_id)
       |> Repo.preload([:away_team, :home_team])
 
   @doc """
