@@ -5,6 +5,10 @@ defmodule TournamentsApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :tournamentsapi, swagger_file: "swagger.json"
+  end
+
   scope "/api", TournamentsApiWeb do
     pipe_through :api
 
