@@ -1,19 +1,24 @@
-# TournamentsApi
+# Go Champs Web API
 
-To start your Phoenix server:
+*This is the Go Champs Web API repository.*
 
+It is based on the REST principles, so the endpoints return JSON data about organizations, tournaments, phases, teams, games, etc. A diagram view explaning the main entities and how the we built the relations is under construction.
+
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
+### How to contribute
+
+It was mainly written in Elixir using Phoenix, so you will have to set up your environment correctly before get start.
+
+After that, you will be able to run your server:
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
   * Start Phoenix endpoint with `mix phx.server`
+  * Run unit tests `mix test`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+---
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## License
 
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://tournament_groups.google.com/tournament_group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+- Copyright 2019.
