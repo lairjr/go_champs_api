@@ -6,7 +6,7 @@ defmodule TournamentsApiWeb.Router do
   end
 
   scope "/api/swagger" do
-    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :tournamentsapi, swagger_file: "swagger.json"
+    forward "/organization", PhoenixSwagger.Plug.SwaggerUI, otp_app: :tournamentsapi, swagger_file: "organization_swagger.json"  
   end
 
   scope "/api", TournamentsApiWeb do
