@@ -1,5 +1,6 @@
 defmodule TournamentsApiWeb.OrganizationController do
   use TournamentsApiWeb, :controller
+  use PhoenixSwagger
 
   alias TournamentsApi.Organizations
   alias TournamentsApi.Organizations.Organization

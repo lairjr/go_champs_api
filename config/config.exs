@@ -17,13 +17,13 @@ config :tournamentsapi, TournamentsApiWeb.Endpoint,
   render_errors: [view: TournamentsApiWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: TournamentsApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
-config :tournamentsapi, :phoenix_swagger,
-  swagger_files: %{
-    "priv/static/swagger.json" => [
-      router: TournamentsApiWeb.Router,    
-      endpoint: TournamentsApiWeb.Endpoint 
-    ]
-  }
+# config :tournamentsapi, :phoenix_swagger,
+#   swagger_files: %{
+#     "priv/static/swagger.json" => [
+#       router: TournamentsApiWeb.Router,    
+#       endpoint: TournamentsApiWeb.Endpoint 
+#     ]
+#   }
 
 # Configures Elixir's Logger
 config :logger, :console,
