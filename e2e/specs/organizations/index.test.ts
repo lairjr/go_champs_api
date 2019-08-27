@@ -1,11 +1,12 @@
-import { equal } from "assert";
+import { expect, use } from "chai";
+import schema from "./organization_swagger.json";
+import ChaiJsonSchema = require("chai-json-schema");
 
-describe("Typescript usage suite", () => {
-  it("should be able to execute a test", () => {
-    equal(true, true);
-  });
+use(ChaiJsonSchema);
 
-  it("should return expected string", () => {
-    equal("a", "incoming-static");
+describe("Organizations", () => {
+  it("matchs hardcoded respose", () => {
+    const organization = schema.definitions.OrganizationRequest.example.organization;
+    expect(organization).to.be.jsonSchema(schema.definitions.Organization);
   });
 });

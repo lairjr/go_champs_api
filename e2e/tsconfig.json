@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
+    "rootDir": "specs",
     "outDir": "test",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "include": [
     "specs/**/*"
