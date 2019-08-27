@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "test",
+  },
+  "include": [
+    "specs/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
