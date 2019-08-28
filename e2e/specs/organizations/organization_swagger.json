@@ -1,0 +1,148 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/organizations": {
+      "post": {
+        "tags": [
+          "Organization"
+        ],
+        "summary": "Post organization",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/OrganizationResponse"
+            },
+            "description": "Organization created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/OrganizationRequest"
+            },
+            "required": true,
+            "name": "organization",
+            "in": "body",
+            "description": "The organization details"
+          }
+        ],
+        "description": "Creates a new organization",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "summary": "List organizations",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/OrganizationsResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "OrganizationsResponse": {
+      "type": "object",
+      "title": "OrganizationsReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Organization"
+          },
+          "description": "The organizations details"
+        }
+      },
+      "description": "Response schema for multiple organizations"
+    },
+    "OrganizationResponse": {
+      "type": "object",
+      "title": "OrganizationResponse",
+      "properties": {
+        "data": {
+          "description": "The organization details",
+          "$ref": "#/definitions/Organization"
+        }
+      },
+      "description": "Response schema for single organization"
+    },
+    "OrganizationRequest": {
+      "type": "object",
+      "title": "OrganizationRequest",
+      "required": [
+        "organization"
+      ],
+      "properties": {
+        "organization": {
+          "description": "The organization details",
+          "$ref": "#/definitions/Organization"
+        }
+      },
+      "example": {
+        "organization": {
+          "name": "Organization name",
+          "slug": "organization-name"
+        }
+      },
+      "description": "POST body for creating a organization"
+    },
+    "Organization": {
+      "type": "object",
+      "title": "Organization",
+      "required": [
+        "name",
+        "slug"
+      ],
+      "properties": {
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        },
+        "name": {
+          "type": "string",
+          "description": "Organization name"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "id": {
+          "type": "string",
+          "description": "Organization ID"
+        },
+        "slug": {
+          "type": "string",
+          "description": "Organization slug"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "name": "Organization name",
+        "slug": "organization-name"
+      },
+      "description": "A organization of the app"
+    }
+  }
+}
