@@ -19,6 +19,10 @@ const createOrganizationPayload = () => ({
 });
 
 describe("Organizations", () => {
+  const deleteOrganization = (organizationId: string) => {
+    return axios.delete(`${ORGANIZATIONS_URL}/${organizationId}`);
+  };
+
   describe("GET /", () => {
     it("matches schema", async () => {
       const { status, data } = await axios.get(ORGANIZATIONS_URL);
@@ -36,6 +40,7 @@ describe("Organizations", () => {
       expect(payload).to.be.jsonSchema(schema.definitions.OrganizationRequest);
       expect(status).to.be.equal(201);
       expect(data).to.be.jsonSchema(schema.definitions.OrganizationResponse);
+      await deleteOrganization(data.data.id);
     });
   });
 });
