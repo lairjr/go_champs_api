@@ -1,17 +1,13 @@
 import axios from 'axios';
 import { expect, tv4, use } from "chai";
+import { ORGANIZATIONS_URL } from "../URLs.js";
+import { randomString } from "../utils/random.js";
 import schema from "./organization_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
 
-const ORGANIZATIONS_URL = "https://yochamps-api.herokuapp.com/api/organizations";
-
 tv4.addSchema("#/definitions/Organization", schema.definitions.Organization);
-
-const randomString = () => (
-  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-);
 
 const createOrganizationPayload = () => ({
   name: randomString(),
