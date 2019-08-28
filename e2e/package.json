@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "compile": "tsc --declaration",
+    "compile": "rm -rf test/ && tsc --declaration",
     "lint": "tslint --project tsconfig.json",
     "test": "yarn compile && yarn mocha --recursive './test/**/*.js'"
   },
