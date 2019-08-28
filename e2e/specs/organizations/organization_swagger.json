@@ -61,6 +61,9 @@
     "OrganizationsResponse": {
       "type": "object",
       "title": "OrganizationsReponse",
+      "required": [
+        "data"
+      ],
       "properties": {
         "data": {
           "type": "array",
@@ -86,6 +89,9 @@
     "OrganizationRequest": {
       "type": "object",
       "title": "OrganizationRequest",
+      "required": [
+        "organization"
+      ],
       "properties": {
         "organization": {
           "description": "The organization details",

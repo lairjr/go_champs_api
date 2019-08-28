@@ -3,7 +3,10 @@
     "rootDir": "specs",
     "outDir": "test",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": [
+      "es2015"
+    ]
   },
   "include": [
     "specs/**/*"
