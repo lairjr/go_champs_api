@@ -114,27 +114,27 @@
         "slug"
       ],
       "properties": {
-        "updated_at": {
+        "id": {
           "type": "string",
-          "format": "datetime",
-          "description": "Update timestamp"
+          "description": "Organization ID"
         },
         "name": {
           "type": "string",
           "description": "Organization name"
+        },
+        "slug": {
+          "type": "string",
+          "description": "Organization slug"
         },
         "inserted_at": {
           "type": "string",
           "format": "datetime",
           "description": "Creation timestamp"
         },
-        "id": {
+        "updated_at": {
           "type": "string",
-          "description": "Organization ID"
-        },
-        "slug": {
-          "type": "string",
-          "description": "Organization slug"
+          "format": "datetime",
+          "description": "Update timestamp"
         }
       },
       "example": {
