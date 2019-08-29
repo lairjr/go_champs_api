@@ -1,11 +1,15 @@
 import { expect, tv4, use } from "chai";
-import httpClient, { organizationPayload } from "./httpClient";
+import { ORGANIZATIONS_URL } from "../URLs";
+import httpClientFactory from "../utils/httpClientFactory";
+import { organizationPayload } from "./helpers";
 import schema from "./organization_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
 
 tv4.addSchema("#/definitions/Organization", schema.definitions.Organization);
+
+const httpClient = httpClientFactory(ORGANIZATIONS_URL);
 
 describe("Organizations", () => {
   describe("POST /", () => {
