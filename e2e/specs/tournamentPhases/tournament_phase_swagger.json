@@ -1,0 +1,156 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/tournaments/{tournamentId}/phases": {
+      "post": {
+        "tags": [
+          "TournamentPhase"
+        ],
+        "summary": "Post tournament phases",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/TournamentPhaseResponse"
+            },
+            "description": "TournamentPhase created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/TournamentPhaseRequest"
+            },
+            "required": true,
+            "name": "tournament_phase",
+            "in": "body",
+            "description": "The tournament phases details"
+          }
+        ],
+        "description": "Creates a new tournament phases",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "TournamentPhase"
+        ],
+        "summary": "List tournament phases",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/TournamentPhasesResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "TournamentPhasesResponse": {
+      "type": "object",
+      "title": "TournamentPhasesReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TournamentPhase"
+          },
+          "description": "The tournament phases details"
+        }
+      },
+      "description": "Response schema for multiple tournament phases"
+    },
+    "TournamentPhaseResponse": {
+      "type": "object",
+      "title": "TournamentPhaseResponse",
+      "properties": {
+        "data": {
+          "description": "The tournament phases details",
+          "$ref": "#/definitions/TournamentPhase"
+        }
+      },
+      "description": "Response schema for single tournament phases"
+    },
+    "TournamentPhaseRequest": {
+      "type": "object",
+      "title": "TournamentPhaseRequest",
+      "required": [
+        "tournament_phase"
+      ],
+      "properties": {
+        "tournament_phase": {
+          "description": "The tournament phases details",
+          "$ref": "#/definitions/TournamentPhase"
+        }
+      },
+      "example": {
+        "tournament_phase": {
+          "name": "TournamentPhase name",
+          "slug": "tournament-name"
+        }
+      },
+      "description": "POST body for creating a tournament phases"
+    },
+    "TournamentPhase": {
+      "type": "object",
+      "title": "TournamentPhase",
+      "required": [
+        "title",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "TournamentPhase ID"
+        },
+        "title": {
+          "type": "string",
+          "description": "TournamentPhase title"
+        },
+        "type": {
+          "type": "string",
+          "description": "TournamentPhase type"
+        },
+        "order": {
+          "type": "number",
+          "description": "TournamentPhase order"
+        },
+        "tournament_id": {
+          "type": "string",
+          "description": "Organization ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "title": "First phase",
+        "type": "standings"
+      },
+      "description": "A tournament phases of the app"
+    }
+  }
+}

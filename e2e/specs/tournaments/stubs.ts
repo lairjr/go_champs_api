@@ -10,9 +10,9 @@ export const createTournamentWithOrganizaion = async () => {
   const { data: organization } = await stubOrganization();
 
   const payload = tournamentPayload(organization.id);
-  const { data: tournament } = await httpClient.post(payload);
+  const { data: { data: tournament } } = await httpClient.post(payload);
 
-  return tournament;
+  return { tournament, organization };
 };
 
 export const deleteTournamentAndOrganization = async (tournamentId: string, organizationId: string) => {
