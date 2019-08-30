@@ -9,7 +9,16 @@ defmodule TournamentsApiWeb.TournamentPhaseView do
   end
 
   def render("show.json", %{tournament_phase: tournament_phase}) do
-    %{data: render_one(tournament_phase, TournamentPhaseView, "tournament_phase.json")}
+    %{
+      data: %{
+        id: tournament_phase.id,
+        order: tournament_phase.order,
+        title: tournament_phase.title,
+        type: tournament_phase.type,
+        groups: render_many(tournament_phase.groups, TournamentGroupView, "tournament_group.json"),
+        stats: render_many(tournament_phase.stats, TournamentStatView, "tournament_stat.json")
+      }
+    }
   end
 
   def render("tournament_phase.json", %{tournament_phase: tournament_phase}) do
@@ -17,9 +26,7 @@ defmodule TournamentsApiWeb.TournamentPhaseView do
       id: tournament_phase.id,
       order: tournament_phase.order,
       title: tournament_phase.title,
-      type: tournament_phase.type,
-      groups: render_many(tournament_phase.groups, TournamentGroupView, "tournament_group.json"),
-      stats: render_many(tournament_phase.stats, TournamentStatView, "tournament_stat.json")
+      type: tournament_phase.type
     }
   end
 end
