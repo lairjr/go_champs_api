@@ -28,13 +28,19 @@ describe("TournamentPhases", () => {
     });
   });
 
-  // describe("GET /", () => {
-  //   it("matches schema", async () => {
-  //     const { status, data } = await httpClient.getAll();
-  //     expect(data).to.be.jsonSchema(schema.definitions.TournamentPhasePhasesResponse);
-  //     expect(status).to.be.equal(200);
-  //   });
-  // });
+  describe("GET /", () => {
+    it("matches schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
+
+      const httpClient = httpClientFactory(tournamentPhasesURL(tournament.id));
+
+      const { status, data } = await httpClient.getAll();
+      expect(data).to.be.jsonSchema(schema.definitions.TournamentPhasesResponse);
+      expect(status).to.be.equal(200);
+
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+  });
 
   // describe("GET /:id", () => {
   //   it("matches schema", async () => {
