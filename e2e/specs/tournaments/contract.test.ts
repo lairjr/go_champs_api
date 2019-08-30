@@ -1,5 +1,5 @@
 import { expect, tv4, use } from "chai";
-import { organizationPayload } from "../organizations/helpers";
+import { stubOrganization } from "../organizations/stubs";
 import { ORGANIZATIONS_URL, TOURNAMENTS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentPayload } from "./helpers";
@@ -14,11 +14,6 @@ const httpClient = httpClientFactory(TOURNAMENTS_URL);
 const organizationClient = httpClientFactory(ORGANIZATIONS_URL);
 
 describe("Tournaments", () => {
-  const stubOrganization = async () => {
-    const { data } = await organizationClient.post(organizationPayload());
-    return data;
-  };
-
   describe("POST /", () => {
     it("matches schema", async () => {
       const { data: organization } = await stubOrganization();
