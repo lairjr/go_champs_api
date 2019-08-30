@@ -42,45 +42,56 @@ describe("TournamentPhases", () => {
     });
   });
 
-  // describe("GET /:id", () => {
-  //   it("matches schema", async () => {
-  //     const { data: organization } = await stubOrganization();
+  describe("GET /:id", () => {
+    it("matches schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
 
-  //     const { data: created } = await httpClient.post(tournamentPayload(organization.id));
-  //     const { status, data: response } = await httpClient.get(created.data.id);
-  //     expect(response).to.be.jsonSchema(schema.definitions.TournamentPhaseResponse);
-  //     expect(status).to.be.equal(200);
+      const httpClient = httpClientFactory(tournamentPhasesURL(tournament.id));
 
-  //     await httpClient.delete(created.data.id);
-  //     await organizationClient.delete(organization.id);
-  //   });
-  // });
+      const payload = tournamentPhasePayload(tournament.id);
+      const { data: created } = await httpClient.post(payload);
 
-  // describe("PATCH /:id", () => {
-  //   it("matchs schema", async () => {
-  //     const { data: organization } = await stubOrganization();
+      const { status, data: response } = await httpClient.get(created.data.id);
+      expect(response).to.be.jsonSchema(schema.definitions.TournamentPhaseResponse);
+      expect(status).to.be.equal(200);
 
-  //     const { data: created } = await httpClient.post(tournamentPayload(organization.id));
-  //     const payload = tournamentPayload(organization.id);
-  //     const { status, data: response } = await httpClient.patch(created.data.id, payload);
-  //     expect(payload).to.be.jsonSchema(schema.definitions.TournamentPhaseRequest);
-  //     expect(response).to.be.jsonSchema(schema.definitions.TournamentPhaseResponse);
-  //     expect(status).to.be.equal(200);
+      await httpClient.delete(created.data.id);
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+  });
 
-  //     await httpClient.delete(created.data.id);
-  //     await organizationClient.delete(organization.id);
-  //   });
-  // });
+  describe("PATCH /:id", () => {
+    it("matchs schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
 
-  // describe("DELETE /", () => {
-  //   it("matches schema", async () => {
-  //     const { data: organization } = await stubOrganization();
+      const httpClient = httpClientFactory(tournamentPhasesURL(tournament.id));
 
-  //     const { data: created } = await httpClient.post(tournamentPayload(organization.id));
-  //     const { status } = await httpClient.delete(created.data.id);
-  //     expect(status).to.be.equal(204);
+      const payload = tournamentPhasePayload(tournament.id);
+      const { data: created } = await httpClient.post(payload);
 
-  //     await organizationClient.delete(organization.id);
-  //   });
-  // });
+      const patchPayload = tournamentPhasePayload(tournament.id);
+      const { status, data: response } = await httpClient.patch(created.data.id, patchPayload);
+      expect(patchPayload).to.be.jsonSchema(schema.definitions.TournamentPhaseRequest);
+      expect(response).to.be.jsonSchema(schema.definitions.TournamentPhaseResponse);
+      expect(status).to.be.equal(200);
+
+      await httpClient.delete(created.data.id);
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+  });
+
+  describe("DELETE /", () => {
+    it("matches schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
+
+      const httpClient = httpClientFactory(tournamentPhasesURL(tournament.id));
+
+      const payload = tournamentPhasePayload(tournament.id);
+      const { data: created } = await httpClient.post(payload);
+      const { status } = await httpClient.delete(created.data.id);
+      expect(status).to.be.equal(204);
+
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+  });
 });
