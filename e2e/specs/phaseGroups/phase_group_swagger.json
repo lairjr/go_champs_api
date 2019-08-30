@@ -1,0 +1,145 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/phases/{phaseId}/groups": {
+      "post": {
+        "tags": [
+          "PhaseGroup"
+        ],
+        "summary": "Post phase groups",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PhaseGroupResponse"
+            },
+            "description": "PhaseGroup created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PhaseGroupRequest"
+            },
+            "required": true,
+            "name": "tournament_group",
+            "in": "body",
+            "description": "The phase groups details"
+          }
+        ],
+        "description": "Creates a new phase groups",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "PhaseGroup"
+        ],
+        "summary": "List phase groups",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PhaseGroupsResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PhaseGroupsResponse": {
+      "type": "object",
+      "title": "PhaseGroupsReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseGroup"
+          },
+          "description": "The phase groups details"
+        }
+      },
+      "description": "Response schema for multiple phase groups"
+    },
+    "PhaseGroupResponse": {
+      "type": "object",
+      "title": "PhaseGroupResponse",
+      "properties": {
+        "data": {
+          "description": "The phase groups details",
+          "$ref": "#/definitions/PhaseGroup"
+        }
+      },
+      "description": "Response schema for single phase groups"
+    },
+    "PhaseGroupRequest": {
+      "type": "object",
+      "title": "PhaseGroupRequest",
+      "required": [
+        "tournament_group"
+      ],
+      "properties": {
+        "tournament_group": {
+          "description": "The phase groups details",
+          "$ref": "#/definitions/PhaseGroup"
+        }
+      },
+      "example": {
+        "tournament_group": {
+          "name": "PhaseGroup name"
+        }
+      },
+      "description": "POST body for creating a phase groups"
+    },
+    "PhaseGroup": {
+      "type": "object",
+      "title": "PhaseGroup",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PhaseGroup ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "PhaseGroup name"
+        },
+        "tournament_group_id": {
+          "type": "string",
+          "description": "Tournament phase ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "name": "Group A"
+      },
+      "description": "A phase groups of the app"
+    }
+  }
+}
