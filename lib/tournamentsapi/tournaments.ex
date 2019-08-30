@@ -543,7 +543,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_phases(tournament_id) do
-    Repo.all(TournamentPhase, tournament_id: tournament_id)
+    Repo.all(from p in TournamentPhase, where: p.tournament_id > ^tournament_id)
   end
 
   @doc """
