@@ -1,18 +1,18 @@
 {
   "swagger": "2.0",
   "paths": {
-    "/api/phases/{phaseId}/groups": {
+    "/api/phases/{phaseId}/stats": {
       "post": {
         "tags": [
-          "PhaseGroup"
+          "PhaseStat"
         ],
-        "summary": "Post phase groups",
+        "summary": "Post phase stats",
         "responses": {
           "201": {
             "schema": {
-              "$ref": "#/definitions/PhaseGroupResponse"
+              "$ref": "#/definitions/PhaseStatResponse"
             },
-            "description": "PhaseGroup created OK"
+            "description": "PhaseStat created OK"
           }
         },
         "produces": [
@@ -21,28 +21,28 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/definitions/PhaseGroupRequest"
+              "$ref": "#/definitions/PhaseStatRequest"
             },
             "required": true,
-            "name": "tournament_group",
+            "name": "tournament_stat",
             "in": "body",
-            "description": "The phase groups details"
+            "description": "The phase stats details"
           }
         ],
-        "description": "Creates a new phase groups",
+        "description": "Creates a new phase stats",
         "consumes": [
           "application/json"
         ]
       },
       "get": {
         "tags": [
-          "PhaseGroup"
+          "PhaseStat"
         ],
-        "summary": "List phase groups",
+        "summary": "List phase stats",
         "responses": {
           "200": {
             "schema": {
-              "$ref": "#/definitions/PhaseGroupsResponse"
+              "$ref": "#/definitions/PhaseStatsResponse"
             }
           }
         },
@@ -58,9 +58,9 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "PhaseGroupsResponse": {
+    "PhaseStatsResponse": {
       "type": "object",
-      "title": "PhaseGroupsReponse",
+      "title": "PhaseStatsReponse",
       "required": [
         "data"
       ],
@@ -68,57 +68,57 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PhaseGroup"
+            "$ref": "#/definitions/PhaseStat"
           },
-          "description": "The phase groups details"
+          "description": "The phase stats details"
         }
       },
-      "description": "Response schema for multiple phase groups"
+      "description": "Response schema for multiple phase stats"
     },
-    "PhaseGroupResponse": {
+    "PhaseStatResponse": {
       "type": "object",
-      "title": "PhaseGroupResponse",
+      "title": "PhaseStatResponse",
       "properties": {
         "data": {
-          "description": "The phase groups details",
-          "$ref": "#/definitions/PhaseGroup"
+          "description": "The phase stats details",
+          "$ref": "#/definitions/PhaseStat"
         }
       },
-      "description": "Response schema for single phase groups"
+      "description": "Response schema for single phase stats"
     },
-    "PhaseGroupRequest": {
+    "PhaseStatRequest": {
       "type": "object",
-      "title": "PhaseGroupRequest",
+      "title": "PhaseStatRequest",
       "required": [
-        "tournament_group"
+        "tournament_stat"
       ],
       "properties": {
-        "tournament_group": {
-          "description": "The phase groups details",
-          "$ref": "#/definitions/PhaseGroup"
+        "tournament_stat": {
+          "description": "The phase stats details",
+          "$ref": "#/definitions/PhaseStat"
         }
       },
       "example": {
-        "tournament_group": {
-          "name": "PhaseGroup name"
+        "tournament_stat": {
+          "title": "PhaseStat title"
         }
       },
-      "description": "POST body for creating a phase groups"
+      "description": "POST body for creating a phase stats"
     },
-    "PhaseGroup": {
+    "PhaseStat": {
       "type": "object",
-      "title": "PhaseGroup",
+      "title": "PhaseStat",
       "required": [
-        "name"
+        "title"
       ],
       "properties": {
         "id": {
           "type": "string",
-          "description": "PhaseGroup ID"
+          "description": "PhaseStat ID"
         },
-        "name": {
+        "title": {
           "type": "string",
-          "description": "PhaseGroup name"
+          "description": "PhaseStat title"
         },
         "tournament_phase_id": {
           "type": "string",
@@ -137,9 +137,9 @@
       },
       "example": {
         "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
-        "name": "Group A"
+        "title": "Wins"
       },
-      "description": "A phase groups of the app"
+      "description": "A phase stats of the app"
     }
   }
 }

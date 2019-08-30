@@ -12,3 +12,6 @@ export const tournamentTeamsURL = (tournamentId: string) => (
 export const phaseGroupsURL = (tournamentPhaseId: string) => (
   `${API_HOST}/phases/${tournamentPhaseId}/groups`
 );
+export const phaseStatsURL = (tournamentPhaseId: string) => (
+  `${API_HOST}/phases/${tournamentPhaseId}/stats`
+);
