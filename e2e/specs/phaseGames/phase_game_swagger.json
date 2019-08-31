@@ -1,0 +1,162 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/phases/{phaseId}/games": {
+      "post": {
+        "tags": [
+          "PhaseGame"
+        ],
+        "summary": "Post phase games",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PhaseGameResponse"
+            },
+            "description": "PhaseGame created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PhaseGameRequest"
+            },
+            "required": true,
+            "name": "tournament_game",
+            "in": "body",
+            "description": "The phase games details"
+          }
+        ],
+        "description": "Creates a new phase games",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "PhaseGame"
+        ],
+        "summary": "List phase games",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PhaseGamesResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PhaseGamesResponse": {
+      "type": "object",
+      "title": "PhaseGamesReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseGame"
+          },
+          "description": "The phase games details"
+        }
+      },
+      "description": "Response schema for multiple phase games"
+    },
+    "PhaseGameResponse": {
+      "type": "object",
+      "title": "PhaseGameResponse",
+      "properties": {
+        "data": {
+          "description": "The phase games details",
+          "$ref": "#/definitions/PhaseGame"
+        }
+      },
+      "description": "Response schema for single phase games"
+    },
+    "PhaseGameRequest": {
+      "type": "object",
+      "title": "PhaseGameRequest",
+      "required": [
+        "tournament_game"
+      ],
+      "properties": {
+        "tournament_game": {
+          "description": "The phase games details",
+          "$ref": "#/definitions/PhaseGame"
+        }
+      },
+      "example": {
+        "tournament_game": {
+          "title": "PhaseGame title"
+        }
+      },
+      "description": "POST body for creating a phase games"
+    },
+    "PhaseGame": {
+      "type": "object",
+      "title": "PhaseGame",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PhaseGame ID"
+        },
+        "away_score": {
+          "type": "number",
+          "description": "PhaseGame away score"
+        },
+        "datetime": {
+          "type": "string",
+          "description": "PhaseGame date and time in ISO"
+        },
+        "home_score": {
+          "type": "number",
+          "description": "PhaseGame home score"
+        },
+        "location": {
+          "type": "string",
+          "description": "PhaseGame location"
+        },
+        "tournament_phase_id": {
+          "type": "string",
+          "description": "Tournament phase ID"
+        },
+        "away_team_id": {
+          "type": "string",
+          "description": "Tournament away team ID"
+        },
+        "home_team_id": {
+          "type": "string",
+          "description": "Tournament home team ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "title": "Wins"
+      },
+      "description": "A phase games of the app"
+    }
+  }
+}
