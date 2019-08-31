@@ -133,9 +133,43 @@
           "type": "string",
           "description": "Tournament phase ID"
         },
+        "away_team": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "nullable": true,
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Away team ID"
+            },
+            "name": {
+              "type": "string",
+              "description": "Away team name"
+            }
+          }
+        },
         "away_team_id": {
           "type": "string",
           "description": "Tournament away team ID"
+        },
+        "home_team": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "nullable": true,
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Hom team ID"
+            },
+            "name": {
+              "type": "string",
+              "description": "Hom team name"
+            }
+          }
         },
         "home_team_id": {
           "type": "string",

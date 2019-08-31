@@ -1,8 +1,9 @@
 import { expect, tv4, use } from "chai";
 import { createTournamentPhaseWithOrganizaion, deleteTournamentPhaseAndOrganization } from "../tournamentPhases/stubs";
+import { createTournamentTeam, deleteTournamentTeam } from "../tournamentTeams/stubs";
 import { phaseGamesURL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
-import { tournamentGamePayload } from "./helpers";
+import { tournamentGamePayload, tournamentGameWithTeamsPayload } from "./helpers";
 import schema from "./phase_game_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
@@ -19,11 +20,35 @@ describe("PhasesGame", () => {
 
       const payload = tournamentGamePayload(tournamentPhase.id);
       const { status, data } = await httpClient.post(payload);
+      console.log(data);
       expect(payload).to.be.jsonSchema(schema.definitions.PhaseGameRequest);
       expect(status).to.be.equal(201);
       expect(data).to.be.jsonSchema(schema.definitions.PhaseGameResponse);
 
       await httpClient.delete(data.data.id);
+      await deleteTournamentPhaseAndOrganization(
+        tournament.id,
+        organization.id,
+        tournamentPhase.id,
+      );
+    });
+
+    it("matches schema with tournament team", async () => {
+      const { tournament, organization, tournamentPhase } = await createTournamentPhaseWithOrganizaion();
+      const { tournamentTeam: awayTeam } = await createTournamentTeam(tournament.id);
+      const { tournamentTeam: homeTeam } = await createTournamentTeam(tournament.id);
+
+      const httpClient = httpClientFactory(phaseGamesURL(tournamentPhase.id));
+
+      const payload = tournamentGameWithTeamsPayload(tournamentPhase.id, awayTeam.id, homeTeam.id);
+      const { status, data } = await httpClient.post(payload);
+      expect(payload).to.be.jsonSchema(schema.definitions.PhaseGameRequest);
+      expect(status).to.be.equal(201);
+      expect(data).to.be.jsonSchema(schema.definitions.PhaseGameResponse);
+
+      await httpClient.delete(data.data.id);
+      await deleteTournamentTeam(tournament.id, awayTeam.id);
+      await deleteTournamentTeam(tournament.id, homeTeam.id);
       await deleteTournamentPhaseAndOrganization(
         tournament.id,
         organization.id,
