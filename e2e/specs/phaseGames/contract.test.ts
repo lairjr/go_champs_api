@@ -20,7 +20,6 @@ describe("PhasesGame", () => {
 
       const payload = tournamentGamePayload(tournamentPhase.id);
       const { status, data } = await httpClient.post(payload);
-      console.log(data);
       expect(payload).to.be.jsonSchema(schema.definitions.PhaseGameRequest);
       expect(status).to.be.equal(201);
       expect(data).to.be.jsonSchema(schema.definitions.PhaseGameResponse);
@@ -113,6 +112,33 @@ describe("PhasesGame", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id);
+      await deleteTournamentPhaseAndOrganization(
+        tournament.id,
+        organization.id,
+        tournamentPhase.id,
+      );
+    });
+
+    it("matchs schema with tournament team", async () => {
+      const { tournament, organization, tournamentPhase } = await createTournamentPhaseWithOrganizaion();
+
+      const httpClient = httpClientFactory(phaseGamesURL(tournamentPhase.id));
+
+      const payload = tournamentGamePayload(tournamentPhase.id);
+      const { data: created } = await httpClient.post(payload);
+
+      const { tournamentTeam: awayTeam } = await createTournamentTeam(tournament.id);
+      const { tournamentTeam: homeTeam } = await createTournamentTeam(tournament.id);
+
+      const patchPayload = tournamentGameWithTeamsPayload(tournamentPhase.id, awayTeam.id, homeTeam.id);
+      const { status, data: response } = await httpClient.patch(created.data.id, patchPayload);
+      expect(patchPayload).to.be.jsonSchema(schema.definitions.PhaseGameRequest);
+      expect(response).to.be.jsonSchema(schema.definitions.PhaseGameResponse);
+      expect(status).to.be.equal(200);
+
+      await httpClient.delete(created.data.id);
+      await deleteTournamentTeam(tournament.id, awayTeam.id);
+      await deleteTournamentTeam(tournament.id, homeTeam.id);
       await deleteTournamentPhaseAndOrganization(
         tournament.id,
         organization.id,
