@@ -1,11 +1,26 @@
 version: '3.1'
 
 services:
+  phoenix:
+    build: 
+      context: .
+    command: mix phx.server
+    environment:
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: tournaments
+      DATABASE_HOST: db
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+
   db:
     image: postgres
     restart: always
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: tournaments
