@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "rm -rf test/ && tsc --declaration",
     "lint": "tslint --project tsconfig.json",
-    "test": "yarn compile && API_HOST=http://localhost:4000/api yarn mocha --recursive './test/**/*.js'"
+    "test": "yarn compile && yarn mocha --recursive './test/**/*.js'"
   },
   "directories": {
     "test": "./test"
