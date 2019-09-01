@@ -1,6 +1,17 @@
 version: '3.1'
 
 services:
+  contract-test:
+    build: 
+      context: ./e2e/
+    command: yarn test
+    environment:
+      API_HOST: http://phoenix:4000/api
+    volumes:
+    - ./e2e/specs:/contractTest/specs
+    depends_on:
+      - phoenix
+ 
   phoenix:
     build: 
       context: .
