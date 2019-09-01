@@ -1,5 +1,6 @@
 // const API_HOST = "https://yochamps-api.herokuapp.com/api";
-const API_HOST = "http://localhost:4000/api";
+const API_HOST = process.env.API_HOST;
+console.log(process.env.API_HOST, 'arriz');
 
 export const ORGANIZATIONS_URL = `${API_HOST}/organizations`;
 export const TOURNAMENTS_URL = `${API_HOST}/tournaments`;
