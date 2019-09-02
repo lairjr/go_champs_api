@@ -15,7 +15,7 @@ services:
   phoenix:
     build: 
       context: .
-    command: mix phx.server
+    command: bash -c "mix ecto.setup && mix phx.server"
     environment:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: admin
