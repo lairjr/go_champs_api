@@ -1,17 +1,6 @@
 version: '3.1'
 
-services:
-  contract-test:
-    build: 
-      context: ./e2e/
-    command: yarn test
-    environment:
-      API_HOST: http://phoenix:4000/api
-    volumes:
-    - ./e2e/specs:/contractTest/specs
-    depends_on:
-      - phoenix
- 
+services:  
   phoenix:
     build: 
       context: .
@@ -35,3 +24,26 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: tournaments
+
+  unit-test:
+    build: 
+      context: .
+    command: mix test
+    environment:
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: tournaments
+      DATABASE_HOST: db
+    depends_on:
+      - db
+
+  contract-test:
+    build: 
+      context: ./e2e/
+    command: yarn test
+    environment:
+      API_HOST: http://phoenix:4000/api
+    volumes:
+    - ./e2e/specs:/contractTest/specs
+    depends_on:
+      - phoenix

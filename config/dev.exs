@@ -53,4 +53,5 @@ config :tournamentsapi, TournamentsApi.Repo,
   password: System.get_env("DATABASE_PASSWORD") || "admin",
   database: System.get_env("DATABASE_NAME") || "tournaments",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
+  port: System.get_env("DATABASE_PORT") || "5432",
   pool_size: 10
