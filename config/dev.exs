@@ -51,6 +51,6 @@ config :phoenix, :plug_init_mode, :runtime
 config :tournamentsapi, TournamentsApi.Repo,
   username: System.get_env("DATABASE_USERNAME") || "postgres",
   password: System.get_env("DATABASE_PASSWORD") || "admin",
-  database: System.get_env("DATABASE_NAME") ||  "tournaments",
+  database: System.get_env("DATABASE_NAME") || "tournaments",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
   pool_size: 10

@@ -488,11 +488,14 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "list_tournament_phases/0 returns all tournament_phases" do
+      random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
       tournament_phase = tournament_phase_fixture()
 
       assert Tournaments.list_tournament_phases(tournament_phase.tournament_id) == [
                tournament_phase
              ]
+
+      assert Tournaments.list_tournament_phases(random_uuid) == []
     end
 
     test "get_tournament_phase!/1 returns the tournament_phase with given id" do
