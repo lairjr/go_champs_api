@@ -5,6 +5,7 @@
 It is based on the REST principles, so the endpoints return JSON data about organizations, tournaments, phases, teams, games, etc. A diagram view explaning the main entities and how the we built the relations is under construction.
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+[![Build Status](https://travis-ci.com/lairjr/tournamentsapi.svg?branch=master)](https://travis-ci.com/lairjr/tournamentsapi)
 
 ### How to contribute
 
