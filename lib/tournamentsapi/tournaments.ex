@@ -347,7 +347,11 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_games(tournament_phase_id) do
-    Repo.all(TournamentGame, tournament_phase_id: tournament_phase_id)
+    {:ok, uuid} = Ecto.UUID.cast(tournament_phase_id)
+
+    TournamentGame
+    |> where([g], g.tournament_phase_id == ^uuid)
+    |> Repo.all()
     |> Repo.preload([:away_team, :home_team])
   end
 

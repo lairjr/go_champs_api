@@ -316,9 +316,12 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "list_tournament_games/0 returns all tournament_games" do
+      random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
       tournament_game = tournament_game_fixture()
       [result_game] = Tournaments.list_tournament_games(tournament_game.tournament_phase_id)
       assert result_game.id == tournament_game.id
+
+      assert Tournaments.list_tournament_games(random_uuid) == []
     end
 
     test "get_tournament_game!/1 returns the tournament_game with given id" do
