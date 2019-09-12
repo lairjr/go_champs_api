@@ -447,7 +447,11 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def list_tournament_stats(tournament_phase_id) do
-    Repo.all(TournamentStat, tournament_phase_id: tournament_phase_id)
+    {:ok, uuid} = Ecto.UUID.cast(tournament_phase_id)
+
+    TournamentStat
+    |> where([s], s.tournament_phase_id == ^uuid)
+    |> Repo.all()
   end
 
   @doc """
@@ -549,9 +553,6 @@ defmodule TournamentsApi.Tournaments do
     TournamentPhase
     |> where([p], p.tournament_id == ^uuid)
     |> Repo.all()
-
-    # query = from p in TournamentPhase, where: p.tournament_id == ^tournament_id
-    # Repo.all(query)
   end
 
   @doc """

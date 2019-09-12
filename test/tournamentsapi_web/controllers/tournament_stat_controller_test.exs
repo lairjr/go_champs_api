@@ -40,7 +40,8 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
 
   describe "index" do
     test "lists all tournament_stats", %{conn: conn} do
-      conn = get(conn, Routes.tournament_stat_path(conn, :index, "tournament-phase-id"))
+      random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
+      conn = get(conn, Routes.tournament_stat_path(conn, :index, random_uuid))
       assert json_response(conn, 200)["data"] == []
     end
   end
