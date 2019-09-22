@@ -14,22 +14,7 @@ defmodule TournamentsApiWeb.TournamentTeamView do
   def render("tournament_team.json", %{tournament_team: tournament_team}) do
     %{
       id: tournament_team.id,
-      name: tournament_team.name,
-      stats: tournament_team.stats,
-      group:
-        render_one(
-          tournament_team.tournament_group,
-          TournamentGroupView,
-          "tournament_group.json"
-        )
-    }
-  end
-
-  def render("basic_tournament_team.json", %{tournament_team: tournament_team}) do
-    %{
-      id: tournament_team.id,
-      name: tournament_team.name,
-      stats: tournament_team.stats
+      name: tournament_team.name
     }
   end
 end

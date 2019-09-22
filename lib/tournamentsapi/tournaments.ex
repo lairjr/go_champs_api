@@ -248,7 +248,6 @@ defmodule TournamentsApi.Tournaments do
   """
   def list_tournament_teams(tournament_id) do
     Repo.all(TournamentTeam, tournament_id: tournament_id)
-    |> Repo.preload([:tournament_group])
   end
 
   @doc """
@@ -268,7 +267,6 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament_team!(id, tournament_id),
     do:
       Repo.get_by!(TournamentTeam, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:tournament_group])
 
   @doc """
   Creates a tournament_team.

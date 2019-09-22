@@ -7,10 +7,8 @@ defmodule TournamentsApi.Tournaments.TournamentTeam do
 
   schema "tournament_teams" do
     field :name, :string
-    field :stats, :map
 
     belongs_to :tournament, Tournament
-    belongs_to :tournament_group, TournamentGroup
 
     timestamps()
   end
@@ -18,7 +16,7 @@ defmodule TournamentsApi.Tournaments.TournamentTeam do
   @doc false
   def changeset(tournament_team, attrs) do
     tournament_team
-    |> cast(attrs, [:name, :tournament_id, :tournament_group_id, :stats])
+    |> cast(attrs, [:name, :tournament_id])
     |> validate_required([:name, :tournament_id])
   end
 end
