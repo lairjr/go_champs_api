@@ -84,13 +84,6 @@
 # municipal_phase = Repo.insert!(%TournamentPhase{title: "Turno", type: "standings", tournament_id: municipal.id})
 # lawson_phase = Repo.insert!(%TournamentPhase{title: "Turno", type: "standings", tournament_id: lawson.id})
 
-# # Add tournament_groups
-
-# alias TournamentsApi.Tournaments.TournamentGroup
-
-# municipal_groupo = Repo.insert!(%TournamentGroup{tournament_phase_id: municipal_phase.id})
-# lawson_grupo = Repo.insert!(%TournamentGroup{tournament_phase_id: lawson_phase.id})
-
 # # Add tournament_game
 
 # date1 = DateTime.truncate(DateTime.utc_now(), :second)

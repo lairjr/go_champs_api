@@ -4,7 +4,6 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
   alias TournamentsApi.Tournaments.TournamentGame
-  alias TournamentsApi.Tournaments.TournamentGroup
   alias TournamentsApi.Tournaments.TournamentStat
 
   schema "tournament_phases" do
@@ -14,7 +13,6 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
 
     belongs_to :tournament, Tournament
     has_many :games, TournamentGame
-    has_many :groups, TournamentGroup
     has_many :stats, TournamentStat
 
     timestamps()

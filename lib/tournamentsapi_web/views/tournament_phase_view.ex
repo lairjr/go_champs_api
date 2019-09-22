@@ -1,6 +1,5 @@
 defmodule TournamentsApiWeb.TournamentPhaseView do
   use TournamentsApiWeb, :view
-  alias TournamentsApiWeb.TournamentGroupView
   alias TournamentsApiWeb.TournamentPhaseView
   alias TournamentsApiWeb.TournamentStatView
 
@@ -15,8 +14,6 @@ defmodule TournamentsApiWeb.TournamentPhaseView do
         order: tournament_phase.order,
         title: tournament_phase.title,
         type: tournament_phase.type,
-        groups:
-          render_many(tournament_phase.groups, TournamentGroupView, "tournament_group.json"),
         stats: render_many(tournament_phase.stats, TournamentStatView, "tournament_stat.json")
       }
     }

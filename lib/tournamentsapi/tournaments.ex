@@ -53,11 +53,7 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament!(id) do
     Tournament
     |> Repo.get!(id)
-    |> Repo.preload(
-      organization: [],
-      teams: [:tournament_group],
-      phases: []
-    )
+    |> Repo.preload([:organization, :phases, :teams])
   end
 
   @doc """
@@ -138,103 +134,6 @@ defmodule TournamentsApi.Tournaments do
     Tournament.changeset(tournament, %{})
   end
 
-  alias TournamentsApi.Tournaments.TournamentGroup
-
-  @doc """
-  Returns the list of tournament_groups.
-
-  ## Examples
-
-      iex> list_tournament_groups()
-      [%TournamentGroup{}, ...]
-
-  """
-  def list_tournament_groups(tournament_phase_id) do
-    Repo.all(TournamentGroup, tournament_phase_id: tournament_phase_id)
-  end
-
-  @doc """
-  Gets a single tournament_group.
-
-  Raises `Ecto.NoResultsError` if the TournamentGroup does not exist.
-
-  ## Examples
-
-      iex> get_tournament_group!(123)
-      %TournamentGroup{}
-
-      iex> get_tournament_group!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_tournament_group!(id, tournament_phase_id),
-    do: Repo.get_by!(TournamentGroup, id: id, tournament_phase_id: tournament_phase_id)
-
-  @doc """
-  Creates a tournament_group.
-
-  ## Examples
-
-      iex> create_tournament_group(%{field: value})
-      {:ok, %TournamentGroup{}}
-
-      iex> create_tournament_group(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_tournament_group(attrs \\ %{}) do
-    %TournamentGroup{}
-    |> TournamentGroup.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a tournament_group.
-
-  ## Examples
-
-      iex> update_tournament_group(tournament_group, %{field: new_value})
-      {:ok, %TournamentGroup{}}
-
-      iex> update_tournament_group(tournament_group, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_tournament_group(%TournamentGroup{} = tournament_group, attrs) do
-    tournament_group
-    |> TournamentGroup.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a TournamentGroup.
-
-  ## Examples
-
-      iex> delete_tournament_group(tournament_group)
-      {:ok, %TournamentGroup{}}
-
-      iex> delete_tournament_group(tournament_group)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_tournament_group(%TournamentGroup{} = tournament_group) do
-    Repo.delete(tournament_group)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking tournament_group changes.
-
-  ## Examples
-
-      iex> change_tournament_group(tournament_group)
-      %Ecto.Changeset{source: %TournamentGroup{}}
-
-  """
-  def change_tournament_group(%TournamentGroup{} = tournament_group) do
-    TournamentGroup.changeset(tournament_group, %{})
-  end
-
   alias TournamentsApi.Tournaments.TournamentTeam
 
   @doc """
@@ -265,8 +164,7 @@ defmodule TournamentsApi.Tournaments do
 
   """
   def get_tournament_team!(id, tournament_id),
-    do:
-      Repo.get_by!(TournamentTeam, id: id, tournament_id: tournament_id)
+    do: Repo.get_by!(TournamentTeam, id: id, tournament_id: tournament_id)
 
   @doc """
   Creates a tournament_team.
@@ -574,7 +472,7 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament_phase!(id, tournament_id),
     do:
       Repo.get_by!(TournamentPhase, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:stats, :groups])
+      |> Repo.preload([:stats])
 
   @doc """
   Creates a tournament_phase.
