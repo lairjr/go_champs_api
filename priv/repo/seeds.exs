@@ -81,8 +81,60 @@
 # # Add tournament_phases
 
 # alias TournamentsApi.Tournaments.TournamentPhase
+
 # municipal_phase = Repo.insert!(%TournamentPhase{title: "Turno", type: "standings", tournament_id: municipal.id})
-# lawson_phase = Repo.insert!(%TournamentPhase{title: "Turno", type: "standings", tournament_id: lawson.id})
+# lawson_phase = Repo.insert!(%TournamentPhase{title: "Turno", type: "bracket", tournament_id: lawson.id})
+
+# # Add phase_stats
+
+# alias TournamentsApi.Tournaments.TournamentStat
+
+# municipal_wins = Repo.insert!(%TournamentStat{
+#   tournament_phase_id: municipal_phase.id,
+#   title: "Wins"
+# })
+# municipal_loses = Repo.insert!(%TournamentStat{
+#   tournament_phase_id: municipal_phase.id,
+#   title: "Loses"
+# })
+
+# # Add phase_standings
+
+# alias TournamentsApi.Phases.PhaseStandings
+
+# municipal_standings = Repo.insert!(%PhaseStandings{
+#   tournament_phase_id: municipal_phase.id,
+#   standings: [
+#     %{
+#       team_id: municipal_team_4.id,
+#       stats: %{
+#         municipal_wins.id => "10",
+#         municipal_loses.id => "0",
+#       }
+#     },
+#     %{
+#       team_id: municipal_team_1.id,
+#       stats: %{
+#         municipal_wins.id => "9",
+#         municipal_loses.id => "1",
+#       }
+#     },
+#     %{
+#       team_id: municipal_team_3.id,
+#       stats: %{
+#         municipal_wins.id => "8",
+#         municipal_loses.id => "2",
+#       }
+#     },
+#     %{
+#       team_id: municipal_team_2.id,
+#       stats: %{
+#         municipal_wins.id => "7",
+#         municipal_loses.id => "3",
+#       }
+#     }
+#   ]
+# })
 
 # # Add tournament_game
 

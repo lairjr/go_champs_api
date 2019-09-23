@@ -1,0 +1,166 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/phases/{phaseId}/standings": {
+      "post": {
+        "tags": [
+          "PhaseStandings"
+        ],
+        "summary": "Post phase standings",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PhaseStandingsResponse"
+            },
+            "description": "PhaseStandings created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PhaseStandingsRequest"
+            },
+            "required": true,
+            "name": "phase_standings",
+            "in": "body",
+            "description": "The phase standings details"
+          }
+        ],
+        "description": "Creates a new phase standings",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "PhaseStandings"
+        ],
+        "summary": "List phase standings",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PhaseStandingssResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PhaseStandingsListResponse": {
+      "type": "object",
+      "title": "PhaseStandingsListResponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseStandings"
+          },
+          "description": "The phase standings details"
+        }
+      },
+      "description": "Response schema for multiple phase standings"
+    },
+    "PhaseStandingsResponse": {
+      "type": "object",
+      "title": "PhaseStandingsResponse",
+      "properties": {
+        "data": {
+          "description": "The phase standings details",
+          "$ref": "#/definitions/PhaseStandings"
+        }
+      },
+      "description": "Response schema for single phase standings"
+    },
+    "PhaseStandingsRequest": {
+      "type": "object",
+      "title": "PhaseStandingsRequest",
+      "required": [
+        "phase_standings"
+      ],
+      "properties": {
+        "phase_standings": {
+          "description": "The phase standings details",
+          "$ref": "#/definitions/PhaseStandings"
+        }
+      },
+      "example": {
+        "phase_standings": {
+          "title": "PhaseStandings title"
+        }
+      },
+      "description": "POST body for creating a phase standings"
+    },
+    "PhaseStandings": {
+      "type": "object",
+      "title": "PhaseStandings",
+      "required": [
+        "standings"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PhaseStandings ID"
+        },
+        "title": {
+          "type": "string",
+          "description": "PhaseStandings title"
+        },
+        "standings": {
+          "type": "array",
+          "description": "Tournament phase standings",
+          "items": {
+            "type": "object",
+            "required": [
+              "team_id",
+              "stats"
+            ],
+            "properties": {
+              "team_id": {
+                "type": "string",
+                "description": "Standings team id"
+              },
+              "stats": {
+                "type": "object",
+                "patternProperties": {
+                  "^[0-9a-fA-F-]+$": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "title": "Wins"
+      },
+      "description": "A phase standings of the app"
+    }
+  }
+}
