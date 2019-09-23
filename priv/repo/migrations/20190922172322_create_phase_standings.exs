@@ -5,7 +5,7 @@ defmodule TournamentsApi.Repo.Migrations.CreatePhaseStandings do
     create table(:phase_standings, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :title, :string
-      add :standings, {:array, :map}
+      add :team_stats, {:array, :map}
 
       add :tournament_phase_id, references(:tournament_phases, on_delete: :nothing, type: :uuid)
 

@@ -100,7 +100,15 @@
       },
       "example": {
         "phase_standings": {
-          "title": "PhaseStandings title"
+          "title": "Optional title",
+          "team_stats": [
+            {
+              "team_id": "some-team-id",
+              "stats": {
+                "some-stat-id": "value"
+              }
+            }
+          ]
         }
       },
       "description": "POST body for creating a phase standings"
@@ -109,7 +117,7 @@
       "type": "object",
       "title": "PhaseStandings",
       "required": [
-        "standings"
+        "team_stats"
       ],
       "properties": {
         "id": {
@@ -120,9 +128,9 @@
           "type": "string",
           "description": "PhaseStandings title"
         },
-        "standings": {
+        "team_stats": {
           "type": "array",
-          "description": "Tournament phase standings",
+          "description": "Tournament phase team stats",
           "items": {
             "type": "object",
             "required": [
@@ -158,7 +166,15 @@
       },
       "example": {
         "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
-        "title": "Wins"
+        "title": "Optional title",
+        "team_stats": [
+          {
+            "team_id": "some-team-id",
+            "stats": {
+              "some-stat-id": "value"
+            }
+          }
+        ]
       },
       "description": "A phase standings of the app"
     }

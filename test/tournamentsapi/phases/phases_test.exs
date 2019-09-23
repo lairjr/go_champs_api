@@ -9,9 +9,9 @@ defmodule TournamentsApi.PhasesTest do
     alias TournamentsApi.Phases.PhaseStandings
 
     random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-    @valid_attrs %{standings: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
-    @update_attrs %{standings: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
-    @invalid_attrs %{standings: nil}
+    @valid_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
+    @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
+    @invalid_attrs %{team_stats: nil}
 
     def map_tournament_phase_id(attrs \\ %{}) do
       {:ok, organization} =
@@ -56,9 +56,9 @@ defmodule TournamentsApi.PhasesTest do
       attrs = map_tournament_phase_id(@valid_attrs)
       assert {:ok, %PhaseStandings{} = phase_standings} = Phases.create_phase_standings(attrs)
 
-      [standings] = phase_standings.standings
-      assert standings.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-      assert standings.stats == %{"key" => "value"}
+      [team_stat] = phase_standings.team_stats
+      assert team_stat.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
+      assert team_stat.stats == %{"key" => "value"}
     end
 
     test "create_phase_standings/1 with invalid data returns error changeset" do
@@ -71,9 +71,9 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %PhaseStandings{} = phase_standings} =
                Phases.update_phase_standings(phase_standings, @update_attrs)
 
-      [standings] = phase_standings.standings
-      assert standings.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-      assert standings.stats == %{"key" => "updated"}
+      [team_stat] = phase_standings.team_stats
+      assert team_stat.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
+      assert team_stat.stats == %{"key" => "updated"}
     end
 
     test "update_phase_standings/2 with invalid data returns error changeset" do

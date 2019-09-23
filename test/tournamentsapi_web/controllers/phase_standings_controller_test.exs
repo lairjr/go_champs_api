@@ -7,9 +7,9 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
   alias TournamentsApi.Tournaments
 
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-  @create_attrs %{standings: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
-  @update_attrs %{standings: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
-  @invalid_attrs %{standings: nil}
+  @create_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
+  @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
+  @invalid_attrs %{team_stats: nil}
 
   def map_tournament_phase_id(attrs \\ %{}) do
     {:ok, organization} =
@@ -62,10 +62,10 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
       conn = get(conn, Routes.phase_standings_path(conn, :show, attrs.tournament_phase_id, id))
 
-      %{"id" => result_id, "standings" => [standing]} = json_response(conn, 200)["data"]
+      %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
 
       assert result_id == id
-      assert standing["stats"] == %{"key" => "value"}
+      assert team_stat["stats"] == %{"key" => "value"}
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -99,10 +99,10 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
       conn = get(conn, Routes.phase_standings_path(conn, :show, tournament_phase_id, id))
 
-      %{"id" => result_id, "standings" => [standing]} = json_response(conn, 200)["data"]
+      %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
 
       assert result_id == id
-      assert standing["stats"] == %{"key" => "updated"}
+      assert team_stat["stats"] == %{"key" => "updated"}
     end
 
     test "renders errors when data is invalid", %{conn: conn, phase_standings: phase_standings} do

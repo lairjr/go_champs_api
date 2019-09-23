@@ -14,7 +14,8 @@ defmodule TournamentsApiWeb.PhaseStandingsView do
     %{
       id: phase_standings.id,
       title: phase_standings.title,
-      standings: render_many(phase_standings.standings, PhaseStandingsView, "team_standings.json")
+      team_stats:
+        render_many(phase_standings.team_stats, PhaseStandingsView, "team_standings.json")
     }
   end
 

@@ -1,7 +1,7 @@
 import { randomString } from "../utils/random";
 
 const randomStandings = (tournamentPhaseId: string) => ({
-  standings: [
+  team_stats: [
     {
       stats: {
         some_stat_id: "stat value",
