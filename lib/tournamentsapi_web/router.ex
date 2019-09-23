@@ -20,6 +20,7 @@ defmodule TournamentsApiWeb.Router do
     resources "/users", UserController
     resources "/phases/:tournament_phase_id/games", TournamentGameController
     resources "/phases/:tournament_phase_id/stats", TournamentStatController
+    resources "/phases/:tournament_phase_id/standings", PhaseStandingsController
     resources "/tournaments", TournamentController
     resources "/tournaments/:tournament_id/phases", TournamentPhaseController
     resources "/tournaments/:tournament_id/teams", TournamentTeamController
