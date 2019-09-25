@@ -472,7 +472,7 @@ defmodule TournamentsApi.Tournaments do
   def get_tournament_phase!(id, tournament_id),
     do:
       Repo.get_by!(TournamentPhase, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:stats, :standings])
+      |> Repo.preload([:rounds, :stats, :standings])
 
   @doc """
   Creates a tournament_phase.
