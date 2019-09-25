@@ -1,0 +1,206 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/phases/{phaseId}/rounds": {
+      "post": {
+        "tags": [
+          "PhaseRounds"
+        ],
+        "summary": "Post phase rounds",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PhaseRoundsResponse"
+            },
+            "description": "PhaseRounds created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PhaseRoundsRequest"
+            },
+            "required": true,
+            "name": "phase_rounds",
+            "in": "body",
+            "description": "The phase rounds details"
+          }
+        ],
+        "description": "Creates a new phase rounds",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "PhaseRounds"
+        ],
+        "summary": "List phase rounds",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PhaseRoundssResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PhaseRoundsListResponse": {
+      "type": "object",
+      "title": "PhaseRoundsListResponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseRounds"
+          },
+          "description": "The phase rounds details"
+        }
+      },
+      "description": "Response schema for multiple phase rounds"
+    },
+    "PhaseRoundsResponse": {
+      "type": "object",
+      "title": "PhaseRoundsResponse",
+      "properties": {
+        "data": {
+          "description": "The phase rounds details",
+          "$ref": "#/definitions/PhaseRounds"
+        }
+      },
+      "description": "Response schema for single phase rounds"
+    },
+    "PhaseRoundsRequest": {
+      "type": "object",
+      "title": "PhaseRoundsRequest",
+      "required": [
+        "phase_round"
+      ],
+      "properties": {
+        "phase_round": {
+          "description": "The phase rounds details",
+          "$ref": "#/definitions/PhaseRounds"
+        }
+      },
+      "example": {
+        "phase_round": {
+          "title": "Optional title",
+          "matches": [
+            {
+              "first_team_id": "some-first-team-id",
+              "first_team_parent_id": "some-first-team-parent-id",
+              "first_team_placeholder": "some-first-team-placeholder",
+              "first_team_score": "some-first-team-score",
+              "second_team_id": "some-second-team-id",
+              "second_team_parent_id": "some-second-team-parent-id",
+              "second_team_placeholder": "some-second-team-placeholder",
+              "second_team_score": "some-second-team-score"
+            }
+          ]
+        }
+      },
+      "description": "POST body for creating a phase rounds"
+    },
+    "PhaseRounds": {
+      "type": "object",
+      "title": "PhaseRounds",
+      "required": [
+        "matches"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PhaseRounds ID"
+        },
+        "matches": {
+          "type": "array",
+          "description": "Tournament phase round matches",
+          "items": {
+            "type": "object",
+            "properties": {
+              "first_team_id": {
+                "type": "string",
+                "description": "Rounds team first team id"
+              },
+              "first_team_parent_id": {
+                "type": "string",
+                "description": "Rounds team first team parent match id"
+              },
+              "first_team_placeholder": {
+                "type": "string",
+                "description": "Rounds team first team placeholder"
+              },
+              "first_team_score": {
+                "type": "string",
+                "description": "Rounds team first team score"
+              },
+              "second_team_id": {
+                "type": "string",
+                "description": "Rounds team second team id"
+              },
+              "second_team_parent_id": {
+                "type": "string",
+                "description": "Rounds team second team parent match id"
+              },
+              "second_team_placeholder": {
+                "type": "string",
+                "description": "Rounds team second team placeholder"
+              },
+              "second_team_score": {
+                "type": "string",
+                "description": "Rounds team second team score"
+              }
+            }
+          }
+        },
+        "title": {
+          "type": "string",
+          "description": "PhaseRounds title"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "title": "Optional title",
+        "matches": [
+          {
+            "first_team_id": "some-first-team-id",
+            "first_team_parent_id": "some-first-team-parent-id",
+            "first_team_placeholder": "some-first-team-placeholder",
+            "first_team_score": "some-first-team-score",
+            "second_team_id": "some-second-team-id",
+            "second_team_parent_id": "some-second-team-parent-id",
+            "second_team_placeholder": "some-second-team-placeholder",
+            "second_team_score": "some-second-team-score"
+          }
+        ]
+      },
+      "description": "A phase rounds of the app"
+    }
+  }
+}
