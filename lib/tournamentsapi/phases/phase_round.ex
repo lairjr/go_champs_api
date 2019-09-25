@@ -6,6 +6,7 @@ defmodule TournamentsApi.Phases.PhaseRound do
 
   schema "phase_rounds" do
     field :title, :string
+    field :order, :integer
 
     embeds_many :matches, RoundMatch, on_replace: :delete do
       field :first_team_id, :binary_id
@@ -27,7 +28,7 @@ defmodule TournamentsApi.Phases.PhaseRound do
   @doc false
   def changeset(phase_round, attrs) do
     phase_round
-    |> cast(attrs, [:title, :tournament_phase_id])
+    |> cast(attrs, [:order, :title, :tournament_phase_id])
     |> cast_embed(:matches, with: &round_match_changeset/2)
     |> validate_required([:matches, :tournament_phase_id])
   end

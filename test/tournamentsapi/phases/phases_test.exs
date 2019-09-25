@@ -154,6 +154,7 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %PhaseRound{} = phase_round} = Phases.create_phase_round(attrs)
 
       [match] = phase_round.matches
+      assert phase_round.order == 1
       assert phase_round.title == "some title"
       assert match.first_team_placeholder == "some-first-team-placeholder"
       assert match.second_team_placeholder == "some-second-team-placeholder"
@@ -161,6 +162,17 @@ defmodule TournamentsApi.PhasesTest do
 
     test "create_phase_round/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Phases.create_phase_round(@invalid_attrs)
+    end
+
+    test "create_phase_round/1 select order for second item" do
+      attrs = map_tournament_phase_id(@valid_attrs)
+
+      assert {:ok, %PhaseRound{} = first_phase_round} = Phases.create_phase_round(attrs)
+
+      assert {:ok, %PhaseRound{} = second_phase_round} = Phases.create_phase_round(attrs)
+
+      assert first_phase_round.order == 1
+      assert second_phase_round.order == 2
     end
 
     test "update_phase_round/2 with valid data updates the phase_round" do

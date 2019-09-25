@@ -83,10 +83,10 @@
 # alias TournamentsApi.Tournaments.TournamentPhase
 
 # municipal_phase =
-#   Repo.insert!(%TournamentPhase{title: "Turno", type: "standings", tournament_id: municipal.id})
+#   Repo.insert!(%TournamentPhase{order: 1, title: "Turno", type: "standings", tournament_id: municipal.id})
 
 # lawson_phase =
-#   Repo.insert!(%TournamentPhase{title: "Turno", type: "bracket", tournament_id: lawson.id})
+#   Repo.insert!(%TournamentPhase{order: 1, title: "Turno", type: "bracket", tournament_id: lawson.id})
 
 # # Add phase_stats
 
@@ -147,51 +147,55 @@
 
 # alias TournamentsApi.Phases.PhaseRound
 
-# lawson_round1 = Repo.insert!(%PhaseRound{
-#   title: "Semi final",
-#   tournament_phase_id: lawson_phase.id,
-#   matches: [
-#     %{
-#       first_team_id: lawson_team_c.id,
-#       first_team_parent_id: nil,
-#       first_team_placeholder: "Primeiro",
-#       first_team_score: "1",
-#       second_team_id: lawson_team_b.id,
-#       second_team_parent_id: nil,
-#       second_team_placeholder: "Quarto",
-#       second_team_score: "0",
-#     },
-#     %{
-#       first_team_id: lawson_team_d.id,
-#       first_team_parent_id: nil,
-#       first_team_placeholder: "Segundo",
-#       first_team_score: "1",
-#       second_team_id: lawson_team_a.id,
-#       second_team_parent_id: nil,
-#       second_team_placeholder: "Terceiro",
-#       second_team_score: "2",
-#     }
-#   ]
-# })
+# lawson_round1 =
+#   Repo.insert!(%PhaseRound{
+#     order: 1,
+#     title: "Semi final",
+#     tournament_phase_id: lawson_phase.id,
+#     matches: [
+#       %{
+#         first_team_id: lawson_team_c.id,
+#         first_team_parent_id: nil,
+#         first_team_placeholder: "Primeiro",
+#         first_team_score: "1",
+#         second_team_id: lawson_team_b.id,
+#         second_team_parent_id: nil,
+#         second_team_placeholder: "Quarto",
+#         second_team_score: "0"
+#       },
+#       %{
+#         first_team_id: lawson_team_d.id,
+#         first_team_parent_id: nil,
+#         first_team_placeholder: "Segundo",
+#         first_team_score: "1",
+#         second_team_id: lawson_team_a.id,
+#         second_team_parent_id: nil,
+#         second_team_placeholder: "Terceiro",
+#         second_team_score: "2"
+#       }
+#     ]
+#   })
 
 # [round1_match1, round2_match2] = lawson_round1.matches
 
-# lawson_round2 = Repo.insert!(%PhaseRound{
-#   title: "Final",
-#   tournament_phase_id: lawson_phase.id,
-#   matches: [
-#     %{
-#       first_team_id: lawson_team_c.id,
-#       first_team_parent_id: round1_match1.id,
-#       first_team_placeholder: "Ganhador S1",
-#       first_team_score: "0",
-#       second_team_id: lawson_team_a.id,
-#       second_team_parent_id: round2_match2.id,
-#       second_team_placeholder: "Ganhador S2",
-#       second_team_score: "0",
-#     }
-#   ]
-# })
+# lawson_round2 =
+#   Repo.insert!(%PhaseRound{
+#     order: 2,
+#     title: "Final",
+#     tournament_phase_id: lawson_phase.id,
+#     matches: [
+#       %{
+#         first_team_id: lawson_team_c.id,
+#         first_team_parent_id: round1_match1.id,
+#         first_team_placeholder: "Ganhador S1",
+#         first_team_score: "0",
+#         second_team_id: lawson_team_a.id,
+#         second_team_parent_id: round2_match2.id,
+#         second_team_placeholder: "Ganhador S2",
+#         second_team_score: "0"
+#       }
+#     ]
+#   })
 
 # # Add tournament_game
 

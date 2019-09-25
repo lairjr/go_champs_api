@@ -7,6 +7,7 @@ defmodule TournamentsApi.Phases do
   alias TournamentsApi.Repo
 
   alias TournamentsApi.Phases.PhaseStandings
+  alias TournamentsApi.Tournaments.TournamentPhase
 
   @doc """
   Returns the list of phase_standings.
@@ -158,7 +159,23 @@ defmodule TournamentsApi.Phases do
   def create_phase_round(attrs \\ %{}) do
     %PhaseRound{}
     |> PhaseRound.changeset(attrs)
+    |> get_phase_round_next_order()
     |> Repo.insert()
+  end
+
+  defp get_phase_round_next_order(changeset) do
+    tournament_phase_id = Ecto.Changeset.get_field(changeset, :tournament_phase_id)
+
+    if tournament_phase_id do
+      number_of_records =
+        PhaseRound
+        |> where([s], s.tournament_phase_id == ^tournament_phase_id)
+        |> Repo.aggregate(:count, :id)
+
+      Ecto.Changeset.put_change(changeset, :order, Enum.sum([number_of_records, 1]))
+    else
+      changeset
+    end
   end
 
   @doc """

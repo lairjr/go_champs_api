@@ -14,6 +14,7 @@ defmodule TournamentsApiWeb.PhaseRoundView do
     %{
       id: phase_round.id,
       matches: render_many(phase_round.matches, PhaseRoundView, "match.json"),
+      order: phase_round.order,
       title: phase_round.title
     }
   end

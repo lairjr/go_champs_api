@@ -4,8 +4,9 @@ defmodule TournamentsApi.Repo.Migrations.CreatePhaseRounds do
   def change do
     create table(:phase_rounds, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :title, :string
       add :matches, {:array, :map}
+      add :order, :integer
+      add :title, :string
 
       add :tournament_phase_id, references(:tournament_phases, on_delete: :nothing, type: :uuid)
 
