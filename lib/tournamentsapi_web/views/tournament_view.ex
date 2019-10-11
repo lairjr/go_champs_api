@@ -3,7 +3,7 @@ defmodule TournamentsApiWeb.TournamentView do
   alias TournamentsApiWeb.OrganizationView
   alias TournamentsApiWeb.TournamentView
   alias TournamentsApiWeb.TournamentPhaseView
-  alias TournamentsApiWeb.TournamentTeamView
+  alias TournamentsApiWeb.TeamView
 
   def render("index.json", %{tournaments: tournaments}) do
     %{data: render_many(tournaments, TournamentView, "tournament.json")}
@@ -17,7 +17,7 @@ defmodule TournamentsApiWeb.TournamentView do
         slug: tournament.slug,
         organization: render_one(tournament.organization, OrganizationView, "organization.json"),
         phases: render_many(tournament.phases, TournamentPhaseView, "tournament_phase.json"),
-        teams: render_many(tournament.teams, TournamentTeamView, "tournament_team.json")
+        teams: render_many(tournament.teams, TeamView, "team.json")
       }
     }
   end

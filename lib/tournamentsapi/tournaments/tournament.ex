@@ -5,7 +5,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
   alias TournamentsApi.Organizations.Organization
   alias TournamentsApi.Tournaments.TournamentGame
   alias TournamentsApi.Tournaments.TournamentPhase
-  alias TournamentsApi.Tournaments.TournamentTeam
+  alias TournamentsApi.Teams.Team
 
   schema "tournaments" do
     field :name, :string
@@ -14,7 +14,7 @@ defmodule TournamentsApi.Tournaments.Tournament do
 
     belongs_to :organization, Organization
     has_many :phases, TournamentPhase
-    has_many :teams, TournamentTeam
+    has_many :teams, Team
 
     timestamps()
   end

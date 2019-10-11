@@ -1,0 +1,146 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/tournaments/{tournamentId}/teams": {
+      "post": {
+        "tags": [
+          "Team"
+        ],
+        "summary": "Post tournament teams",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/TeamResponse"
+            },
+            "description": "Team created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/TeamRequest"
+            },
+            "required": true,
+            "name": "team",
+            "in": "body",
+            "description": "The tournament teams details"
+          }
+        ],
+        "description": "Creates a new tournament teams",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Team"
+        ],
+        "summary": "List tournament teams",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/TeamsResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "TeamsResponse": {
+      "type": "object",
+      "title": "TeamsReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Team"
+          },
+          "description": "The tournament teams details"
+        }
+      },
+      "description": "Response schema for multiple tournament teams"
+    },
+    "TeamResponse": {
+      "type": "object",
+      "title": "TeamResponse",
+      "properties": {
+        "data": {
+          "description": "The tournament teams details",
+          "$ref": "#/definitions/Team"
+        }
+      },
+      "description": "Response schema for single tournament teams"
+    },
+    "TeamRequest": {
+      "type": "object",
+      "title": "TeamRequest",
+      "required": [
+        "team"
+      ],
+      "properties": {
+        "team": {
+          "description": "The tournament teams details",
+          "$ref": "#/definitions/Team"
+        }
+      },
+      "example": {
+        "team": {
+          "name": "Team name",
+          "slug": "tournament-name"
+        }
+      },
+      "description": "POST body for creating a tournament teams"
+    },
+    "Team": {
+      "type": "object",
+      "title": "Team",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Team ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Team name"
+        },
+        "tournament_id": {
+          "type": "string",
+          "description": "Organization ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "name": "First team"
+      },
+      "description": "A tournament teams of the app"
+    }
+  }
+}

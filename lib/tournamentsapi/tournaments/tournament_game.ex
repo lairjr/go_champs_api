@@ -3,7 +3,7 @@ defmodule TournamentsApi.Tournaments.TournamentGame do
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.TournamentPhase
-  alias TournamentsApi.Tournaments.TournamentTeam
+  alias TournamentsApi.Teams.Team
 
   schema "tournament_games" do
     field :away_score, :integer
@@ -12,8 +12,8 @@ defmodule TournamentsApi.Tournaments.TournamentGame do
     field :location, :string
 
     belongs_to :tournament_phase, TournamentPhase
-    belongs_to :away_team, TournamentTeam
-    belongs_to :home_team, TournamentTeam
+    belongs_to :away_team, Team
+    belongs_to :home_team, Team
 
     timestamps()
   end

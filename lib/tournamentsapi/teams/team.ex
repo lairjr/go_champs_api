@@ -1,10 +1,10 @@
-defmodule TournamentsApi.Tournaments.TournamentTeam do
+defmodule TournamentsApi.Teams.Team do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Tournaments.Tournament
 
-  schema "tournament_teams" do
+  schema "teams" do
     field :name, :string
 
     belongs_to :tournament, Tournament

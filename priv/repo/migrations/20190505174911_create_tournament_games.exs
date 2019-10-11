@@ -10,8 +10,8 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournamentGames do
       add :location, :string
       add :datetime, :utc_datetime
 
-      add :away_team_id, references(:tournament_teams, on_delete: :nothing, type: :uuid)
-      add :home_team_id, references(:tournament_teams, on_delete: :nothing, type: :uuid)
+      add :away_team_id, references(:teams, on_delete: :nothing, type: :uuid)
+      add :home_team_id, references(:teams, on_delete: :nothing, type: :uuid)
 
       timestamps()
     end

@@ -64,19 +64,19 @@
 # old_scholl = Repo.insert!(%Team{name: "Old Scholl", slug: "Old Scholl"})
 # pucrs = Repo.insert!(%Team{name: "Pucrs", slug: "pucrs"})
 
-# # Add tournament_teams
+# # Add teams
 
-# alias TournamentsApi.Tournaments.TournamentTeam
+# alias TournamentsApi.Teams.Team
 
-# municipal_team_1 = Repo.insert!(%TournamentTeam{tournament_id: municipal.id, name: "Time 1"})
-# municipal_team_2 = Repo.insert!(%TournamentTeam{tournament_id: municipal.id, name: "Time 2"})
-# municipal_team_3 = Repo.insert!(%TournamentTeam{tournament_id: municipal.id, name: "Time 3"})
-# municipal_team_4 = Repo.insert!(%TournamentTeam{tournament_id: municipal.id, name: "Time 4"})
-# lawson_team_a = Repo.insert!(%TournamentTeam{tournament_id: lawson.id, name: "Time A"})
-# lawson_team_b = Repo.insert!(%TournamentTeam{tournament_id: lawson.id, name: "Time B"})
-# lawson_team_c = Repo.insert!(%TournamentTeam{tournament_id: lawson.id, name: "Time C"})
-# lawson_team_d = Repo.insert!(%TournamentTeam{tournament_id: lawson.id, name: "Time D"})
-# lawson_team_e = Repo.insert!(%TournamentTeam{tournament_id: lawson.id, name: "Time E"})
+# municipal_team_1 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 1"})
+# municipal_team_2 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 2"})
+# municipal_team_3 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 3"})
+# municipal_team_4 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 4"})
+# lawson_team_a = Repo.insert!(%Team{tournament_id: lawson.id, name: "Time A"})
+# lawson_team_b = Repo.insert!(%Team{tournament_id: lawson.id, name: "Time B"})
+# lawson_team_c = Repo.insert!(%Team{tournament_id: lawson.id, name: "Time C"})
+# lawson_team_d = Repo.insert!(%Team{tournament_id: lawson.id, name: "Time D"})
+# lawson_team_e = Repo.insert!(%Team{tournament_id: lawson.id, name: "Time E"})
 
 # # Add tournament_phases
 
