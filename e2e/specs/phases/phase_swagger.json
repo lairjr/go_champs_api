@@ -4,15 +4,15 @@
     "/api/tournaments/{tournamentId}/phases": {
       "post": {
         "tags": [
-          "TournamentPhase"
+          "Phase"
         ],
         "summary": "Post tournament phases",
         "responses": {
           "201": {
             "schema": {
-              "$ref": "#/definitions/TournamentPhaseResponse"
+              "$ref": "#/definitions/PhaseResponse"
             },
-            "description": "TournamentPhase created OK"
+            "description": "Phase created OK"
           }
         },
         "produces": [
@@ -21,10 +21,10 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/definitions/TournamentPhaseRequest"
+              "$ref": "#/definitions/PhaseRequest"
             },
             "required": true,
-            "name": "tournament_phase",
+            "name": "phase",
             "in": "body",
             "description": "The tournament phases details"
           }
@@ -36,13 +36,13 @@
       },
       "get": {
         "tags": [
-          "TournamentPhase"
+          "Phase"
         ],
         "summary": "List tournament phases",
         "responses": {
           "200": {
             "schema": {
-              "$ref": "#/definitions/TournamentPhasesResponse"
+              "$ref": "#/definitions/PhasesResponse"
             }
           }
         },
@@ -58,9 +58,9 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "TournamentPhasesResponse": {
+    "PhasesResponse": {
       "type": "object",
-      "title": "TournamentPhasesReponse",
+      "title": "PhasesReponse",
       "required": [
         "data"
       ],
@@ -68,47 +68,47 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TournamentPhase"
+            "$ref": "#/definitions/Phase"
           },
           "description": "The tournament phases details"
         }
       },
       "description": "Response schema for multiple tournament phases"
     },
-    "TournamentPhaseResponse": {
+    "PhaseResponse": {
       "type": "object",
-      "title": "TournamentPhaseResponse",
+      "title": "PhaseResponse",
       "properties": {
         "data": {
           "description": "The tournament phases details",
-          "$ref": "#/definitions/TournamentPhase"
+          "$ref": "#/definitions/Phase"
         }
       },
       "description": "Response schema for single tournament phases"
     },
-    "TournamentPhaseRequest": {
+    "PhaseRequest": {
       "type": "object",
-      "title": "TournamentPhaseRequest",
+      "title": "PhaseRequest",
       "required": [
-        "tournament_phase"
+        "phase"
       ],
       "properties": {
-        "tournament_phase": {
+        "phase": {
           "description": "The tournament phases details",
-          "$ref": "#/definitions/TournamentPhase"
+          "$ref": "#/definitions/Phase"
         }
       },
       "example": {
-        "tournament_phase": {
-          "name": "TournamentPhase name",
+        "phase": {
+          "name": "Phase name",
           "slug": "tournament-name"
         }
       },
       "description": "POST body for creating a tournament phases"
     },
-    "TournamentPhase": {
+    "Phase": {
       "type": "object",
-      "title": "TournamentPhase",
+      "title": "Phase",
       "required": [
         "title",
         "type"
@@ -116,19 +116,19 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "TournamentPhase ID"
+          "description": "Phase ID"
         },
         "title": {
           "type": "string",
-          "description": "TournamentPhase title"
+          "description": "Phase title"
         },
         "type": {
           "type": "string",
-          "description": "TournamentPhase type"
+          "description": "Phase type"
         },
         "order": {
           "type": "number",
-          "description": "TournamentPhase order"
+          "description": "Phase order"
         },
         "tournament_id": {
           "type": "string",

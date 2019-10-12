@@ -6,7 +6,7 @@ const randomPhase = (tournamentId: string) => ({
   type: Math.round(Math.random() * 1) ? "standings" : "bracket",
 });
 
-export const tournamentPhasePayload = (tournamentId: string) => (
+export const phasePayload = (tournamentId: string) => (
   {
-    tournament_phase: randomPhase(tournamentId),
+    phase: randomPhase(tournamentId),
   });

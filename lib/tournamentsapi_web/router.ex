@@ -18,12 +18,12 @@ defmodule TournamentsApiWeb.Router do
     resources "/organizations", OrganizationController
     resources "/teams", TeamController
     resources "/users", UserController
-    resources "/phases/:tournament_phase_id/games", TournamentGameController
-    resources "/phases/:tournament_phase_id/rounds", PhaseRoundController
-    resources "/phases/:tournament_phase_id/stats", TournamentStatController
-    resources "/phases/:tournament_phase_id/standings", PhaseStandingsController
+    resources "/phases", PhaseController
+    resources "/phases/:phase_id/games", TournamentGameController
+    resources "/phases/:phase_id/rounds", PhaseRoundController
+    resources "/phases/:phase_id/stats", TournamentStatController
+    resources "/phases/:phase_id/standings", PhaseStandingsController
     resources "/tournaments", TournamentController
-    resources "/tournaments/:tournament_id/phases", TournamentPhaseController
   end
 
   def swagger_info do

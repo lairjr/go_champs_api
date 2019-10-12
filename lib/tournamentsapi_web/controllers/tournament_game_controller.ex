@@ -6,44 +6,42 @@ defmodule TournamentsApiWeb.TournamentGameController do
 
   action_fallback TournamentsApiWeb.FallbackController
 
-  def index(conn, %{"tournament_phase_id" => tournament_phase_id}) do
-    tournament_games = Tournaments.list_tournament_games(tournament_phase_id)
+  def index(conn, %{"phase_id" => phase_id}) do
+    tournament_games = Tournaments.list_tournament_games(phase_id)
     render(conn, "index.json", tournament_games: tournament_games)
   end
 
   def create(conn, %{
         "tournament_game" => tournament_game_params,
-        "tournament_phase_id" => tournament_phase_id
+        "phase_id" => phase_id
       }) do
-    tournament_game_params =
-      Map.merge(tournament_game_params, %{"tournament_phase_id" => tournament_phase_id})
+    tournament_game_params = Map.merge(tournament_game_params, %{"phase_id" => phase_id})
 
     with {:ok, %TournamentGame{} = created_tournament_game} <-
            Tournaments.create_tournament_game(tournament_game_params) do
-      tournament_game =
-        Tournaments.get_tournament_game!(created_tournament_game.id, tournament_phase_id)
+      tournament_game = Tournaments.get_tournament_game!(created_tournament_game.id, phase_id)
 
       conn
       |> put_status(:created)
       |> put_resp_header(
         "location",
-        Routes.tournament_game_path(conn, :show, tournament_phase_id, tournament_game)
+        Routes.tournament_game_path(conn, :show, phase_id, tournament_game)
       )
       |> render("show.json", tournament_game: tournament_game)
     end
   end
 
-  def show(conn, %{"id" => id, "tournament_phase_id" => tournament_phase_id}) do
-    tournament_game = Tournaments.get_tournament_game!(id, tournament_phase_id)
+  def show(conn, %{"id" => id, "phase_id" => phase_id}) do
+    tournament_game = Tournaments.get_tournament_game!(id, phase_id)
     render(conn, "show.json", tournament_game: tournament_game)
   end
 
   def update(conn, %{
         "id" => id,
         "tournament_game" => tournament_game_params,
-        "tournament_phase_id" => tournament_phase_id
+        "phase_id" => phase_id
       }) do
-    tournament_game = Tournaments.get_tournament_game!(id, tournament_phase_id)
+    tournament_game = Tournaments.get_tournament_game!(id, phase_id)
 
     with {:ok, %TournamentGame{} = tournament_game} <-
            Tournaments.update_tournament_game(tournament_game, tournament_game_params) do
@@ -51,8 +49,8 @@ defmodule TournamentsApiWeb.TournamentGameController do
     end
   end
 
-  def delete(conn, %{"id" => id, "tournament_phase_id" => tournament_phase_id}) do
-    tournament_game = Tournaments.get_tournament_game!(id, tournament_phase_id)
+  def delete(conn, %{"id" => id, "phase_id" => phase_id}) do
+    tournament_game = Tournaments.get_tournament_game!(id, phase_id)
 
     with {:ok, %TournamentGame{}} <- Tournaments.delete_tournament_game(tournament_game) do
       send_resp(conn, :no_content, "")

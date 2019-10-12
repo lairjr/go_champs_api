@@ -26,7 +26,7 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
   }
   @invalid_attrs %{title: nil, matches: nil}
 
-  def map_tournament_phase_id(attrs \\ %{}) do
+  def map_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
@@ -34,16 +34,16 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
 
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    tournament_phase_attrs =
+    phase_attrs =
       Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
 
-    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+    {:ok, phase} = Phases.create_phase(phase_attrs)
 
-    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    Map.merge(attrs, %{phase_id: phase.id})
   end
 
   def fixture(:phase_round) do
-    phase_round_attrs = map_tournament_phase_id(@create_attrs)
+    phase_round_attrs = map_phase_id(@create_attrs)
     {:ok, phase_round} = Phases.create_phase_round(phase_round_attrs)
     phase_round
   end
@@ -63,16 +63,14 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
 
   describe "create phase_round" do
     test "renders phase_round when data is valid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@create_attrs)
+      attrs = map_phase_id(@create_attrs)
 
       conn =
-        post(conn, Routes.phase_round_path(conn, :create, attrs.tournament_phase_id),
-          phase_round: attrs
-        )
+        post(conn, Routes.phase_round_path(conn, :create, attrs.phase_id), phase_round: attrs)
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.phase_round_path(conn, :show, attrs.tournament_phase_id, id))
+      conn = get(conn, Routes.phase_round_path(conn, :show, attrs.phase_id, id))
 
       assert %{
                "id" => id,
@@ -81,12 +79,10 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@invalid_attrs)
+      attrs = map_phase_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.phase_round_path(conn, :create, attrs.tournament_phase_id),
-          phase_round: attrs
-        )
+        post(conn, Routes.phase_round_path(conn, :create, attrs.phase_id), phase_round: attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -97,16 +93,16 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
 
     test "renders phase_round when data is valid", %{
       conn: conn,
-      phase_round: %PhaseRound{id: id, tournament_phase_id: tournament_phase_id} = phase_round
+      phase_round: %PhaseRound{id: id, phase_id: phase_id} = phase_round
     } do
       conn =
-        put(conn, Routes.phase_round_path(conn, :update, tournament_phase_id, phase_round),
+        put(conn, Routes.phase_round_path(conn, :update, phase_id, phase_round),
           phase_round: @update_attrs
         )
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.phase_round_path(conn, :show, tournament_phase_id, id))
+      conn = get(conn, Routes.phase_round_path(conn, :show, phase_id, id))
 
       assert %{
                "id" => id,
@@ -118,7 +114,7 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
       conn =
         put(
           conn,
-          Routes.phase_round_path(conn, :update, phase_round.tournament_phase_id, phase_round),
+          Routes.phase_round_path(conn, :update, phase_round.phase_id, phase_round),
           phase_round: @invalid_attrs
         )
 
@@ -133,7 +129,7 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
       conn =
         delete(
           conn,
-          Routes.phase_round_path(conn, :delete, phase_round.tournament_phase_id, phase_round)
+          Routes.phase_round_path(conn, :delete, phase_round.phase_id, phase_round)
         )
 
       assert response(conn, 204)
@@ -141,7 +137,7 @@ defmodule TournamentsApiWeb.PhaseRoundControllerTest do
       assert_error_sent 404, fn ->
         get(
           conn,
-          Routes.phase_round_path(conn, :show, phase_round.tournament_phase_id, phase_round)
+          Routes.phase_round_path(conn, :show, phase_round.phase_id, phase_round)
         )
       end
     end

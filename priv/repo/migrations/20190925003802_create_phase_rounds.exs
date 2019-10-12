@@ -8,12 +8,12 @@ defmodule TournamentsApi.Repo.Migrations.CreatePhaseRounds do
       add :order, :integer
       add :title, :string
 
-      add :tournament_phase_id, references(:tournament_phases, on_delete: :nothing, type: :uuid)
+      add :phase_id, references(:phases, on_delete: :nothing, type: :uuid)
 
       timestamps()
     end
 
-    create index(:phase_rounds, [:tournament_phase_id])
-    create unique_index(:phase_rounds, [:id, :tournament_phase_id])
+    create index(:phase_rounds, [:phase_id])
+    create unique_index(:phase_rounds, [:id, :phase_id])
   end
 end

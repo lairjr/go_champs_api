@@ -145,11 +145,11 @@ defmodule TournamentsApi.Tournaments do
       [%TournamentGame{}, ...]
 
   """
-  def list_tournament_games(tournament_phase_id) do
-    {:ok, uuid} = Ecto.UUID.cast(tournament_phase_id)
+  def list_tournament_games(phase_id) do
+    {:ok, uuid} = Ecto.UUID.cast(phase_id)
 
     TournamentGame
-    |> where([g], g.tournament_phase_id == ^uuid)
+    |> where([g], g.phase_id == ^uuid)
     |> Repo.all()
     |> Repo.preload([:away_team, :home_team])
   end
@@ -168,9 +168,9 @@ defmodule TournamentsApi.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament_game!(id, tournament_phase_id),
+  def get_tournament_game!(id, phase_id),
     do:
-      Repo.get_by!(TournamentGame, id: id, tournament_phase_id: tournament_phase_id)
+      Repo.get_by!(TournamentGame, id: id, phase_id: phase_id)
       |> Repo.preload([:away_team, :home_team])
 
   @doc """
@@ -249,11 +249,11 @@ defmodule TournamentsApi.Tournaments do
       [%TournamentStat{}, ...]
 
   """
-  def list_tournament_stats(tournament_phase_id) do
-    {:ok, uuid} = Ecto.UUID.cast(tournament_phase_id)
+  def list_tournament_stats(phase_id) do
+    {:ok, uuid} = Ecto.UUID.cast(phase_id)
 
     TournamentStat
-    |> where([s], s.tournament_phase_id == ^uuid)
+    |> where([s], s.phase_id == ^uuid)
     |> Repo.all()
   end
 
@@ -271,8 +271,8 @@ defmodule TournamentsApi.Tournaments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_tournament_stat!(id, tournament_phase_id),
-    do: Repo.get_by!(TournamentStat, id: id, tournament_phase_id: tournament_phase_id)
+  def get_tournament_stat!(id, phase_id),
+    do: Repo.get_by!(TournamentStat, id: id, phase_id: phase_id)
 
   @doc """
   Creates a tournament_stat.
@@ -337,115 +337,5 @@ defmodule TournamentsApi.Tournaments do
   """
   def change_tournament_stat(%TournamentStat{} = tournament_stat) do
     TournamentStat.changeset(tournament_stat, %{})
-  end
-
-  alias TournamentsApi.Tournaments.TournamentPhase
-
-  @doc """
-  Returns the list of tournament_phases.
-
-  ## Examples
-
-      iex> list_tournament_phases()
-      [%TournamentPhase{}, ...]
-
-  """
-  def list_tournament_phases(tournament_id) do
-    {:ok, uuid} = Ecto.UUID.cast(tournament_id)
-
-    TournamentPhase
-    |> where([p], p.tournament_id == ^uuid)
-    |> Repo.all()
-  end
-
-  @doc """
-  Gets a single tournament_phase.
-
-  Raises `Ecto.NoResultsError` if the Tournament phase does not exist.
-
-  ## Examples
-
-      iex> get_tournament_phase!(123)
-      %TournamentPhase{}
-
-      iex> get_tournament_phase!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_tournament_phase!(id, tournament_id),
-    do:
-      Repo.get_by!(TournamentPhase, id: id, tournament_id: tournament_id)
-      |> Repo.preload([:rounds, :stats, :standings])
-
-  @doc """
-  Creates a tournament_phase.
-
-  ## Examples
-
-      iex> create_tournament_phase(%{field: value})
-      {:ok, %TournamentPhase{}}
-
-      iex> create_tournament_phase(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_tournament_phase(attrs \\ %{}) do
-    %TournamentPhase{}
-    |> TournamentPhase.changeset(attrs)
-    |> get_tournament_phase_next_order()
-    |> Repo.insert()
-  end
-
-  defp get_tournament_phase_next_order(changeset) do
-    tournament_id = Ecto.Changeset.get_field(changeset, :tournament_id)
-    number_of_records = Repo.aggregate(TournamentPhase, :count, :id, tournament_id: tournament_id)
-    Ecto.Changeset.put_change(changeset, :order, Enum.sum([number_of_records, 1]))
-  end
-
-  @doc """
-  Updates a tournament_phase.
-
-  ## Examples
-
-      iex> update_tournament_phase(tournament_phase, %{field: new_value})
-      {:ok, %TournamentPhase{}}
-
-      iex> update_tournament_phase(tournament_phase, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_tournament_phase(%TournamentPhase{} = tournament_phase, attrs) do
-    tournament_phase
-    |> TournamentPhase.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a TournamentPhase.
-
-  ## Examples
-
-      iex> delete_tournament_phase(tournament_phase)
-      {:ok, %TournamentPhase{}}
-
-      iex> delete_tournament_phase(tournament_phase)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_tournament_phase(%TournamentPhase{} = tournament_phase) do
-    Repo.delete(tournament_phase)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking tournament_phase changes.
-
-  ## Examples
-
-      iex> change_tournament_phase(tournament_phase)
-      %Ecto.Changeset{source: %TournamentPhase{}}
-
-  """
-  def change_tournament_phase(%TournamentPhase{} = tournament_phase) do
-    TournamentPhase.changeset(tournament_phase, %{})
   end
 end

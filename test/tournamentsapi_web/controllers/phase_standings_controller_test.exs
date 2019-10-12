@@ -11,7 +11,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
   @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
   @invalid_attrs %{team_stats: nil}
 
-  def map_tournament_phase_id(attrs \\ %{}) do
+  def map_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
@@ -19,16 +19,16 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    tournament_phase_attrs =
+    phase_attrs =
       Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
 
-    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+    {:ok, phase} = Phases.create_phase(phase_attrs)
 
-    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    Map.merge(attrs, %{phase_id: phase.id})
   end
 
   def fixture(:phase_standings) do
-    phase_standings_attrs = map_tournament_phase_id(@create_attrs)
+    phase_standings_attrs = map_phase_id(@create_attrs)
     {:ok, phase_standings} = Phases.create_phase_standings(phase_standings_attrs)
     phase_standings
   end
@@ -51,16 +51,16 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
   describe "create phase_standings" do
     test "renders phase_standings when data is valid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@create_attrs)
+      attrs = map_phase_id(@create_attrs)
 
       conn =
-        post(conn, Routes.phase_standings_path(conn, :create, attrs.tournament_phase_id),
+        post(conn, Routes.phase_standings_path(conn, :create, attrs.phase_id),
           phase_standings: attrs
         )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.phase_standings_path(conn, :show, attrs.tournament_phase_id, id))
+      conn = get(conn, Routes.phase_standings_path(conn, :show, attrs.phase_id, id))
 
       %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
 
@@ -69,10 +69,10 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@invalid_attrs)
+      attrs = map_phase_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.phase_standings_path(conn, :create, attrs.tournament_phase_id),
+        post(conn, Routes.phase_standings_path(conn, :create, attrs.phase_id),
           phase_standings: attrs
         )
 
@@ -85,19 +85,18 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
     test "renders phase_standings when data is valid", %{
       conn: conn,
-      phase_standings:
-        %PhaseStandings{id: id, tournament_phase_id: tournament_phase_id} = phase_standings
+      phase_standings: %PhaseStandings{id: id, phase_id: phase_id} = phase_standings
     } do
       conn =
         put(
           conn,
-          Routes.phase_standings_path(conn, :update, tournament_phase_id, phase_standings),
+          Routes.phase_standings_path(conn, :update, phase_id, phase_standings),
           phase_standings: @update_attrs
         )
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.phase_standings_path(conn, :show, tournament_phase_id, id))
+      conn = get(conn, Routes.phase_standings_path(conn, :show, phase_id, id))
 
       %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
 
@@ -112,7 +111,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
           Routes.phase_standings_path(
             conn,
             :update,
-            phase_standings.tournament_phase_id,
+            phase_standings.phase_id,
             phase_standings
           ),
           phase_standings: @invalid_attrs
@@ -132,7 +131,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
           Routes.phase_standings_path(
             conn,
             :delete,
-            phase_standings.tournament_phase_id,
+            phase_standings.phase_id,
             phase_standings
           )
         )
@@ -145,7 +144,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
           Routes.phase_standings_path(
             conn,
             :show,
-            phase_standings.tournament_phase_id,
+            phase_standings.phase_id,
             phase_standings
           )
         )

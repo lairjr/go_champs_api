@@ -2,6 +2,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
   use TournamentsApiWeb.ConnCase
 
   alias TournamentsApi.Organizations
+  alias TournamentsApi.Phases
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.TournamentGame
 
@@ -19,24 +20,24 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
   }
 
   def fixture(:tournament_game) do
-    attrs = map_tournament_phase_id(@create_attrs)
+    attrs = map_phase_id(@create_attrs)
     {:ok, tournament_game} = Tournaments.create_tournament_game(attrs)
     tournament_game
   end
 
-  def map_tournament_phase_id(attrs \\ %{}) do
+  def map_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
     tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    tournament_phase_attrs =
+    phase_attrs =
       Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
 
-    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+    {:ok, phase} = Phases.create_phase(phase_attrs)
 
-    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    Map.merge(attrs, %{phase_id: phase.id})
   end
 
   setup %{conn: conn} do
@@ -45,24 +46,24 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
 
   describe "index" do
     test "lists all tournament_games", %{conn: conn} do
-      attrs = map_tournament_phase_id(@create_attrs)
-      conn = get(conn, Routes.tournament_game_path(conn, :index, attrs.tournament_phase_id))
+      attrs = map_phase_id(@create_attrs)
+      conn = get(conn, Routes.tournament_game_path(conn, :index, attrs.phase_id))
       assert json_response(conn, 200)["data"] == []
     end
   end
 
   describe "create tournament_game" do
     test "renders tournament_game when data is valid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@create_attrs)
+      attrs = map_phase_id(@create_attrs)
 
       conn =
-        post(conn, Routes.tournament_game_path(conn, :create, attrs.tournament_phase_id),
+        post(conn, Routes.tournament_game_path(conn, :create, attrs.phase_id),
           tournament_game: attrs
         )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.tournament_game_path(conn, :show, attrs.tournament_phase_id, id))
+      conn = get(conn, Routes.tournament_game_path(conn, :show, attrs.phase_id, id))
 
       assert %{
                "id" => id
@@ -83,7 +84,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
           Routes.tournament_game_path(
             conn,
             :update,
-            tournament_game.tournament_phase_id,
+            tournament_game.phase_id,
             tournament_game
           ),
           tournament_game: @update_attrs
@@ -94,7 +95,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
       conn =
         get(
           conn,
-          Routes.tournament_game_path(conn, :show, tournament_game.tournament_phase_id, id)
+          Routes.tournament_game_path(conn, :show, tournament_game.phase_id, id)
         )
 
       assert %{
@@ -113,7 +114,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
           Routes.tournament_game_path(
             conn,
             :delete,
-            tournament_game.tournament_phase_id,
+            tournament_game.phase_id,
             tournament_game
           )
         )
@@ -126,7 +127,7 @@ defmodule TournamentsApiWeb.TournamentGameControllerTest do
           Routes.tournament_game_path(
             conn,
             :show,
-            tournament_game.tournament_phase_id,
+            tournament_game.phase_id,
             tournament_game
           )
         )

@@ -2,6 +2,7 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
   use TournamentsApiWeb.ConnCase
 
   alias TournamentsApi.Organizations
+  alias TournamentsApi.Phases
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.TournamentStat
 
@@ -14,24 +15,24 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
   @invalid_attrs %{title: nil}
 
   def fixture(:tournament_stat) do
-    attrs = map_tournament_phase_id(@create_attrs)
+    attrs = map_phase_id(@create_attrs)
     {:ok, tournament_stat} = Tournaments.create_tournament_stat(attrs)
     tournament_stat
   end
 
-  def map_tournament_phase_id(attrs \\ %{}) do
+  def map_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
     tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    tournament_phase_attrs =
+    phase_attrs =
       Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
 
-    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+    {:ok, phase} = Phases.create_phase(phase_attrs)
 
-    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    Map.merge(attrs, %{phase_id: phase.id})
   end
 
   setup %{conn: conn} do
@@ -48,16 +49,16 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
 
   describe "create tournament_stat" do
     test "renders tournament_stat when data is valid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@create_attrs)
+      attrs = map_phase_id(@create_attrs)
 
       conn =
-        post(conn, Routes.tournament_stat_path(conn, :create, attrs.tournament_phase_id),
+        post(conn, Routes.tournament_stat_path(conn, :create, attrs.phase_id),
           tournament_stat: attrs
         )
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.tournament_stat_path(conn, :show, attrs.tournament_phase_id, id))
+      conn = get(conn, Routes.tournament_stat_path(conn, :show, attrs.phase_id, id))
 
       assert %{
                "id" => id,
@@ -66,10 +67,10 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_tournament_phase_id(@invalid_attrs)
+      attrs = map_phase_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.tournament_stat_path(conn, :create, attrs.tournament_phase_id),
+        post(conn, Routes.tournament_stat_path(conn, :create, attrs.phase_id),
           tournament_stat: @invalid_attrs
         )
 
@@ -82,19 +83,18 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
 
     test "renders tournament_stat when data is valid", %{
       conn: conn,
-      tournament_stat:
-        %TournamentStat{id: id, tournament_phase_id: tournament_phase_id} = tournament_stat
+      tournament_stat: %TournamentStat{id: id, phase_id: phase_id} = tournament_stat
     } do
       conn =
         put(
           conn,
-          Routes.tournament_stat_path(conn, :update, tournament_phase_id, tournament_stat),
+          Routes.tournament_stat_path(conn, :update, phase_id, tournament_stat),
           tournament_stat: @update_attrs
         )
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.tournament_stat_path(conn, :show, tournament_phase_id, id))
+      conn = get(conn, Routes.tournament_stat_path(conn, :show, phase_id, id))
 
       assert %{
                "id" => id,
@@ -109,7 +109,7 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
           Routes.tournament_stat_path(
             conn,
             :update,
-            tournament_stat.tournament_phase_id,
+            tournament_stat.phase_id,
             tournament_stat
           ),
           tournament_stat: @invalid_attrs
@@ -129,7 +129,7 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
           Routes.tournament_stat_path(
             conn,
             :delete,
-            tournament_stat.tournament_phase_id,
+            tournament_stat.phase_id,
             tournament_stat
           )
         )
@@ -142,7 +142,7 @@ defmodule TournamentsApiWeb.TournamentStatControllerTest do
           Routes.tournament_stat_path(
             conn,
             :show,
-            tournament_stat.tournament_phase_id,
+            tournament_stat.phase_id,
             tournament_stat
           )
         )

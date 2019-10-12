@@ -2,7 +2,7 @@ defmodule TournamentsApi.Phases.PhaseRound do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
-  alias TournamentsApi.Tournaments.TournamentPhase
+  alias TournamentsApi.Phases.Phase
 
   schema "phase_rounds" do
     field :title, :string
@@ -20,7 +20,7 @@ defmodule TournamentsApi.Phases.PhaseRound do
       field :second_team_score, :string
     end
 
-    belongs_to :tournament_phase, TournamentPhase
+    belongs_to :phase, Phase
 
     timestamps()
   end
@@ -28,9 +28,9 @@ defmodule TournamentsApi.Phases.PhaseRound do
   @doc false
   def changeset(phase_round, attrs) do
     phase_round
-    |> cast(attrs, [:order, :title, :tournament_phase_id])
+    |> cast(attrs, [:order, :title, :phase_id])
     |> cast_embed(:matches, with: &round_match_changeset/2)
-    |> validate_required([:matches, :tournament_phase_id])
+    |> validate_required([:matches, :phase_id])
   end
 
   defp round_match_changeset(schema, params) do

@@ -1,6 +1,6 @@
 import { randomString } from "../utils/random";
 
-const randomStandings = (tournamentPhaseId: string) => ({
+const randomStandings = (phaseId: string) => ({
   team_stats: [
     {
       stats: {
@@ -10,10 +10,10 @@ const randomStandings = (tournamentPhaseId: string) => ({
     },
   ],
   title: randomString(),
-  tournament_phase_id: tournamentPhaseId,
+  phase_id: phaseId,
 });
 
-export const tournamentStandingsPayload = (tournamentPhaseId: string) => (
+export const tournamentStandingsPayload = (phaseId: string) => (
   {
-    phase_standings: randomStandings(tournamentPhaseId),
+    phase_standings: randomStandings(phaseId),
   });

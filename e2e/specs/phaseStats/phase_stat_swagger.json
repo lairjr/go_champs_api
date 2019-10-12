@@ -120,7 +120,7 @@
           "type": "string",
           "description": "PhaseStat title"
         },
-        "tournament_phase_id": {
+        "phase_id": {
           "type": "string",
           "description": "Tournament phase ID"
         },

@@ -1,4 +1,4 @@
-defmodule TournamentsApi.Tournaments.TournamentPhase do
+defmodule TournamentsApi.Phases.Phase do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
@@ -8,7 +8,7 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   alias TournamentsApi.Tournaments.TournamentGame
   alias TournamentsApi.Tournaments.TournamentStat
 
-  schema "tournament_phases" do
+  schema "phases" do
     field :title, :string
     field :type, :string
     field :order, :integer
@@ -23,8 +23,8 @@ defmodule TournamentsApi.Tournaments.TournamentPhase do
   end
 
   @doc false
-  def changeset(tournament_phase, attrs) do
-    tournament_phase
+  def changeset(phase, attrs) do
+    phase
     |> cast(attrs, [:title, :type, :order, :tournament_id])
     |> validate_required([:title, :type, :tournament_id])
   end

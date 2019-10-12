@@ -1,29 +1,29 @@
 import { randomDate, randomString } from "../utils/random";
 
-const randomGame = (tournamentPhaseId: string) => ({
+const randomGame = (phaseId: string) => ({
   away_score: Math.round(Math.random() * 100),
   datetime: randomDate(),
   home_score: Math.round(Math.random() * 100),
   location: randomString(),
-  tournament_phase_id: tournamentPhaseId,
+  phase_id: phaseId,
 });
 
-const randomGameWithTeams = (tournamentPhaseId: string, awayTeamId: string, homeTeamId: string) => ({
+const randomGameWithTeams = (phaseId: string, awayTeamId: string, homeTeamId: string) => ({
   away_score: Math.round(Math.random() * 100),
   away_team_id: awayTeamId,
   datetime: randomDate(),
   home_score: Math.round(Math.random() * 100),
   home_team_id: homeTeamId,
   location: randomString(),
-  tournament_phase_id: tournamentPhaseId,
+  phase_id: phaseId,
 });
 
-export const tournamentGamePayload = (tournamentPhaseId: string) => (
+export const tournamentGamePayload = (phaseId: string) => (
   {
-    tournament_game: randomGame(tournamentPhaseId),
+    tournament_game: randomGame(phaseId),
   });
 
-export const tournamentGameWithTeamsPayload = (tournamentPhaseId: string, awayTeamId: string, homeTeamId: string) => (
+export const tournamentGameWithTeamsPayload = (phaseId: string, awayTeamId: string, homeTeamId: string) => (
   {
-    tournament_game: randomGameWithTeams(tournamentPhaseId, awayTeamId, homeTeamId),
+    tournament_game: randomGameWithTeams(phaseId, awayTeamId, homeTeamId),
   });

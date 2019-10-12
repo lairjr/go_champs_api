@@ -1,13 +1,14 @@
 defmodule TournamentsApi.PhasesTest do
   use TournamentsApi.DataCase
 
+  alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Organizations
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Phases
 
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
 
-  def map_tournament_phase_id(attrs \\ %{}) do
+  def map_phase_id(attrs \\ %{}) do
     {:ok, organization} =
       Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
 
@@ -15,12 +16,115 @@ defmodule TournamentsApi.PhasesTest do
 
     {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
 
-    tournament_phase_attrs =
+    phase_attrs =
       Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
 
-    {:ok, tournament_phase} = Tournaments.create_tournament_phase(tournament_phase_attrs)
+    {:ok, phase} = Phases.create_phase(phase_attrs)
 
-    Map.merge(attrs, %{tournament_phase_id: tournament_phase.id})
+    Map.merge(attrs, %{phase_id: phase.id})
+  end
+
+  describe "phases" do
+    alias TournamentsApi.Phases.Phase
+
+    @valid_attrs %{title: "some title", type: "standings"}
+    @update_attrs %{title: "some updated title", type: "standings"}
+    @invalid_attrs %{title: nil, type: nil}
+
+    def phase_fixture(attrs \\ %{}) do
+      {:ok, phase} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> TournamentHelpers.map_tournament_id()
+        |> Phases.create_phase()
+
+      phase
+    end
+
+    test "get_phase!/1 returns the phase with given id" do
+      phase = phase_fixture()
+
+      assert Phases.get_phase!(phase.id).id == phase.id
+    end
+
+    test "create_phase/1 with valid data creates a phase" do
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+
+      assert {:ok, %Phase{} = phase} = Phases.create_phase(attrs)
+
+      assert phase.title == "some title"
+      assert phase.type == "standings"
+      assert phase.order == 1
+    end
+
+    test "create_phase/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Phases.create_phase(@invalid_attrs)
+    end
+
+    test "create_phase/1 select order for second item" do
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+
+      assert {:ok, %Phase{} = first_phase} = Phases.create_phase(attrs)
+
+      assert {:ok, %Phase{} = second_phase} = Phases.create_phase(attrs)
+
+      assert first_phase.order == 1
+      assert second_phase.order == 2
+    end
+
+    test "create_phase/1 set order as 1 for new phase" do
+      first_attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+
+      assert {:ok, %Phase{} = first_phase} = Phases.create_phase(first_attrs)
+
+      [organization] = Organizations.list_organizations()
+
+      {:ok, second_tournament} =
+        Tournaments.create_tournament(%{
+          name: "some other tournament name",
+          organization_id: organization.id
+        })
+
+      second_attrs = Map.merge(@valid_attrs, %{tournament_id: second_tournament.id})
+
+      assert {:ok, %Phase{} = second_phase} = Phases.create_phase(second_attrs)
+
+      assert first_phase.order == 1
+      assert second_phase.order == 2
+    end
+
+    test "update_phase/2 with valid data updates the phase" do
+      phase = phase_fixture()
+
+      assert {:ok, %Phase{} = phase} = Phases.update_phase(phase, @update_attrs)
+
+      assert phase.title == "some updated title"
+      assert phase.type == "standings"
+    end
+
+    test "update_phase/2 with invalid data returns error changeset" do
+      phase = phase_fixture()
+
+      assert {:error, %Ecto.Changeset{}} = Phases.update_phase(phase, @invalid_attrs)
+
+      result_phase = Phases.get_phase!(phase.id)
+
+      assert phase.id == result_phase.id
+    end
+
+    test "delete_phase/1 deletes the phase" do
+      phase = phase_fixture()
+      assert {:ok, %Phase{}} = Phases.delete_phase(phase)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Phases.get_phase!(phase.id)
+      end
+    end
+
+    test "change_phase/1 returns a phase changeset" do
+      phase = phase_fixture()
+      assert %Ecto.Changeset{} = Phases.change_phase(phase)
+    end
   end
 
   describe "phase_standings" do
@@ -34,7 +138,7 @@ defmodule TournamentsApi.PhasesTest do
       {:ok, phase_standings} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_phase_id()
+        |> map_phase_id()
         |> Phases.create_phase_standings()
 
       phase_standings
@@ -42,18 +146,18 @@ defmodule TournamentsApi.PhasesTest do
 
     test "list_phase_standings/0 returns all phase_standings" do
       phase_standings = phase_standings_fixture()
-      assert Phases.list_phase_standings(phase_standings.tournament_phase_id) == [phase_standings]
+      assert Phases.list_phase_standings(phase_standings.phase_id) == [phase_standings]
     end
 
     test "get_phase_standings!/1 returns the phase_standings with given id" do
       phase_standings = phase_standings_fixture()
 
-      assert Phases.get_phase_standings!(phase_standings.id, phase_standings.tournament_phase_id) ==
+      assert Phases.get_phase_standings!(phase_standings.id, phase_standings.phase_id) ==
                phase_standings
     end
 
     test "create_phase_standings/1 with valid data creates a phase_standings" do
-      attrs = map_tournament_phase_id(@valid_attrs)
+      attrs = map_phase_id(@valid_attrs)
       assert {:ok, %PhaseStandings{} = phase_standings} = Phases.create_phase_standings(attrs)
 
       [team_stat] = phase_standings.team_stats
@@ -85,7 +189,7 @@ defmodule TournamentsApi.PhasesTest do
       assert phase_standings ==
                Phases.get_phase_standings!(
                  phase_standings.id,
-                 phase_standings.tournament_phase_id
+                 phase_standings.phase_id
                )
     end
 
@@ -94,7 +198,7 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %PhaseStandings{}} = Phases.delete_phase_standings(phase_standings)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Phases.get_phase_standings!(phase_standings.id, phase_standings.tournament_phase_id)
+        Phases.get_phase_standings!(phase_standings.id, phase_standings.phase_id)
       end
     end
 
@@ -131,7 +235,7 @@ defmodule TournamentsApi.PhasesTest do
       {:ok, phase_round} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_phase_id()
+        |> map_phase_id()
         |> Phases.create_phase_round()
 
       phase_round
@@ -139,18 +243,18 @@ defmodule TournamentsApi.PhasesTest do
 
     test "list_phase_rounds/0 returns all phase_rounds" do
       phase_round = phase_round_fixture()
-      assert Phases.list_phase_rounds(phase_round.tournament_phase_id) == [phase_round]
+      assert Phases.list_phase_rounds(phase_round.phase_id) == [phase_round]
     end
 
     test "get_phase_round!/1 returns the phase_round with given id" do
       phase_round = phase_round_fixture()
 
-      assert Phases.get_phase_round!(phase_round.id, phase_round.tournament_phase_id) ==
+      assert Phases.get_phase_round!(phase_round.id, phase_round.phase_id) ==
                phase_round
     end
 
     test "create_phase_round/1 with valid data creates a phase_round" do
-      attrs = map_tournament_phase_id(@valid_attrs)
+      attrs = map_phase_id(@valid_attrs)
       assert {:ok, %PhaseRound{} = phase_round} = Phases.create_phase_round(attrs)
 
       [match] = phase_round.matches
@@ -165,7 +269,7 @@ defmodule TournamentsApi.PhasesTest do
     end
 
     test "create_phase_round/1 select order for second item" do
-      attrs = map_tournament_phase_id(@valid_attrs)
+      attrs = map_phase_id(@valid_attrs)
 
       assert {:ok, %PhaseRound{} = first_phase_round} = Phases.create_phase_round(attrs)
 
@@ -192,7 +296,7 @@ defmodule TournamentsApi.PhasesTest do
       assert {:error, %Ecto.Changeset{}} = Phases.update_phase_round(phase_round, @invalid_attrs)
 
       assert phase_round ==
-               Phases.get_phase_round!(phase_round.id, phase_round.tournament_phase_id)
+               Phases.get_phase_round!(phase_round.id, phase_round.phase_id)
     end
 
     test "delete_phase_round/1 deletes the phase_round" do
@@ -200,7 +304,7 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %PhaseRound{}} = Phases.delete_phase_round(phase_round)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Phases.get_phase_round!(phase_round.id, phase_round.tournament_phase_id)
+        Phases.get_phase_round!(phase_round.id, phase_round.phase_id)
       end
     end
 
