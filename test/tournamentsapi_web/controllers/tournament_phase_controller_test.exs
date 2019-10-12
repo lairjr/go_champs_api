@@ -1,7 +1,7 @@
 defmodule TournamentsApiWeb.TournamentPhaseControllerTest do
   use TournamentsApiWeb.ConnCase
 
-  alias TournamentsApi.Organizations
+  alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Tournaments.TournamentPhase
 
@@ -16,19 +16,9 @@ defmodule TournamentsApiWeb.TournamentPhaseControllerTest do
   @invalid_attrs %{title: nil, type: nil}
 
   def fixture(:tournament_phase) do
-    attrs = map_tournament_id(@create_attrs)
+    attrs = TournamentHelpers.map_tournament_id(@create_attrs)
     {:ok, tournament_phase} = Tournaments.create_tournament_phase(attrs)
     tournament_phase
-  end
-
-  def map_tournament_id(attrs \\ %{}) do
-    {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
-
-    tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
-    {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
-
-    Map.merge(attrs, %{tournament_id: tournament.id})
   end
 
   setup %{conn: conn} do
@@ -45,7 +35,7 @@ defmodule TournamentsApiWeb.TournamentPhaseControllerTest do
 
   describe "create tournament_phase" do
     test "renders tournament_phase when data is valid", %{conn: conn} do
-      attrs = map_tournament_id(@create_attrs)
+      attrs = TournamentHelpers.map_tournament_id(@create_attrs)
 
       conn =
         post(conn, Routes.tournament_phase_path(conn, :create, attrs.tournament_id),
@@ -64,7 +54,7 @@ defmodule TournamentsApiWeb.TournamentPhaseControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_tournament_id(@invalid_attrs)
+      attrs = TournamentHelpers.map_tournament_id(@invalid_attrs)
 
       conn =
         post(conn, Routes.tournament_phase_path(conn, :create, attrs.tournament_id),

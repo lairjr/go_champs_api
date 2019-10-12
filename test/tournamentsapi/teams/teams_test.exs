@@ -2,10 +2,8 @@ defmodule TournamentsApi.TeamsTest do
   use TournamentsApi.DataCase
 
   alias TournamentsApi.Helpers.TournamentHelpers
-  alias TournamentsApi.Organizations
   alias TournamentsApi.Teams
   alias TournamentsApi.Teams.Team
-  alias TournamentsApi.Tournaments
 
   describe "teams" do
     alias TournamentsApi.Teams.Team

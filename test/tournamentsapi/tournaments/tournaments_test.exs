@@ -1,6 +1,7 @@
 defmodule TournamentsApi.TournamentsTest do
   use TournamentsApi.DataCase
 
+  alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Organizations
 
@@ -30,11 +31,6 @@ defmodule TournamentsApi.TournamentsTest do
       Map.merge(attrs, %{organization_id: organization.id})
     end
 
-    def map_tournament_id(attrs \\ %{}) do
-      tournament = tournament_fixture(%{name: "some tournament name"})
-      Map.merge(attrs, %{tournament_id: tournament.id})
-    end
-
     def map_tournament_team_id(attrs \\ %{}) do
       {:ok, tournament_team} =
         attrs
@@ -52,7 +48,8 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     def map_tournament_phase_id(attrs \\ %{}) do
-      tournament_phase_attrs = map_tournament_id(%{title: "tournament phase", type: "standings"})
+      tournament_phase_attrs =
+        TournamentHelpers.map_tournament_id(%{title: "tournament phase", type: "standings"})
 
       {:ok, tournament_phase} =
         tournament_phase_attrs
@@ -314,7 +311,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_phase} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_id()
+        |> TournamentHelpers.map_tournament_id()
         |> Tournaments.create_tournament_phase()
 
       tournament_phase
@@ -341,7 +338,7 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament_phase/1 with valid data creates a tournament_phase" do
-      attrs = map_tournament_id(@valid_attrs)
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
 
       assert {:ok, %TournamentPhase{} = tournament_phase} =
                Tournaments.create_tournament_phase(attrs)
@@ -356,7 +353,7 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament_phase/1 select order for second item" do
-      attrs = map_tournament_id(@valid_attrs)
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
 
       assert {:ok, %TournamentPhase{} = first_tournament_phase} =
                Tournaments.create_tournament_phase(attrs)
@@ -369,7 +366,7 @@ defmodule TournamentsApi.TournamentsTest do
     end
 
     test "create_tournament_phase/1 set order as 1 for new tournament_phase" do
-      first_attrs = map_tournament_id(@valid_attrs)
+      first_attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
 
       assert {:ok, %TournamentPhase{} = first_tournament_phase} =
                Tournaments.create_tournament_phase(first_attrs)

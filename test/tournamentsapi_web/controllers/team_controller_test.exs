@@ -1,10 +1,9 @@
 defmodule TournamentsApiWeb.TeamControllerTest do
   use TournamentsApiWeb.ConnCase
 
-  alias TournamentsApi.Organizations
+  alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Teams
   alias TournamentsApi.Teams.Team
-  alias TournamentsApi.Tournaments
 
   @create_attrs %{
     name: "some name"
@@ -14,20 +13,10 @@ defmodule TournamentsApiWeb.TeamControllerTest do
   }
   @invalid_attrs %{name: nil}
 
-  def map_tournament_id(attrs \\ %{}) do
-    {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
-
-    tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
-    {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
-
-    Map.merge(attrs, %{tournament_id: tournament.id})
-  end
-
   def fixture(:team) do
     {:ok, team} =
       @create_attrs
-      |> map_tournament_id()
+      |> TournamentHelpers.map_tournament_id()
       |> Teams.create_team()
 
     team
@@ -39,7 +28,7 @@ defmodule TournamentsApiWeb.TeamControllerTest do
 
   describe "create team" do
     test "renders team when data is valid", %{conn: conn} do
-      create_attrs = map_tournament_id(@create_attrs)
+      create_attrs = TournamentHelpers.map_tournament_id(@create_attrs)
       conn = post(conn, Routes.team_path(conn, :create), team: create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
