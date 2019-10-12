@@ -14,10 +14,10 @@ defmodule TournamentsApiWeb.TournamentGameView do
   def render("tournament_game.json", %{tournament_game: tournament_game}) do
     %{
       id: tournament_game.id,
-      away_team: render_one(tournament_game.away_team, TeamView, "tournament_team.json"),
+      away_team: render_one(tournament_game.away_team, TeamView, "team.json"),
       away_score: tournament_game.away_score,
       datetime: tournament_game.datetime,
-      home_team: render_one(tournament_game.home_team, TeamView, "tournament_team.json"),
+      home_team: render_one(tournament_game.home_team, TeamView, "team.json"),
       home_score: tournament_game.home_score,
       location: tournament_game.location
     }

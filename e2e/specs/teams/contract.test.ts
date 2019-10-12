@@ -1,9 +1,9 @@
 import { expect, tv4, use } from "chai";
 import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from "../tournaments/stubs";
-import { tournamentTeamsURL } from "../URLs";
+import { TEAMS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentTeamPayload } from "./helpers";
-import schema from "./team_swagger.json.js";
+import schema from "./team_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
@@ -15,7 +15,7 @@ describe("Teams", () => {
     it("matches schema", async () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
 
-      const httpClient = httpClientFactory(tournamentTeamsURL(tournament.id));
+      const httpClient = httpClientFactory(TEAMS_URL);
 
       const payload = tournamentTeamPayload(tournament.id);
       const { status, data } = await httpClient.post(payload);
@@ -28,25 +28,11 @@ describe("Teams", () => {
     });
   });
 
-  describe("GET /", () => {
-    it("matches schema", async () => {
-      const { tournament, organization } = await createTournamentWithOrganizaion();
-
-      const httpClient = httpClientFactory(tournamentTeamsURL(tournament.id));
-
-      const { status, data } = await httpClient.getAll();
-      expect(data).to.be.jsonSchema(schema.definitions.TeamsResponse);
-      expect(status).to.be.equal(200);
-
-      await deleteTournamentAndOrganization(tournament.id, organization.id);
-    });
-  });
-
   describe("GET /:id", () => {
     it("matches schema", async () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
 
-      const httpClient = httpClientFactory(tournamentTeamsURL(tournament.id));
+      const httpClient = httpClientFactory(TEAMS_URL);
 
       const payload = tournamentTeamPayload(tournament.id);
       const { data: created } = await httpClient.post(payload);
@@ -64,7 +50,7 @@ describe("Teams", () => {
     it("matchs schema", async () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
 
-      const httpClient = httpClientFactory(tournamentTeamsURL(tournament.id));
+      const httpClient = httpClientFactory(TEAMS_URL);
 
       const payload = tournamentTeamPayload(tournament.id);
       const { data: created } = await httpClient.post(payload);
@@ -84,7 +70,7 @@ describe("Teams", () => {
     it("matches schema", async () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
 
-      const httpClient = httpClientFactory(tournamentTeamsURL(tournament.id));
+      const httpClient = httpClientFactory(TEAMS_URL);
 
       const payload = tournamentTeamPayload(tournament.id);
       const { data: created } = await httpClient.post(payload);
