@@ -1,6 +1,7 @@
 defmodule TournamentsApi.TeamsTest do
   use TournamentsApi.DataCase
 
+  alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Organizations
   alias TournamentsApi.Teams
   alias TournamentsApi.Teams.Team
@@ -13,23 +14,11 @@ defmodule TournamentsApi.TeamsTest do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    def map_tournament_id(attrs \\ %{}) do
-      {:ok, organization} =
-        Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
-
-      tournament_attrs =
-        Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
-
-      {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
-
-      Map.merge(attrs, %{tournament_id: tournament.id})
-    end
-
     def team_fixture(attrs \\ %{}) do
       {:ok, team} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_tournament_id()
+        |> TournamentHelpers.map_tournament_id()
         |> Teams.create_team()
 
       team
@@ -41,13 +30,13 @@ defmodule TournamentsApi.TeamsTest do
     end
 
     test "create_team/1 with valid data creates a team" do
-      valid_attrs = map_tournament_id(@valid_attrs)
+      valid_attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
       assert {:ok, %Team{} = team} = Teams.create_team(valid_attrs)
       assert team.name == "some name"
     end
 
     test "create_team/1 with invalid data returns error changeset" do
-      invalid_attrs = map_tournament_id(@invalid_attrs)
+      invalid_attrs = TournamentHelpers.map_tournament_id(@invalid_attrs)
       assert {:error, %Ecto.Changeset{}} = Teams.create_team(invalid_attrs)
     end
 
