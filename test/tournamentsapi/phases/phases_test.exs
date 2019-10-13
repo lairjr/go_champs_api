@@ -1,28 +1,13 @@
 defmodule TournamentsApi.PhasesTest do
   use TournamentsApi.DataCase
 
+  alias TournamentsApi.Helpers.PhaseHelpers
   alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Organizations
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Phases
 
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-
-  def map_phase_id(attrs \\ %{}) do
-    {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
-
-    tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
-
-    {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
-
-    phase_attrs =
-      Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
-
-    {:ok, phase} = Phases.create_phase(phase_attrs)
-
-    Map.merge(attrs, %{phase_id: phase.id})
-  end
 
   describe "phases" do
     alias TournamentsApi.Phases.Phase
@@ -138,7 +123,7 @@ defmodule TournamentsApi.PhasesTest do
       {:ok, phase_standings} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_phase_id()
+        |> PhaseHelpers.map_phase_id()
         |> Phases.create_phase_standings()
 
       phase_standings
@@ -157,7 +142,7 @@ defmodule TournamentsApi.PhasesTest do
     end
 
     test "create_phase_standings/1 with valid data creates a phase_standings" do
-      attrs = map_phase_id(@valid_attrs)
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
       assert {:ok, %PhaseStandings{} = phase_standings} = Phases.create_phase_standings(attrs)
 
       [team_stat] = phase_standings.team_stats
@@ -235,7 +220,7 @@ defmodule TournamentsApi.PhasesTest do
       {:ok, phase_round} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_phase_id()
+        |> PhaseHelpers.map_phase_id()
         |> Phases.create_phase_round()
 
       phase_round
@@ -254,7 +239,7 @@ defmodule TournamentsApi.PhasesTest do
     end
 
     test "create_phase_round/1 with valid data creates a phase_round" do
-      attrs = map_phase_id(@valid_attrs)
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
       assert {:ok, %PhaseRound{} = phase_round} = Phases.create_phase_round(attrs)
 
       [match] = phase_round.matches
@@ -269,7 +254,7 @@ defmodule TournamentsApi.PhasesTest do
     end
 
     test "create_phase_round/1 select order for second item" do
-      attrs = map_phase_id(@valid_attrs)
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
 
       assert {:ok, %PhaseRound{} = first_phase_round} = Phases.create_phase_round(attrs)
 

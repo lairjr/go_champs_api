@@ -4,9 +4,7 @@ export const ORGANIZATIONS_URL = `${API_HOST}/organizations`;
 export const PHASES_URL = `${API_HOST}/phases`;
 export const TOURNAMENTS_URL = `${API_HOST}/tournaments`;
 export const TEAMS_URL = `${API_HOST}/teams`;
-export const phaseGamesURL = (phaseId: string) => (
-  `${API_HOST}/phases/${phaseId}/games`
-);
+export const GAMES_URL = `${API_HOST}/games`;
 export const phaseRoundsURL = (phaseId: string) => (
   `${API_HOST}/phases/${phaseId}/rounds`
 );

@@ -197,7 +197,7 @@
 #     ]
 #   })
 
-# # Add tournament_game
+# # Add game
 
 # date1 = DateTime.truncate(DateTime.utc_now(), :second)
 # date2 = DateTime.truncate(DateTime.utc_now(), :second)
@@ -212,86 +212,86 @@
 # date11 = DateTime.truncate(DateTime.utc_now(), :second)
 # date12 = DateTime.truncate(DateTime.utc_now(), :second)
 
-# alias TournamentsApi.Tournaments.TournamentGame
+# alias TournamentsApi.Games.Game
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_1.id,
 #   home_team_id: municipal_team_2.id,
 #   datetime: date1
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_3.id,
 #   home_team_id: municipal_team_4.id,
 #   datetime: date2
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_1.id,
 #   home_team_id: municipal_team_3.id,
 #   datetime: date3
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_4.id,
 #   home_team_id: municipal_team_2.id,
 #   datetime: date4
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_1.id,
 #   home_team_id: municipal_team_4.id,
 #   datetime: date5
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,
 #   away_team_id: municipal_team_2.id,
 #   home_team_id: municipal_team_3.id,
 #   datetime: date6
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_a.id,
 #   home_team_id: lawson_team_b.id,
 #   datetime: date7
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_c.id,
 #   home_team_id: lawson_team_d.id,
 #   datetime: date8
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_e.id,
 #   home_team_id: lawson_team_a.id,
 #   datetime: date9
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_b.id,
 #   home_team_id: lawson_team_c.id,
 #   datetime: date10
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_d.id,
 #   home_team_id: lawson_team_e.id,
 #   datetime: date11
 # })
 
-# Repo.insert!(%TournamentGame{
+# Repo.insert!(%Game{
 #   phase_id: lawson_phase.id,
 #   away_team_id: lawson_team_a.id,
 #   home_team_id: lawson_team_c.id,

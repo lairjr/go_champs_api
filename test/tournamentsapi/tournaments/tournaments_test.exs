@@ -1,8 +1,7 @@
 defmodule TournamentsApi.TournamentsTest do
   use TournamentsApi.DataCase
 
-  alias TournamentsApi.Helpers.TournamentHelpers
-  alias TournamentsApi.Phases
+  alias TournamentsApi.Helpers.PhaseHelpers
   alias TournamentsApi.Tournaments
   alias TournamentsApi.Organizations
 
@@ -46,17 +45,6 @@ defmodule TournamentsApi.TournamentsTest do
 
     def map_tournament_team({:ok, tournament}) do
       %{name: "some team name", tournament_id: tournament.id}
-    end
-
-    def map_phase_id(attrs \\ %{}) do
-      phase_attrs =
-        TournamentHelpers.map_tournament_id(%{title: "tournament phase", type: "standings"})
-
-      {:ok, phase} =
-        phase_attrs
-        |> Phases.create_phase()
-
-      Map.merge(attrs, %{phase_id: phase.id})
     end
 
     test "list_tournaments/0 returns all tournaments" do
@@ -113,102 +101,6 @@ defmodule TournamentsApi.TournamentsTest do
     end
   end
 
-  describe "tournament_games" do
-    alias TournamentsApi.Tournaments.TournamentGame
-
-    @valid_attrs %{
-      away_score: 10,
-      datetime: "2019-08-25T16:59:27.116Z",
-      home_score: 20,
-      location: "some location"
-    }
-    @update_attrs %{
-      away_score: 20,
-      datetime: "2019-08-25T16:59:27.116Z",
-      home_score: 30,
-      location: "another location"
-    }
-    @invalid_attrs %{phase_id: nil}
-
-    def tournament_game_fixture(attrs \\ %{}) do
-      {:ok, tournament_game} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> map_phase_id()
-        |> Tournaments.create_tournament_game()
-
-      tournament_game
-    end
-
-    test "list_tournament_games/0 returns all tournament_games" do
-      random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-      tournament_game = tournament_game_fixture()
-      [result_game] = Tournaments.list_tournament_games(tournament_game.phase_id)
-      assert result_game.id == tournament_game.id
-
-      assert Tournaments.list_tournament_games(random_uuid) == []
-    end
-
-    test "get_tournament_game!/1 returns the tournament_game with given id" do
-      tournament_game = tournament_game_fixture()
-
-      result_game = Tournaments.get_tournament_game!(tournament_game.id, tournament_game.phase_id)
-
-      assert result_game.id == tournament_game.id
-    end
-
-    test "create_tournament_game/1 with valid data creates a tournament_game" do
-      valid_tournament =
-        tournament_game_fixture()
-        |> Map.from_struct()
-
-      assert {:ok, %TournamentGame{} = tournament_game} =
-               Tournaments.create_tournament_game(valid_tournament)
-    end
-
-    test "create_tournament_game/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament_game(@invalid_attrs)
-    end
-
-    test "update_tournament_game/2 with valid data updates the tournament_game" do
-      tournament_game = tournament_game_fixture()
-
-      attrs = Map.merge(@update_attrs, %{phase_id: tournament_game.phase_id})
-
-      {:ok, %TournamentGame{} = updated_tournament_game} =
-        Tournaments.update_tournament_game(tournament_game, attrs)
-
-      assert updated_tournament_game.away_score == attrs.away_score
-      assert updated_tournament_game.home_score == attrs.home_score
-      assert updated_tournament_game.location == attrs.location
-    end
-
-    test "update_tournament_game/2 with invalid data returns error changeset" do
-      tournament_game = tournament_game_fixture()
-
-      assert {:error, %Ecto.Changeset{}} =
-               Tournaments.update_tournament_game(tournament_game, @invalid_attrs)
-
-      result_game = Tournaments.get_tournament_game!(tournament_game.id, tournament_game.phase_id)
-
-      assert result_game.id == tournament_game.id
-    end
-
-    test "delete_tournament_game/1 deletes the tournament_game" do
-      tournament_game = tournament_game_fixture()
-      assert {:ok, %TournamentGame{}} = Tournaments.delete_tournament_game(tournament_game)
-
-      assert_raise Ecto.NoResultsError, fn ->
-        Tournaments.get_tournament_game!(tournament_game.id, tournament_game.phase_id)
-      end
-    end
-
-    test "change_tournament_game/1 returns a tournament_game changeset" do
-      tournament_game = tournament_game_fixture()
-      assert %Ecto.Changeset{} = Tournaments.change_tournament_game(tournament_game)
-    end
-  end
-
   describe "tournament_stats" do
     alias TournamentsApi.Tournaments.TournamentStat
 
@@ -220,7 +112,7 @@ defmodule TournamentsApi.TournamentsTest do
       {:ok, tournament_stat} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> map_phase_id()
+        |> PhaseHelpers.map_phase_id()
         |> Tournaments.create_tournament_stat()
 
       tournament_stat

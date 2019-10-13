@@ -24,7 +24,7 @@
               "$ref": "#/definitions/PhaseGameRequest"
             },
             "required": true,
-            "name": "tournament_game",
+            "name": "game",
             "in": "body",
             "description": "The phase games details"
           }
@@ -90,16 +90,16 @@
       "type": "object",
       "title": "PhaseGameRequest",
       "required": [
-        "tournament_game"
+        "game"
       ],
       "properties": {
-        "tournament_game": {
+        "game": {
           "description": "The phase games details",
           "$ref": "#/definitions/PhaseGame"
         }
       },
       "example": {
-        "tournament_game": {
+        "game": {
           "title": "PhaseGame title"
         }
       },

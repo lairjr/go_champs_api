@@ -20,10 +20,10 @@ const randomGameWithTeams = (phaseId: string, awayTeamId: string, homeTeamId: st
 
 export const tournamentGamePayload = (phaseId: string) => (
   {
-    tournament_game: randomGame(phaseId),
+    game: randomGame(phaseId),
   });
 
 export const tournamentGameWithTeamsPayload = (phaseId: string, awayTeamId: string, homeTeamId: string) => (
   {
-    tournament_game: randomGameWithTeams(phaseId, awayTeamId, homeTeamId),
+    game: randomGameWithTeams(phaseId, awayTeamId, homeTeamId),
   });

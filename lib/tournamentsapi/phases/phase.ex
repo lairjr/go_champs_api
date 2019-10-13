@@ -5,7 +5,7 @@ defmodule TournamentsApi.Phases.Phase do
   alias TournamentsApi.Phases.PhaseRound
   alias TournamentsApi.Phases.PhaseStandings
   alias TournamentsApi.Tournaments.Tournament
-  alias TournamentsApi.Tournaments.TournamentGame
+  alias TournamentsApi.Games.Game
   alias TournamentsApi.Tournaments.TournamentStat
 
   schema "phases" do
@@ -14,7 +14,7 @@ defmodule TournamentsApi.Phases.Phase do
     field :order, :integer
 
     belongs_to :tournament, Tournament
-    has_many :games, TournamentGame
+    has_many :games, Game
     has_many :rounds, PhaseRound
     has_many :stats, TournamentStat
     has_many :standings, PhaseStandings

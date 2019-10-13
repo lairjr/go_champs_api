@@ -1,8 +1,8 @@
-defmodule TournamentsApi.Repo.Migrations.CreateTournamentGames do
+defmodule TournamentsApi.Repo.Migrations.CreateGames do
   use Ecto.Migration
 
   def change do
-    create table(:tournament_games, primary_key: false) do
+    create table(:games, primary_key: false) do
       add :id, :uuid, primary_key: true
 
       add :home_score, :integer
@@ -16,7 +16,7 @@ defmodule TournamentsApi.Repo.Migrations.CreateTournamentGames do
       timestamps()
     end
 
-    create index(:tournament_games, [:away_team_id])
-    create index(:tournament_games, [:home_team_id])
+    create index(:games, [:away_team_id])
+    create index(:games, [:home_team_id])
   end
 end

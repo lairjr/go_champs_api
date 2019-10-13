@@ -1,34 +1,17 @@
 defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
   use TournamentsApiWeb.ConnCase
 
-  alias TournamentsApi.Organizations
+  alias TournamentsApi.Helpers.PhaseHelpers
   alias TournamentsApi.Phases
   alias TournamentsApi.Phases.PhaseStandings
-  alias TournamentsApi.Tournaments
 
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
   @create_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
   @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
   @invalid_attrs %{team_stats: nil}
 
-  def map_phase_id(attrs \\ %{}) do
-    {:ok, organization} =
-      Organizations.create_organization(%{name: "some organization", slug: "some-slug"})
-
-    tournament_attrs = Map.merge(%{name: "some tournament"}, %{organization_id: organization.id})
-
-    {:ok, tournament} = Tournaments.create_tournament(tournament_attrs)
-
-    phase_attrs =
-      Map.merge(%{title: "some phase", type: "stadings"}, %{tournament_id: tournament.id})
-
-    {:ok, phase} = Phases.create_phase(phase_attrs)
-
-    Map.merge(attrs, %{phase_id: phase.id})
-  end
-
   def fixture(:phase_standings) do
-    phase_standings_attrs = map_phase_id(@create_attrs)
+    phase_standings_attrs = PhaseHelpers.map_phase_id(@create_attrs)
     {:ok, phase_standings} = Phases.create_phase_standings(phase_standings_attrs)
     phase_standings
   end
@@ -51,7 +34,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
 
   describe "create phase_standings" do
     test "renders phase_standings when data is valid", %{conn: conn} do
-      attrs = map_phase_id(@create_attrs)
+      attrs = PhaseHelpers.map_phase_id(@create_attrs)
 
       conn =
         post(conn, Routes.phase_standings_path(conn, :create, attrs.phase_id),
@@ -69,7 +52,7 @@ defmodule TournamentsApiWeb.PhaseStandingsControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      attrs = map_phase_id(@invalid_attrs)
+      attrs = PhaseHelpers.map_phase_id(@invalid_attrs)
 
       conn =
         post(conn, Routes.phase_standings_path(conn, :create, attrs.phase_id),
