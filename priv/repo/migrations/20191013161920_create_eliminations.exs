@@ -1,8 +1,8 @@
-defmodule TournamentsApi.Repo.Migrations.CreatePhaseStandings do
+defmodule TournamentsApi.Repo.Migrations.CreateEliminations do
   use Ecto.Migration
 
   def change do
-    create table(:phase_standings, primary_key: false) do
+    create table(:eliminations, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :title, :string
       add :team_stats, {:array, :map}
@@ -12,7 +12,7 @@ defmodule TournamentsApi.Repo.Migrations.CreatePhaseStandings do
       timestamps()
     end
 
-    create index(:phase_standings, [:phase_id])
-    create unique_index(:phase_standings, [:id, :phase_id])
+    create index(:eliminations, [:phase_id])
+    create unique_index(:eliminations, [:id, :phase_id])
   end
 end

@@ -104,12 +104,12 @@
 #     title: "Loses"
 #   })
 
-# # Add phase_standings
+# # Add elimination
 
-# alias TournamentsApi.Phases.PhaseStandings
+# alias TournamentsApi.Eliminations.Elimination
 
 # municipal_standings =
-#   Repo.insert!(%PhaseStandings{
+#   Repo.insert!(%Elimination{
 #     phase_id: municipal_phase.id,
 #     team_stats: [
 #       %{

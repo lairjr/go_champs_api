@@ -14,6 +14,7 @@ defmodule TournamentsApiWeb.Router do
   scope "/api", TournamentsApiWeb do
     pipe_through :api
 
+    resources "/eliminations", EliminationController
     resources "/games", GameController
     resources "/organizations", OrganizationController
     resources "/teams", TeamController
@@ -21,7 +22,6 @@ defmodule TournamentsApiWeb.Router do
     resources "/phases", PhaseController
     resources "/phases/:phase_id/rounds", PhaseRoundController
     resources "/phases/:phase_id/stats", TournamentStatController
-    resources "/phases/:phase_id/standings", PhaseStandingsController
     resources "/tournaments", TournamentController
   end
 

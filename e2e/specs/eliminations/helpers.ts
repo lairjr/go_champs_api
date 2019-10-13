@@ -1,6 +1,6 @@
 import { randomString } from "../utils/random";
 
-const randomStandings = (phaseId: string) => ({
+const randomElimination = (phaseId: string) => ({
   team_stats: [
     {
       stats: {
@@ -13,7 +13,7 @@ const randomStandings = (phaseId: string) => ({
   phase_id: phaseId,
 });
 
-export const tournamentStandingsPayload = (phaseId: string) => (
+export const eliminationPayload = (phaseId: string) => (
   {
-    phase_standings: randomStandings(phaseId),
+    elimination: randomElimination(phaseId),
   });

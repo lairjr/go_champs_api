@@ -24,7 +24,7 @@
               "$ref": "#/definitions/PhaseStandingsRequest"
             },
             "required": true,
-            "name": "phase_standings",
+            "name": "elimination",
             "in": "body",
             "description": "The phase standings details"
           }
@@ -90,16 +90,16 @@
       "type": "object",
       "title": "PhaseStandingsRequest",
       "required": [
-        "phase_standings"
+        "elimination"
       ],
       "properties": {
-        "phase_standings": {
+        "elimination": {
           "description": "The phase standings details",
           "$ref": "#/definitions/PhaseStandings"
         }
       },
       "example": {
-        "phase_standings": {
+        "elimination": {
           "title": "Optional title",
           "team_stats": [
             {

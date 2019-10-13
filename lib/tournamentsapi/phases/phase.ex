@@ -3,7 +3,7 @@ defmodule TournamentsApi.Phases.Phase do
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Phases.PhaseRound
-  alias TournamentsApi.Phases.PhaseStandings
+  alias TournamentsApi.Eliminations.Elimination
   alias TournamentsApi.Tournaments.Tournament
   alias TournamentsApi.Games.Game
   alias TournamentsApi.Tournaments.TournamentStat
@@ -17,7 +17,7 @@ defmodule TournamentsApi.Phases.Phase do
     has_many :games, Game
     has_many :rounds, PhaseRound
     has_many :stats, TournamentStat
-    has_many :standings, PhaseStandings
+    has_many :eliminations, Elimination
 
     timestamps()
   end

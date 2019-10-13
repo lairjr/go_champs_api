@@ -1,7 +1,7 @@
 defmodule TournamentsApiWeb.PhaseView do
   use TournamentsApiWeb, :view
   alias TournamentsApiWeb.PhaseRoundView
-  alias TournamentsApiWeb.PhaseStandingsView
+  alias TournamentsApiWeb.EliminationView
   alias TournamentsApiWeb.PhaseView
   alias TournamentsApiWeb.TournamentStatView
 
@@ -15,7 +15,7 @@ defmodule TournamentsApiWeb.PhaseView do
         id: phase.id,
         order: phase.order,
         rounds: render_many(phase.rounds, PhaseRoundView, "phase_round.json"),
-        standings: render_many(phase.standings, PhaseStandingsView, "phase_standings.json"),
+        eliminations: render_many(phase.eliminations, EliminationView, "elimination.json"),
         stats: render_many(phase.stats, TournamentStatView, "tournament_stat.json"),
         title: phase.title,
         type: phase.type
