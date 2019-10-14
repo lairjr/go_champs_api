@@ -3,7 +3,6 @@ defmodule TournamentsApiWeb.PhaseView do
   alias TournamentsApiWeb.DrawView
   alias TournamentsApiWeb.EliminationView
   alias TournamentsApiWeb.PhaseView
-  alias TournamentsApiWeb.TournamentStatView
 
   def render("index.json", %{phases: phases}) do
     %{data: render_many(phases, PhaseView, "phase.json")}
@@ -16,6 +15,8 @@ defmodule TournamentsApiWeb.PhaseView do
         order: phase.order,
         draws: render_many(phase.draws, DrawView, "draw.json"),
         eliminations: render_many(phase.eliminations, EliminationView, "elimination.json"),
+        elimination_stats:
+          render_many(phase.elimination_stats, PhaseView, "elimination_stats.json"),
         title: phase.title,
         type: phase.type
       }
@@ -28,6 +29,13 @@ defmodule TournamentsApiWeb.PhaseView do
       order: phase.order,
       title: phase.title,
       type: phase.type
+    }
+  end
+
+  def render("elimination_stats.json", %{elimination: elimination_stats}) do
+    %{
+      id: elimination_stats.id,
+      title: elimination_stats.title
     }
   end
 end

@@ -1,7 +1,6 @@
 defmodule TournamentsApi.PhasesTest do
   use TournamentsApi.DataCase
 
-  alias TournamentsApi.Helpers.PhaseHelpers
   alias TournamentsApi.Helpers.TournamentHelpers
   alias TournamentsApi.Organizations
   alias TournamentsApi.Tournaments

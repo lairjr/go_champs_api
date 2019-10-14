@@ -14,7 +14,7 @@ defmodule TournamentsApi.TournamentsTest do
 
     @organization_attrs %{name: "some organization name", slug: "some-slug"}
 
-    def tournament_fixture(attrs \\ %{}, organization_attrs \\ @organization_attrs) do
+    def tournament_fixture(attrs \\ %{}) do
       {:ok, tournament} =
         attrs
         |> Enum.into(@valid_attrs)
