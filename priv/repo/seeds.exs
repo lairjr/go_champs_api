@@ -83,61 +83,47 @@
 # alias TournamentsApi.Phases.Phase
 
 # municipal_phase =
-#   Repo.insert!(%Phase{order: 1, title: "Turno", type: "standings", tournament_id: municipal.id})
+#   Repo.insert!(%Phase{order: 1, title: "Turno", type: "elimination", tournament_id: municipal.id, elimination_stats: [%{"title" => "Wins"}, %{"title" => "Loses"}]})
 
 # lawson_phase =
-#   Repo.insert!(%Phase{order: 1, title: "Turno", type: "bracket", tournament_id: lawson.id})
-
-# # Add phase_stats
-
-# alias TournamentsApi.Tournaments.TournamentStat
-
-# municipal_wins =
-#   Repo.insert!(%TournamentStat{
-#     phase_id: municipal_phase.id,
-#     title: "Wins"
-#   })
-
-# municipal_loses =
-#   Repo.insert!(%TournamentStat{
-#     phase_id: municipal_phase.id,
-#     title: "Loses"
-#   })
+#   Repo.insert!(%Phase{order: 1, title: "Turno", type: "draw", tournament_id: lawson.id})
 
 # # Add elimination
 
 # alias TournamentsApi.Eliminations.Elimination
 
-# municipal_standings =
+# [wins, loses] = municipal_phase.elimination_stats
+
+# municipal_elimination =
 #   Repo.insert!(%Elimination{
 #     phase_id: municipal_phase.id,
 #     team_stats: [
 #       %{
 #         team_id: municipal_team_4.id,
 #         stats: %{
-#           municipal_wins.id => "10",
-#           municipal_loses.id => "0"
+#           wins.id => "10",
+#           loses.id => "0"
 #         }
 #       },
 #       %{
 #         team_id: municipal_team_1.id,
 #         stats: %{
-#           municipal_wins.id => "9",
-#           municipal_loses.id => "1"
+#           wins.id => "9",
+#           loses.id => "1"
 #         }
 #       },
 #       %{
 #         team_id: municipal_team_3.id,
 #         stats: %{
-#           municipal_wins.id => "8",
-#           municipal_loses.id => "2"
+#           wins.id => "8",
+#           loses.id => "2"
 #         }
 #       },
 #       %{
 #         team_id: municipal_team_2.id,
 #         stats: %{
-#           municipal_wins.id => "7",
-#           municipal_loses.id => "3"
+#           wins.id => "7",
+#           loses.id => "3"
 #         }
 #       }
 #     ]

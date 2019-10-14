@@ -7,6 +7,7 @@ defmodule TournamentsApi.Repo.Migrations.CreatePhases do
       add :title, :string
       add :type, :string
       add :order, :integer
+      add :elimination_stats, {:array, :map}
       add :tournament_id, references(:tournaments, on_delete: :nothing, type: :uuid)
 
       timestamps()

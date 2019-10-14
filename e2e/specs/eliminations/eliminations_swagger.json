@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "paths": {
-    "/api/phases/{phaseId}/standings": {
+    "/api/phases/{phaseId}/elimination": {
       "post": {
         "tags": [
           "PhaseStandings"
         ],
-        "summary": "Post phase standings",
+        "summary": "Post phase elimination",
         "responses": {
           "201": {
             "schema": {
@@ -26,10 +26,10 @@
             "required": true,
             "name": "elimination",
             "in": "body",
-            "description": "The phase standings details"
+            "description": "The phase elimination details"
           }
         ],
-        "description": "Creates a new phase standings",
+        "description": "Creates a new phase elimination",
         "consumes": [
           "application/json"
         ]
@@ -38,7 +38,7 @@
         "tags": [
           "PhaseStandings"
         ],
-        "summary": "List phase standings",
+        "summary": "List phase elimination",
         "responses": {
           "200": {
             "schema": {
@@ -70,21 +70,21 @@
           "items": {
             "$ref": "#/definitions/PhaseStandings"
           },
-          "description": "The phase standings details"
+          "description": "The phase elimination details"
         }
       },
-      "description": "Response schema for multiple phase standings"
+      "description": "Response schema for multiple phase elimination"
     },
     "PhaseStandingsResponse": {
       "type": "object",
       "title": "PhaseStandingsResponse",
       "properties": {
         "data": {
-          "description": "The phase standings details",
+          "description": "The phase elimination details",
           "$ref": "#/definitions/PhaseStandings"
         }
       },
-      "description": "Response schema for single phase standings"
+      "description": "Response schema for single phase elimination"
     },
     "PhaseStandingsRequest": {
       "type": "object",
@@ -94,7 +94,7 @@
       ],
       "properties": {
         "elimination": {
-          "description": "The phase standings details",
+          "description": "The phase elimination details",
           "$ref": "#/definitions/PhaseStandings"
         }
       },
@@ -111,7 +111,7 @@
           ]
         }
       },
-      "description": "POST body for creating a phase standings"
+      "description": "POST body for creating a phase elimination"
     },
     "PhaseStandings": {
       "type": "object",
@@ -176,7 +176,7 @@
           }
         ]
       },
-      "description": "A phase standings of the app"
+      "description": "A phase elimination of the app"
     }
   }
 }

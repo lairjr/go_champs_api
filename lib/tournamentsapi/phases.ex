@@ -25,7 +25,7 @@ defmodule TournamentsApi.Phases do
   def get_phase!(id),
     do:
       Repo.get_by!(Phase, id: id)
-      |> Repo.preload([:draws, :eliminations, :stats])
+      |> Repo.preload([:draws, :eliminations])
 
   @doc """
   Creates a phase.

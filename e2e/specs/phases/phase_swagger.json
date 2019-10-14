@@ -148,7 +148,7 @@
       "example": {
         "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
         "title": "First phase",
-        "type": "standings"
+        "type": "elimination"
       },
       "description": "A tournament phases of the app"
     }

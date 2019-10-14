@@ -7,11 +7,11 @@ defmodule TournamentsApiWeb.PhaseControllerTest do
 
   @create_attrs %{
     title: "some title",
-    type: "standings"
+    type: "elimination"
   }
   @update_attrs %{
     title: "some updated title",
-    type: "standings"
+    type: "elimination"
   }
   @invalid_attrs %{title: nil, type: nil}
 
@@ -38,7 +38,7 @@ defmodule TournamentsApiWeb.PhaseControllerTest do
       assert %{
                "id" => id,
                "title" => "some title",
-               "type" => "standings"
+               "type" => "elimination"
              } = json_response(conn, 200)["data"]
     end
 
@@ -76,7 +76,7 @@ defmodule TournamentsApiWeb.PhaseControllerTest do
       assert %{
                "id" => id,
                "title" => "some updated title",
-               "type" => "standings"
+               "type" => "elimination"
              } = json_response(conn, 200)["data"]
     end
 

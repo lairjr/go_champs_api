@@ -10,8 +10,16 @@ defmodule TournamentsApi.PhasesTest do
   describe "phases" do
     alias TournamentsApi.Phases.Phase
 
-    @valid_attrs %{title: "some title", type: "standings"}
-    @update_attrs %{title: "some updated title", type: "standings"}
+    @valid_attrs %{
+      title: "some title",
+      type: "elimination",
+      elimination_stats: [%{"title" => "stat title"}]
+    }
+    @update_attrs %{
+      title: "some updated title",
+      type: "elimination",
+      elimination_stats: [%{"title" => "updated stat title"}]
+    }
     @invalid_attrs %{title: nil, type: nil}
 
     def phase_fixture(attrs \\ %{}) do
@@ -36,8 +44,10 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %Phase{} = phase} = Phases.create_phase(attrs)
 
       assert phase.title == "some title"
-      assert phase.type == "standings"
+      assert phase.type == "elimination"
       assert phase.order == 1
+      [elimination_stat] = phase.elimination_stats
+      assert elimination_stat.title == "stat title"
     end
 
     test "create_phase/1 with invalid data returns error changeset" do
@@ -82,7 +92,9 @@ defmodule TournamentsApi.PhasesTest do
       assert {:ok, %Phase{} = phase} = Phases.update_phase(phase, @update_attrs)
 
       assert phase.title == "some updated title"
-      assert phase.type == "standings"
+      assert phase.type == "elimination"
+      [elimination_stat] = phase.elimination_stats
+      assert elimination_stat.title == "updated stat title"
     end
 
     test "update_phase/2 with invalid data returns error changeset" do

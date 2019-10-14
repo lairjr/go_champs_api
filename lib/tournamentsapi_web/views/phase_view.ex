@@ -16,7 +16,6 @@ defmodule TournamentsApiWeb.PhaseView do
         order: phase.order,
         draws: render_many(phase.draws, DrawView, "draw.json"),
         eliminations: render_many(phase.eliminations, EliminationView, "elimination.json"),
-        stats: render_many(phase.stats, TournamentStatView, "tournament_stat.json"),
         title: phase.title,
         type: phase.type
       }
