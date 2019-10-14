@@ -1,23 +1,23 @@
 import { expect, tv4, use } from "chai";
 import { createPhaseWithOrganizaion, deletePhaseAndOrganization } from "../phases/stubs";
-import { phaseRoundsURL } from "../URLs";
+import { DRAWS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
-import { tournamentRoundPayload } from "./helpers";
-import schema from "./phase_rounds_swagger.json";
+import schema from "./draws_swagger.json";
+import { drawPayload } from "./helpers";
 import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
 
 tv4.addSchema("#/definitions/PhaseRounds", schema.definitions.PhaseRounds);
 
-describe("PhasesRounds", () => {
+describe("Draws", () => {
   describe("POST /", () => {
     it("matches schema", async () => {
       const { tournament, organization, phase } = await createPhaseWithOrganizaion();
 
-      const httpClient = httpClientFactory(phaseRoundsURL(phase.id));
+      const httpClient = httpClientFactory(DRAWS_URL);
 
-      const payload = tournamentRoundPayload(phase.id);
+      const payload = drawPayload(phase.id);
       const { status, data } = await httpClient.post(payload);
       expect(payload).to.be.jsonSchema(schema.definitions.PhaseRoundsRequest);
       expect(status).to.be.equal(201);
@@ -32,31 +32,13 @@ describe("PhasesRounds", () => {
     });
   });
 
-  describe("GET /", () => {
-    it("matches schema", async () => {
-      const { tournament, organization, phase } = await createPhaseWithOrganizaion();
-
-      const httpClient = httpClientFactory(phaseRoundsURL(phase.id));
-
-      const { status, data } = await httpClient.getAll();
-      expect(data).to.be.jsonSchema(schema.definitions.PhaseRoundsListResponse);
-      expect(status).to.be.equal(200);
-
-      await deletePhaseAndOrganization(
-        tournament.id,
-        organization.id,
-        phase.id,
-      );
-    });
-  });
-
   describe("GET /:id", () => {
     it("matches schema", async () => {
       const { tournament, organization, phase } = await createPhaseWithOrganizaion();
 
-      const httpClient = httpClientFactory(phaseRoundsURL(phase.id));
+      const httpClient = httpClientFactory(DRAWS_URL);
 
-      const payload = tournamentRoundPayload(phase.id);
+      const payload = drawPayload(phase.id);
       const { data: created } = await httpClient.post(payload);
 
       const { status, data: response } = await httpClient.get(created.data.id);
@@ -76,12 +58,12 @@ describe("PhasesRounds", () => {
     it("matchs schema", async () => {
       const { tournament, organization, phase } = await createPhaseWithOrganizaion();
 
-      const httpClient = httpClientFactory(phaseRoundsURL(phase.id));
+      const httpClient = httpClientFactory(DRAWS_URL);
 
-      const payload = tournamentRoundPayload(phase.id);
+      const payload = drawPayload(phase.id);
       const { data: created } = await httpClient.post(payload);
 
-      const patchPayload = tournamentRoundPayload(phase.id);
+      const patchPayload = drawPayload(phase.id);
       const { status, data: response } = await httpClient.patch(created.data.id, patchPayload);
       expect(patchPayload).to.be.jsonSchema(schema.definitions.PhaseRoundsRequest);
       expect(response).to.be.jsonSchema(schema.definitions.PhaseRoundsResponse);
@@ -100,9 +82,9 @@ describe("PhasesRounds", () => {
     it("matches schema", async () => {
       const { tournament, organization, phase } = await createPhaseWithOrganizaion();
 
-      const httpClient = httpClientFactory(phaseRoundsURL(phase.id));
+      const httpClient = httpClientFactory(DRAWS_URL);
 
-      const payload = tournamentRoundPayload(phase.id);
+      const payload = drawPayload(phase.id);
       const { data: created } = await httpClient.post(payload);
       const { status } = await httpClient.delete(created.data.id);
       expect(status).to.be.equal(204);

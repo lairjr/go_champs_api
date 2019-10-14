@@ -1,6 +1,6 @@
 import { randomString } from "../utils/random";
 
-const randomRound = (phaseId: string) => ({
+const randomDraw = (phaseId: string) => ({
   matches: [
     {
       first_team_id: "some-first-team-id",
@@ -17,7 +17,7 @@ const randomRound = (phaseId: string) => ({
   phase_id: phaseId,
 });
 
-export const tournamentRoundPayload = (phaseId: string) => (
+export const drawPayload = (phaseId: string) => (
   {
-    phase_round: randomRound(phaseId),
+    draw: randomDraw(phaseId),
   });

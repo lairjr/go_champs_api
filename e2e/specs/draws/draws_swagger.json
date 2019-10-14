@@ -24,7 +24,7 @@
               "$ref": "#/definitions/PhaseRoundsRequest"
             },
             "required": true,
-            "name": "phase_rounds",
+            "name": "draws",
             "in": "body",
             "description": "The phase rounds details"
           }
@@ -90,16 +90,16 @@
       "type": "object",
       "title": "PhaseRoundsRequest",
       "required": [
-        "phase_round"
+        "draw"
       ],
       "properties": {
-        "phase_round": {
+        "draw": {
           "description": "The phase rounds details",
           "$ref": "#/definitions/PhaseRounds"
         }
       },
       "example": {
-        "phase_round": {
+        "draw": {
           "title": "Optional title",
           "matches": [
             {

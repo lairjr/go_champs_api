@@ -1,14 +1,14 @@
-defmodule TournamentsApi.Phases.PhaseRound do
+defmodule TournamentsApi.Draws.Draw do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
   alias TournamentsApi.Phases.Phase
 
-  schema "phase_rounds" do
+  schema "draws" do
     field :title, :string
     field :order, :integer
 
-    embeds_many :matches, RoundMatch, on_replace: :delete do
+    embeds_many :matches, Match, on_replace: :delete do
       field :first_team_id, :binary_id
       field :first_team_parent_id, :binary_id
       field :first_team_placeholder, :string
@@ -26,14 +26,14 @@ defmodule TournamentsApi.Phases.PhaseRound do
   end
 
   @doc false
-  def changeset(phase_round, attrs) do
-    phase_round
+  def changeset(draw, attrs) do
+    draw
     |> cast(attrs, [:order, :title, :phase_id])
-    |> cast_embed(:matches, with: &round_match_changeset/2)
+    |> cast_embed(:matches, with: &match_changeset/2)
     |> validate_required([:matches, :phase_id])
   end
 
-  defp round_match_changeset(schema, params) do
+  defp match_changeset(schema, params) do
     schema
     |> cast(params, [
       :first_team_id,

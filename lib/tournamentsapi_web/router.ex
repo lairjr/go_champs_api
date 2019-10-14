@@ -14,13 +14,13 @@ defmodule TournamentsApiWeb.Router do
   scope "/api", TournamentsApiWeb do
     pipe_through :api
 
+    resources "/draws", DrawController
     resources "/eliminations", EliminationController
     resources "/games", GameController
     resources "/organizations", OrganizationController
-    resources "/teams", TeamController
-    resources "/users", UserController
     resources "/phases", PhaseController
-    resources "/phases/:phase_id/rounds", PhaseRoundController
+    resources "/users", UserController
+    resources "/teams", TeamController
     resources "/phases/:phase_id/stats", TournamentStatController
     resources "/tournaments", TournamentController
   end

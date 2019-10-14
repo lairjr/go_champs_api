@@ -2,7 +2,7 @@ defmodule TournamentsApi.Phases.Phase do
   use Ecto.Schema
   use TournamentsApi.Schema
   import Ecto.Changeset
-  alias TournamentsApi.Phases.PhaseRound
+  alias TournamentsApi.Draws.Draw
   alias TournamentsApi.Eliminations.Elimination
   alias TournamentsApi.Tournaments.Tournament
   alias TournamentsApi.Games.Game
@@ -15,7 +15,7 @@ defmodule TournamentsApi.Phases.Phase do
 
     belongs_to :tournament, Tournament
     has_many :games, Game
-    has_many :rounds, PhaseRound
+    has_many :draws, Draw
     has_many :stats, TournamentStat
     has_many :eliminations, Elimination
 

@@ -143,12 +143,12 @@
 #     ]
 #   })
 
-# # Add phase_rounds
+# # Add draws
 
-# alias TournamentsApi.Phases.PhaseRound
+# alias TournamentsApi.Draws.Draw
 
 # lawson_round1 =
-#   Repo.insert!(%PhaseRound{
+#   Repo.insert!(%Draw{
 #     order: 1,
 #     title: "Semi final",
 #     phase_id: lawson_phase.id,
@@ -179,7 +179,7 @@
 # [round1_match1, round2_match2] = lawson_round1.matches
 
 # lawson_round2 =
-#   Repo.insert!(%PhaseRound{
+#   Repo.insert!(%Draw{
 #     order: 2,
 #     title: "Final",
 #     phase_id: lawson_phase.id,
