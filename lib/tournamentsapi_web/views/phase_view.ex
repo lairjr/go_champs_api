@@ -32,7 +32,7 @@ defmodule TournamentsApiWeb.PhaseView do
     }
   end
 
-  def render("elimination_stats.json", %{elimination: elimination_stats}) do
+  def render("elimination_stats.json", %{phase: elimination_stats}) do
     %{
       id: elimination_stats.id,
       title: elimination_stats.title

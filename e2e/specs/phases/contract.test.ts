@@ -2,7 +2,7 @@ import { expect, tv4, use } from "chai";
 import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from "../tournaments/stubs";
 import { PHASES_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
-import { phasePayload } from "./helpers";
+import { phasePayload, phaseWithEliminationPayload } from "./helpers";
 import schema from "./phase_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
@@ -35,6 +35,22 @@ describe("Phases", () => {
       const httpClient = httpClientFactory(PHASES_URL);
 
       const payload = phasePayload(tournament.id);
+      const { data: created } = await httpClient.post(payload);
+
+      const { status, data: response } = await httpClient.get(created.data.id);
+      expect(response).to.be.jsonSchema(schema.definitions.PhaseResponse);
+      expect(status).to.be.equal(200);
+
+      await httpClient.delete(created.data.id);
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+
+    it("matches full schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
+
+      const httpClient = httpClientFactory(PHASES_URL);
+
+      const payload = phaseWithEliminationPayload(tournament.id);
       const { data: created } = await httpClient.post(payload);
 
       const { status, data: response } = await httpClient.get(created.data.id);

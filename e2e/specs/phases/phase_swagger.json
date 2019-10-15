@@ -130,6 +130,22 @@
           "type": "number",
           "description": "Phase order"
         },
+        "elimination_stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Stat id"
+              },
+              "title": {
+                "type": "string",
+                "description": "Stat title"
+              }
+            }
+          }
+        },
         "tournament_id": {
           "type": "string",
           "description": "Organization ID"
