@@ -29,7 +29,6 @@ defmodule TournamentsApiWeb.TournamentControllerTest do
       assert json_response(conn, 200)["data"] == []
     end
 
-    @tag runnable: true
     test "lists all tournaments matching where", %{conn: conn} do
       fixture(:tournament)
 

@@ -4,6 +4,7 @@ defmodule TournamentsApiWeb.GameControllerTest do
   alias TournamentsApi.Helpers.PhaseHelpers
   alias TournamentsApi.Games
   alias TournamentsApi.Games.Game
+  alias TournamentsApi.Phases
 
   @create_attrs %{
     away_score: 10,
@@ -30,6 +31,37 @@ defmodule TournamentsApiWeb.GameControllerTest do
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
+  end
+
+  describe "index" do
+    test "lists all games", %{conn: conn} do
+      conn = get(conn, Routes.game_path(conn, :index))
+      assert json_response(conn, 200)["data"] == []
+    end
+
+    test "lists all games matching where", %{conn: conn} do
+      first_game = fixture(:game)
+
+      first_phase = Phases.get_phase!(first_game.phase_id)
+
+      {:ok, second_phase} =
+        Phases.create_phase(%{
+          title: "another phase",
+          type: "stadings",
+          tournament_id: first_phase.tournament_id
+        })
+
+      {:ok, second_game} =
+        @create_attrs
+        |> Map.merge(%{phase_id: second_phase.id})
+        |> Games.create_game()
+
+      where = %{"phase_id" => second_game.phase_id}
+
+      conn = get(conn, Routes.game_path(conn, :index, where: where))
+      [game_result] = json_response(conn, 200)["data"]
+      assert game_result["id"] == second_game.id
+    end
   end
 
   describe "create game" do

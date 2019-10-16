@@ -6,6 +6,26 @@ defmodule TournamentsApiWeb.GameController do
 
   action_fallback TournamentsApiWeb.FallbackController
 
+  defp map_to_keyword(map) do
+    Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
+    games =
+      case params do
+        %{"where" => where} ->
+          where
+          |> map_to_keyword()
+          |> Games.list_games()
+
+        _ ->
+          # TODO (lairjr): Return error if no filter is provided
+          []
+      end
+
+    render(conn, "index.json", games: games)
+  end
+
   def create(conn, %{"game" => game_params}) do
     with {:ok, %Game{} = created_game} <- Games.create_game(game_params) do
       game = Games.get_game!(created_game.id)

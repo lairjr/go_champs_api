@@ -12,8 +12,6 @@ defmodule TournamentsApi.TournamentsTest do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    @organization_attrs %{name: "some organization name", slug: "some-slug"}
-
     def tournament_fixture(attrs \\ %{}) do
       {:ok, tournament} =
         attrs

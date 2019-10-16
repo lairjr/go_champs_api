@@ -9,6 +9,22 @@ defmodule TournamentsApi.Games do
   alias TournamentsApi.Games.Game
 
   @doc """
+  Returns the list of games filter by keywork param.
+
+  ## Examples
+
+      iex> list_games([name: "some name"])
+      [%Tournament{}, ...]
+
+  """
+  def list_games(where) do
+    query = from t in Game, where: ^where
+
+    Repo.all(query)
+    |> Repo.preload([:away_team, :home_team])
+  end
+
+  @doc """
   Gets a single game.
 
   Raises `Ecto.NoResultsError` if the Game does not exist.
