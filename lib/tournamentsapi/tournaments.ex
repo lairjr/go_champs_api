@@ -127,11 +127,14 @@ defmodule TournamentsApi.Tournaments do
   def search_tournaments(term) do
     search_term = "%#{term}%"
 
-    query =
-      from t in Tournament, where: ilike(t.name, ^search_term) or ilike(t.slug, ^search_term)
-
-    Repo.all(query)
-    |> Repo.preload([:organization])
+    Repo.all(
+      from t in Tournament,
+        join: o in assoc(t, :organization),
+        where:
+          ilike(t.name, ^search_term) or ilike(t.slug, ^search_term) or
+            ilike(o.name, ^search_term) or ilike(o.slug, ^search_term),
+        preload: [organization: o]
+    )
   end
 
   @doc """

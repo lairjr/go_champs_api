@@ -19,9 +19,9 @@ defmodule TournamentsApiWeb.Router do
     resources "/games", GameController
     resources "/organizations", OrganizationController
     resources "/phases", PhaseController
+    get "/search", SearchController, :index
     resources "/users", UserController
     resources "/teams", TeamController
-    resources "/phases/:phase_id/stats", TournamentStatController
     resources "/tournaments", TournamentController
   end
 
