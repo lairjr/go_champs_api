@@ -96,5 +96,42 @@ defmodule TournamentsApi.TournamentsTest do
       tournament = tournament_fixture()
       assert %Ecto.Changeset{} = Tournaments.change_tournament(tournament)
     end
+
+    test "search_tournaments/1 returns all tournaments matching common term" do
+      {:ok, another_organization} =
+        Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
+
+      {:ok, first_tournament} =
+        %{name: "another name"}
+        |> Map.merge(%{organization_id: another_organization.id})
+        |> Tournaments.create_tournament()
+
+      second_tournament = tournament_fixture()
+
+      term = "name"
+
+      [first_result, second_result] = Tournaments.search_tournaments(term)
+
+      assert first_result.id == first_tournament.id
+      assert second_result.id == second_tournament.id
+    end
+
+    test "search_tournaments/1 returns all tournaments matching second tournament term" do
+      {:ok, another_organization} =
+        Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
+
+      {:ok, first_tournament} =
+        %{name: "another name"}
+        |> Map.merge(%{organization_id: another_organization.id})
+        |> Tournaments.create_tournament()
+
+      tournament_fixture()
+
+      term = "another"
+
+      [first_result] = Tournaments.search_tournaments(term)
+
+      assert first_result.id == first_tournament.id
+    end
   end
 end

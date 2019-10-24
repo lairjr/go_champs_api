@@ -122,6 +122,19 @@ defmodule TournamentsApi.Tournaments do
   end
 
   @doc """
+  Search tournaments.
+  """
+  def search_tournaments(term) do
+    search_term = "%#{term}%"
+
+    query =
+      from t in Tournament, where: ilike(t.name, ^search_term) or ilike(t.slug, ^search_term)
+
+    Repo.all(query)
+    |> Repo.preload([:organization])
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking tournament changes.
 
   ## Examples
