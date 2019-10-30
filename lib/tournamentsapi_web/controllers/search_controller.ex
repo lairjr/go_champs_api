@@ -16,8 +16,6 @@ defmodule TournamentsApiWeb.SearchController do
           Tournaments.list_tournaments()
       end
 
-    conn
-    |> put_view(TournamentsApiWeb.TournamentView)
-    |> render("index.json", tournaments: tournaments)
+    render(conn, "index.json", tournaments: tournaments)
   end
 end
