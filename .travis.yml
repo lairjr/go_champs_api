@@ -13,6 +13,14 @@ before_install:
   - sudo service postgresql stop
   - docker-compose build
 
-script:
-  - docker-compose run unit-test
-  - docker-compose run contract-test
+jobs:
+  include:
+    - stage: unit_test
+      name: "Unit tests"
+      script:
+        - docker-compose run unit-test
+
+    - stage: contract_test
+      name: "Contract tests"
+      script:
+        - docker-compose run contract-test
