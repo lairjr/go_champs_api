@@ -1,4 +1,4 @@
-defmodule TournamentsApiWeb.ChannelCase do
+defmodule GoChampsApiWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule TournamentsApiWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint TournamentsApiWeb.Endpoint
+      @endpoint GoChampsApiWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TournamentsApi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GoChampsApi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TournamentsApi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(GoChampsApi.Repo, {:shared, self()})
     end
 
     :ok

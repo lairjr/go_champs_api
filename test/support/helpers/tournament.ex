@@ -1,6 +1,6 @@
-defmodule TournamentsApi.Helpers.TournamentHelpers do
-  alias TournamentsApi.Helpers.OrganizationHelpers
-  alias TournamentsApi.Tournaments
+defmodule GoChampsApi.Helpers.TournamentHelpers do
+  alias GoChampsApi.Helpers.OrganizationHelpers
+  alias GoChampsApi.Tournaments
 
   def map_tournament_id(attrs \\ %{}) do
     {:ok, tournament} =

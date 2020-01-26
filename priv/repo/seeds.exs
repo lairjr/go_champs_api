@@ -5,16 +5,16 @@
 # # Inside the script, you can read and write to any of your
 # # repositories directly:
 # #
-# #     TournamentsApi.Repo.insert!(%TournamentsApi.SomeSchema{})
+# #     GoChampsApi.Repo.insert!(%GoChampsApi.SomeSchema{})
 # #
 # # We recommend using the bang functions (`insert!`, `update!`
 # # and so on) as they will fail if something goes wrong.
 
-# alias TournamentsApi.Repo
+# alias GoChampsApi.Repo
 
 # # Add organizations
 
-# alias TournamentsApi.Organizations.Organization
+# alias GoChampsApi.Organizations.Organization
 
 # sec_organization =
 #   Repo.insert!(%Organization{name: "Secretaria Municipal de Esportes", slug: "sec-mun-esportes"})
@@ -24,7 +24,7 @@
 
 # # Add tournaments
 
-# alias TournamentsApi.Tournaments.Tournament
+# alias GoChampsApi.Tournaments.Tournament
 
 # municipal =
 #   Repo.insert!(%Tournament{
@@ -52,7 +52,7 @@
 
 # # Add teams
 
-# alias TournamentsApi.Teams.Team
+# alias GoChampsApi.Teams.Team
 
 # illumis = Repo.insert!(%Team{name: "Illumis"})
 # quiuchin = Repo.insert!(%Team{name: "Quiuchin"})
@@ -66,7 +66,7 @@
 
 # # Add teams
 
-# alias TournamentsApi.Teams.Team
+# alias GoChampsApi.Teams.Team
 
 # municipal_team_1 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 1"})
 # municipal_team_2 = Repo.insert!(%Team{tournament_id: municipal.id, name: "Time 2"})
@@ -80,7 +80,7 @@
 
 # # Add phases
 
-# alias TournamentsApi.Phases.Phase
+# alias GoChampsApi.Phases.Phase
 
 # municipal_phase =
 #   Repo.insert!(%Phase{
@@ -96,7 +96,7 @@
 
 # # Add elimination
 
-# alias TournamentsApi.Eliminations.Elimination
+# alias GoChampsApi.Eliminations.Elimination
 
 # [wins, loses] = municipal_phase.elimination_stats
 
@@ -137,7 +137,7 @@
 
 # # Add draws
 
-# alias TournamentsApi.Draws.Draw
+# alias GoChampsApi.Draws.Draw
 
 # lawson_round1 =
 #   Repo.insert!(%Draw{
@@ -204,7 +204,7 @@
 # date11 = DateTime.truncate(DateTime.utc_now(), :second)
 # date12 = DateTime.truncate(DateTime.utc_now(), :second)
 
-# alias TournamentsApi.Games.Game
+# alias GoChampsApi.Games.Game
 
 # Repo.insert!(%Game{
 #   phase_id: municipal_phase.id,

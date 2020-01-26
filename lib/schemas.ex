@@ -1,4 +1,4 @@
-defmodule TournamentsApi.Schema do
+defmodule GoChampsApi.Schema do
   defmacro __using__(_) do
     quote do
       use Ecto.Schema

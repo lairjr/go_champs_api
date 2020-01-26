@@ -1,4 +1,4 @@
-defmodule TournamentsApi.Repo.Migrations.CreatePhases do
+defmodule GoChampsApi.Repo.Migrations.CreatePhases do
   use Ecto.Migration
 
   def change do

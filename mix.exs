@@ -1,9 +1,9 @@
-defmodule TournamentsApi.MixProject do
+defmodule GoChampsApi.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :tournamentsapi,
+      app: :go_champs_api,
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule TournamentsApi.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {TournamentsApi.Application, []},
+      mod: {GoChampsApi.Application, []},
       extra_applications: [:corsica, :logger, :runtime_tools]
     ]
   end

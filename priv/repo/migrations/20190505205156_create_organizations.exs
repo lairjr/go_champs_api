@@ -1,4 +1,4 @@
-defmodule TournamentsApi.Repo.Migrations.CreateOrganizations do
+defmodule GoChampsApi.Repo.Migrations.CreateOrganizations do
   use Ecto.Migration
 
   def change do

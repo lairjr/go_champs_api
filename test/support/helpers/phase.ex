@@ -1,6 +1,6 @@
-defmodule TournamentsApi.Helpers.PhaseHelpers do
-  alias TournamentsApi.Helpers.TournamentHelpers
-  alias TournamentsApi.Phases
+defmodule GoChampsApi.Helpers.PhaseHelpers do
+  alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Phases
 
   def map_phase_id(attrs \\ %{}) do
     {:ok, phase} =

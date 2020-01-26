@@ -7,21 +7,21 @@
 # General application configuration
 use Mix.Config
 
-config :tournamentsapi,
-  ecto_repos: [TournamentsApi.Repo]
+config :go_champs_api,
+  ecto_repos: [GoChampsApi.Repo]
 
 # Configures the endpoint
-config :tournamentsapi, TournamentsApiWeb.Endpoint,
+config :go_champs_api, GoChampsApiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "imta0fFj1/DTKBsA9UFU4NP9/3U2KQAAi9TqID70AdjSC1sBxS8D1ddhrkRAHP5X",
-  render_errors: [view: TournamentsApiWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: TournamentsApi.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: GoChampsApiWeb.ErrorView, accepts: ~w(json)],
+  pubsub: [name: GoChampsApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
-# config :tournamentsapi, :phoenix_swagger,
+# config :go_champs_api, :phoenix_swagger,
 #   swagger_files: %{
 #     "priv/static/swagger.json" => [
-#       router: TournamentsApiWeb.Router,    
-#       endpoint: TournamentsApiWeb.Endpoint 
+#       router: GoChampsApiWeb.Router,    
+#       endpoint: GoChampsApiWeb.Endpoint 
 #     ]
 #   }
 

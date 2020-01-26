@@ -6,7 +6,7 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :tournamentsapi, TournamentsApiWeb.Endpoint,
+config :go_champs_api, GoChampsApiWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -48,10 +48,10 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
-config :tournamentsapi, TournamentsApi.Repo,
+config :go_champs_api, GoChampsApi.Repo,
   username: System.get_env("DATABASE_USERNAME") || "postgres",
   password: System.get_env("DATABASE_PASSWORD") || "admin",
-  database: System.get_env("DATABASE_NAME") || "tournaments",
+  database: System.get_env("DATABASE_NAME") || "go_champs_db",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
   port: System.get_env("DATABASE_PORT") || "5432",
   pool_size: 10

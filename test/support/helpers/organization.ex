@@ -1,5 +1,5 @@
-defmodule TournamentsApi.Helpers.OrganizationHelpers do
-  alias TournamentsApi.Organizations
+defmodule GoChampsApi.Helpers.OrganizationHelpers do
+  alias GoChampsApi.Organizations
 
   def map_organization_id(attrs \\ %{}) do
     {:ok, organization} =

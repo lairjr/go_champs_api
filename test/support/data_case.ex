@@ -1,4 +1,4 @@
-defmodule TournamentsApi.DataCase do
+defmodule GoChampsApi.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule TournamentsApi.DataCase do
 
   using do
     quote do
-      alias TournamentsApi.Repo
+      alias GoChampsApi.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import TournamentsApi.DataCase
+      import GoChampsApi.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TournamentsApi.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GoChampsApi.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TournamentsApi.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(GoChampsApi.Repo, {:shared, self()})
     end
 
     :ok
