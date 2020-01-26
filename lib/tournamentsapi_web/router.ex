@@ -23,6 +23,7 @@ defmodule TournamentsApiWeb.Router do
     resources "/users", UserController
     resources "/teams", TeamController
     resources "/tournaments", TournamentController
+    get "/version", VersionController, :index
   end
 
   def swagger_info do
