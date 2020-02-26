@@ -175,6 +175,10 @@
           "type": "string",
           "description": "Tournament home team ID"
         },
+        "info": {
+          "type": "string",
+          "description": "Game information"
+        },
         "inserted_at": {
           "type": "string",
           "format": "datetime",

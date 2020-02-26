@@ -4,6 +4,7 @@ const randomGame = (phaseId: string) => ({
   away_score: Math.round(Math.random() * 100),
   datetime: randomDate(),
   home_score: Math.round(Math.random() * 100),
+  info: randomString(),
   location: randomString(),
   phase_id: phaseId,
 });
@@ -14,6 +15,7 @@ const randomGameWithTeams = (phaseId: string, awayTeamId: string, homeTeamId: st
   datetime: randomDate(),
   home_score: Math.round(Math.random() * 100),
   home_team_id: homeTeamId,
+  info: randomString(),
   location: randomString(),
   phase_id: phaseId,
 });

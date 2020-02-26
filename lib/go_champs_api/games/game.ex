@@ -9,6 +9,7 @@ defmodule GoChampsApi.Games.Game do
     field :away_score, :integer
     field :datetime, :utc_datetime
     field :home_score, :integer
+    field :info, :string
     field :location, :string
 
     belongs_to :phase, Phase
@@ -27,6 +28,7 @@ defmodule GoChampsApi.Games.Game do
       :away_score,
       :home_score,
       :phase_id,
+      :info,
       :away_team_id,
       :home_team_id
     ])

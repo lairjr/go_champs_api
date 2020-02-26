@@ -19,6 +19,7 @@ defmodule GoChampsApiWeb.GameView do
       datetime: game.datetime,
       home_team: render_one(game.home_team, TeamView, "team.json"),
       home_score: game.home_score,
+      info: game.info,
       location: game.location
     }
   end
