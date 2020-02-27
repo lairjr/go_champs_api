@@ -26,7 +26,6 @@ defmodule GoChampsApi.Phases.Phase do
 
   @doc false
   def changeset(phase, attrs) do
-    # TODO (lairjr): Adjust the way we cast elimination stats, need to update without modifying currently stats.
     phase
     |> cast(attrs, [:title, :type, :order, :tournament_id])
     |> cast_embed(:elimination_stats, with: &elimination_stats_changeset/2)
