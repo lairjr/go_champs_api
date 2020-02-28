@@ -9,8 +9,16 @@ defmodule GoChampsApi.EliminationsTest do
   describe "eliminations" do
     alias GoChampsApi.Eliminations.Elimination
 
-    @valid_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
-    @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
+    @valid_attrs %{
+      team_stats: [
+        %{placeholder: "placeholder", team_id: random_uuid, stats: %{"key" => "value"}}
+      ]
+    }
+    @update_attrs %{
+      team_stats: [
+        %{placeholder: "placeholder updated", team_id: random_uuid, stats: %{"key" => "updated"}}
+      ]
+    }
     @invalid_attrs %{team_stats: nil}
 
     def elimination_fixture(attrs \\ %{}) do
@@ -34,6 +42,7 @@ defmodule GoChampsApi.EliminationsTest do
       assert {:ok, %Elimination{} = elimination} = Eliminations.create_elimination(attrs)
 
       [team_stat] = elimination.team_stats
+      assert team_stat.placeholder == "placeholder"
       assert team_stat.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
       assert team_stat.stats == %{"key" => "value"}
     end
@@ -49,6 +58,7 @@ defmodule GoChampsApi.EliminationsTest do
                Eliminations.update_elimination(elimination, @update_attrs)
 
       [team_stat] = elimination.team_stats
+      assert team_stat.placeholder == "placeholder updated"
       assert team_stat.team_id == "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
       assert team_stat.stats == %{"key" => "updated"}
     end

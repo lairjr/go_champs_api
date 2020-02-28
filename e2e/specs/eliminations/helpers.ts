@@ -3,6 +3,7 @@ import { randomString } from "../utils/random";
 const randomElimination = (phaseId: string) => ({
   team_stats: [
     {
+      placeholder: "some placeholder",
       stats: {
         some_stat_id: "stat value",
       },

@@ -6,8 +6,15 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
   alias GoChampsApi.Eliminations.Elimination
 
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
-  @create_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "value"}}]}
-  @update_attrs %{team_stats: [%{team_id: random_uuid, stats: %{"key" => "updated"}}]}
+
+  @create_attrs %{
+    team_stats: [%{placeholder: "placeholder", team_id: random_uuid, stats: %{"key" => "value"}}]
+  }
+  @update_attrs %{
+    team_stats: [
+      %{placeholder: "placeholder updated", team_id: random_uuid, stats: %{"key" => "updated"}}
+    ]
+  }
   @invalid_attrs %{team_stats: nil}
 
   def fixture(:elimination) do
@@ -32,6 +39,7 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
 
       assert result_id == id
       assert team_stat["stats"] == %{"key" => "value"}
+      assert team_stat["placeholder"] == "placeholder"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -59,6 +67,7 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
 
       assert result_id == id
       assert team_stat["stats"] == %{"key" => "updated"}
+      assert team_stat["placeholder"] == "placeholder updated"
     end
 
     test "renders errors when data is invalid", %{conn: conn, elimination: elimination} do

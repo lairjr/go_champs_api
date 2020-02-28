@@ -8,6 +8,7 @@ defmodule GoChampsApi.Eliminations.Elimination do
     field :title, :string
 
     embeds_many :team_stats, TeamStats, on_replace: :delete do
+      field :placeholder, :string
       field :team_id, :binary_id
       field :stats, :map
     end
@@ -27,6 +28,6 @@ defmodule GoChampsApi.Eliminations.Elimination do
 
   defp team_stats_changeset(schema, params) do
     schema
-    |> cast(params, [:team_id, :stats])
+    |> cast(params, [:placeholder, :stats, :team_id])
   end
 end

@@ -138,6 +138,10 @@
               "stats"
             ],
             "properties": {
+              "placeholder": {
+                "type": "string",
+                "description": "Team stat placeholder"
+              },
               "team_id": {
                 "type": "string",
                 "description": "Standings team id"
@@ -169,6 +173,7 @@
         "title": "Optional title",
         "team_stats": [
           {
+            "placeholder": "team placeholder",
             "team_id": "some-team-id",
             "stats": {
               "some-stat-id": "value"

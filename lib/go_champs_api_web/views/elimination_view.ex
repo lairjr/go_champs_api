@@ -21,6 +21,7 @@ defmodule GoChampsApiWeb.EliminationView do
   def render("team_stats.json", %{elimination: team_stats}) do
     %{
       id: team_stats.id,
+      placeholder: team_stats.placeholder,
       team_id: team_stats.team_id,
       stats: team_stats.stats
     }
