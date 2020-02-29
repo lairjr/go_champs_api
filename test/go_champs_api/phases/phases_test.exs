@@ -10,11 +10,13 @@ defmodule GoChampsApi.PhasesTest do
     alias GoChampsApi.Phases.Phase
 
     @valid_attrs %{
+      is_in_progress: true,
       title: "some title",
       type: "elimination",
       elimination_stats: [%{"title" => "stat title"}]
     }
     @update_attrs %{
+      is_in_progress: false,
       title: "some updated title",
       type: "elimination",
       elimination_stats: [%{"title" => "updated stat title"}]
@@ -45,6 +47,7 @@ defmodule GoChampsApi.PhasesTest do
       assert phase.title == "some title"
       assert phase.type == "elimination"
       assert phase.order == 1
+      assert phase.is_in_progress == true
       [elimination_stat] = phase.elimination_stats
       assert elimination_stat.title == "stat title"
     end
@@ -92,6 +95,7 @@ defmodule GoChampsApi.PhasesTest do
 
       assert phase.title == "some updated title"
       assert phase.type == "elimination"
+      assert phase.is_in_progress == false
       [elimination_stat] = phase.elimination_stats
       assert elimination_stat.title == "updated stat title"
     end

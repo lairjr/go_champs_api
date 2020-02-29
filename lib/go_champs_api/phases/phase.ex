@@ -11,6 +11,7 @@ defmodule GoChampsApi.Phases.Phase do
     field :title, :string
     field :type, :string
     field :order, :integer
+    field :is_in_progress, :boolean
 
     embeds_many :elimination_stats, EliminationStats, on_replace: :delete do
       field :title, :string
@@ -27,7 +28,7 @@ defmodule GoChampsApi.Phases.Phase do
   @doc false
   def changeset(phase, attrs) do
     phase
-    |> cast(attrs, [:title, :type, :order, :tournament_id])
+    |> cast(attrs, [:title, :type, :order, :is_in_progress, :tournament_id])
     |> cast_embed(:elimination_stats, with: &elimination_stats_changeset/2)
     |> validate_required([:title, :type, :tournament_id])
   end

@@ -4,6 +4,7 @@ const randomPhase = (tournamentId: string) => ({
   title: randomString(),
   tournament_id: tournamentId,
   type: Math.round(Math.random() * 1) ? "elimination" : "draw",
+  is_in_progress: Math.round(Math.random() * 1) ? true : false,
 });
 
 const randomPhaseWithElimination = (tournamentId: string) => ({
@@ -18,6 +19,7 @@ const randomPhaseWithElimination = (tournamentId: string) => ({
       title: randomString(),
     },
   ],
+  is_in_progress: Math.round(Math.random() * 1) ? true : false,
 });
 
 export const phasePayload = (tournamentId: string) => (

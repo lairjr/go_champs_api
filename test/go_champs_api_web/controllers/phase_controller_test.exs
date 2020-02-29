@@ -7,11 +7,13 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
 
   @create_attrs %{
     title: "some title",
-    type: "elimination"
+    type: "elimination",
+    is_in_progress: true
   }
   @update_attrs %{
     title: "some updated title",
-    type: "elimination"
+    type: "elimination",
+    is_in_progress: false
   }
   @invalid_attrs %{title: nil, type: nil}
 
@@ -38,7 +40,8 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       assert %{
                "id" => id,
                "title" => "some title",
-               "type" => "elimination"
+               "type" => "elimination",
+               "is_in_progress" => true
              } = json_response(conn, 200)["data"]
     end
 
@@ -76,7 +79,8 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       assert %{
                "id" => id,
                "title" => "some updated title",
-               "type" => "elimination"
+               "type" => "elimination",
+               "is_in_progress" => false
              } = json_response(conn, 200)["data"]
     end
 

@@ -111,7 +111,8 @@
       "title": "Phase",
       "required": [
         "title",
-        "type"
+        "type",
+        "is_in_progress"
       ],
       "properties": {
         "id": {
@@ -145,6 +146,10 @@
               }
             }
           }
+        },
+        "is_in_progress": {
+          "type": "boolean",
+          "description": "Mark if the phase is in progress."
         },
         "tournament_id": {
           "type": "string",
