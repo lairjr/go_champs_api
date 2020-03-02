@@ -43,12 +43,14 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
         "id" => result_id,
         "title" => result_title,
         "info" => result_info,
+        "order" => result_order,
         "team_stats" => [team_stat]
       } = json_response(conn, 200)["data"]
 
       assert result_id == id
       assert result_title == "some title"
       assert result_info == "some info"
+      assert result_order == 1
       assert team_stat["stats"] == %{"key" => "value"}
       assert team_stat["placeholder"] == "placeholder"
     end
@@ -78,12 +80,14 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
         "id" => result_id,
         "title" => result_title,
         "info" => result_info,
+        "order" => result_order,
         "team_stats" => [team_stat]
       } = json_response(conn, 200)["data"]
 
       assert result_id == id
       assert result_title == "some updated title"
       assert result_info == "some updated info"
+      assert result_order == 1
       assert team_stat["stats"] == %{"key" => "updated"}
       assert team_stat["placeholder"] == "placeholder updated"
     end

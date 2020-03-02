@@ -13,8 +13,9 @@ defmodule GoChampsApiWeb.EliminationView do
   def render("elimination.json", %{elimination: elimination}) do
     %{
       id: elimination.id,
-      title: elimination.title,
       info: elimination.info,
+      order: elimination.order,
+      title: elimination.title,
       team_stats: render_many(elimination.team_stats, EliminationView, "team_stats.json")
     }
   end

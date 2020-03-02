@@ -12,6 +12,7 @@ const randomElimination = (phaseId: string) => ({
   ],
   title: randomString(),
   info: randomString(),
+  order: 1,
   phase_id: phaseId,
 });
 
