@@ -23,7 +23,7 @@ defmodule GoChampsApi.Eliminations.Elimination do
   @doc false
   def changeset(elimination, attrs) do
     elimination
-    |> cast(attrs, [:title, :info, :phase_id])
+    |> cast(attrs, [:title, :info, :order, :phase_id])
     |> cast_embed(:team_stats, with: &team_stats_changeset/2)
     |> validate_required([:team_stats, :phase_id])
   end
