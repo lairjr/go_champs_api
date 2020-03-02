@@ -12,6 +12,8 @@ defmodule GoChampsApi.DrawsTest do
       matches: [
         %{
           first_team_placeholder: "some-first-team-placeholder",
+          info: "some info",
+          name: "some name",
           second_team_placeholder: "some-second-team-placeholder"
         }
       ]
@@ -21,6 +23,8 @@ defmodule GoChampsApi.DrawsTest do
       matches: [
         %{
           first_team_placeholder: "some-updated-first-team-placeholder",
+          info: "some updated info",
+          name: "some updated name",
           second_team_placeholder: "some-updated-second-team-placeholder"
         }
       ]
@@ -52,6 +56,8 @@ defmodule GoChampsApi.DrawsTest do
       assert draw.order == 1
       assert draw.title == "some title"
       assert match.first_team_placeholder == "some-first-team-placeholder"
+      assert match.info == "some info"
+      assert match.name == "some name"
       assert match.second_team_placeholder == "some-second-team-placeholder"
     end
 
@@ -78,6 +84,8 @@ defmodule GoChampsApi.DrawsTest do
       [match] = draw.matches
       assert draw.title == "some updated title"
       assert match.first_team_placeholder == "some-updated-first-team-placeholder"
+      assert match.info == "some updated info"
+      assert match.name == "some updated name"
       assert match.second_team_placeholder == "some-updated-second-team-placeholder"
     end
 

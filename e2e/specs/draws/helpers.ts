@@ -7,6 +7,8 @@ const randomDraw = (phaseId: string) => ({
       first_team_parent_id: "some-first-team-parent-id",
       first_team_placeholder: "some-first-team-placeholder",
       first_team_score: "some-first-team-score",
+      info: "some info",
+      name: "some name",
       second_team_id: "some-second-team-id",
       second_team_parent_id: "some-second-team-parent-id",
       second_team_placeholder: "some-second-team-placeholder",

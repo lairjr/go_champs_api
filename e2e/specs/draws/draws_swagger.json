@@ -107,6 +107,8 @@
               "first_team_parent_id": "some-first-team-parent-id",
               "first_team_placeholder": "some-first-team-placeholder",
               "first_team_score": "some-first-team-score",
+              "info": "some info",
+              "name": "some name",
               "second_team_id": "some-second-team-id",
               "second_team_parent_id": "some-second-team-parent-id",
               "second_team_placeholder": "some-second-team-placeholder",
@@ -149,6 +151,14 @@
               "first_team_score": {
                 "type": "string",
                 "description": "Rounds team first team score"
+              },
+              "info": {
+                "type": "string",
+                "description": "Round match info"
+              },
+              "name": {
+                "type": "string",
+                "description": "Round match name"
               },
               "second_team_id": {
                 "type": "string",
@@ -193,6 +203,8 @@
             "first_team_parent_id": "some-first-team-parent-id",
             "first_team_placeholder": "some-first-team-placeholder",
             "first_team_score": "some-first-team-score",
+            "info": "some info",
+            "name": "some name",
             "second_team_id": "some-second-team-id",
             "second_team_parent_id": "some-second-team-parent-id",
             "second_team_placeholder": "some-second-team-placeholder",

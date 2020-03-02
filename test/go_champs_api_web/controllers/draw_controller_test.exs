@@ -10,6 +10,8 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     matches: [
       %{
         first_team_placeholder: "some-first-team-placeholder",
+        info: "some info",
+        name: "some name",
         second_team_placeholder: "some-second-team-placeholder"
       }
     ]
@@ -19,6 +21,8 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     matches: [
       %{
         first_team_placeholder: "some-updated-first-team-placeholder",
+        info: "some updated info",
+        name: "some updated name",
         second_team_placeholder: "some-updated-second-team-placeholder"
       }
     ]

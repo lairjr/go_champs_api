@@ -14,6 +14,9 @@ defmodule GoChampsApi.Draws.Draw do
       field :first_team_placeholder, :string
       field :first_team_score, :string
 
+      field :info, :string
+      field :name, :string
+
       field :second_team_id, :binary_id
       field :second_team_parent_id, :binary_id
       field :second_team_placeholder, :string
@@ -40,6 +43,8 @@ defmodule GoChampsApi.Draws.Draw do
       :first_team_parent_id,
       :first_team_placeholder,
       :first_team_score,
+      :info,
+      :name,
       :second_team_id,
       :second_team_parent_id,
       :second_team_placeholder,
