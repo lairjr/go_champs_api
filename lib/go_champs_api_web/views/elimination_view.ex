@@ -14,6 +14,7 @@ defmodule GoChampsApiWeb.EliminationView do
     %{
       id: elimination.id,
       title: elimination.title,
+      info: elimination.info,
       team_stats: render_many(elimination.team_stats, EliminationView, "team_stats.json")
     }
   end

@@ -8,9 +8,13 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
   random_uuid = "d6a40c15-7363-4179-9f7b-8b17cc6cf32c"
 
   @create_attrs %{
+    title: "some title",
+    info: "some info",
     team_stats: [%{placeholder: "placeholder", team_id: random_uuid, stats: %{"key" => "value"}}]
   }
   @update_attrs %{
+    title: "some updated title",
+    info: "some updated info",
     team_stats: [
       %{placeholder: "placeholder updated", team_id: random_uuid, stats: %{"key" => "updated"}}
     ]
@@ -35,9 +39,16 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
 
       conn = get(conn, Routes.elimination_path(conn, :show, id))
 
-      %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
+      %{
+        "id" => result_id,
+        "title" => result_title,
+        "info" => result_info,
+        "team_stats" => [team_stat]
+      } = json_response(conn, 200)["data"]
 
       assert result_id == id
+      assert result_title == "some title"
+      assert result_info == "some info"
       assert team_stat["stats"] == %{"key" => "value"}
       assert team_stat["placeholder"] == "placeholder"
     end
@@ -63,9 +74,16 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
 
       conn = get(conn, Routes.elimination_path(conn, :show, id))
 
-      %{"id" => result_id, "team_stats" => [team_stat]} = json_response(conn, 200)["data"]
+      %{
+        "id" => result_id,
+        "title" => result_title,
+        "info" => result_info,
+        "team_stats" => [team_stat]
+      } = json_response(conn, 200)["data"]
 
       assert result_id == id
+      assert result_title == "some updated title"
+      assert result_info == "some updated info"
       assert team_stat["stats"] == %{"key" => "updated"}
       assert team_stat["placeholder"] == "placeholder updated"
     end

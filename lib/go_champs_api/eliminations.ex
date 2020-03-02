@@ -39,7 +39,22 @@ defmodule GoChampsApi.Eliminations do
   def create_elimination(attrs \\ %{}) do
     %Elimination{}
     |> Elimination.changeset(attrs)
+    |> get_elimination_next_order()
     |> Repo.insert()
+  end
+
+  defp get_elimination_next_order(changeset) do
+    phase_id = Ecto.Changeset.get_field(changeset, :phase_id)
+
+    query =
+      if phase_id do
+        from e in Elimination, where: e.phase_id == ^phase_id
+      else
+        from(e in Elimination)
+      end
+
+    number_of_records = Repo.aggregate(query, :count, :id)
+    Ecto.Changeset.put_change(changeset, :order, Enum.sum([number_of_records, 1]))
   end
 
   @doc """

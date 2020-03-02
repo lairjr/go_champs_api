@@ -4,15 +4,15 @@
     "/api/phases/{phaseId}/elimination": {
       "post": {
         "tags": [
-          "PhaseStandings"
+          "Eliminiations"
         ],
         "summary": "Post phase elimination",
         "responses": {
           "201": {
             "schema": {
-              "$ref": "#/definitions/PhaseStandingsResponse"
+              "$ref": "#/definitions/EliminiationsResponse"
             },
-            "description": "PhaseStandings created OK"
+            "description": "Eliminiations created OK"
           }
         },
         "produces": [
@@ -21,7 +21,7 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/definitions/PhaseStandingsRequest"
+              "$ref": "#/definitions/EliminiationsRequest"
             },
             "required": true,
             "name": "elimination",
@@ -36,13 +36,13 @@
       },
       "get": {
         "tags": [
-          "PhaseStandings"
+          "Eliminiations"
         ],
         "summary": "List phase elimination",
         "responses": {
           "200": {
             "schema": {
-              "$ref": "#/definitions/PhaseStandingssResponse"
+              "$ref": "#/definitions/EliminiationssResponse"
             }
           }
         },
@@ -58,9 +58,9 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "PhaseStandingsListResponse": {
+    "EliminiationsListResponse": {
       "type": "object",
-      "title": "PhaseStandingsListResponse",
+      "title": "EliminiationsListResponse",
       "required": [
         "data"
       ],
@@ -68,34 +68,34 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PhaseStandings"
+            "$ref": "#/definitions/Eliminiations"
           },
           "description": "The phase elimination details"
         }
       },
       "description": "Response schema for multiple phase elimination"
     },
-    "PhaseStandingsResponse": {
+    "EliminiationsResponse": {
       "type": "object",
-      "title": "PhaseStandingsResponse",
+      "title": "EliminiationsResponse",
       "properties": {
         "data": {
           "description": "The phase elimination details",
-          "$ref": "#/definitions/PhaseStandings"
+          "$ref": "#/definitions/Eliminiations"
         }
       },
       "description": "Response schema for single phase elimination"
     },
-    "PhaseStandingsRequest": {
+    "EliminiationsRequest": {
       "type": "object",
-      "title": "PhaseStandingsRequest",
+      "title": "EliminiationsRequest",
       "required": [
         "elimination"
       ],
       "properties": {
         "elimination": {
           "description": "The phase elimination details",
-          "$ref": "#/definitions/PhaseStandings"
+          "$ref": "#/definitions/Eliminiations"
         }
       },
       "example": {
@@ -113,20 +113,28 @@
       },
       "description": "POST body for creating a phase elimination"
     },
-    "PhaseStandings": {
+    "Eliminiations": {
       "type": "object",
-      "title": "PhaseStandings",
+      "title": "Eliminiations",
       "required": [
         "team_stats"
       ],
       "properties": {
         "id": {
           "type": "string",
-          "description": "PhaseStandings ID"
+          "description": "Eliminiations ID"
         },
         "title": {
           "type": "string",
-          "description": "PhaseStandings title"
+          "description": "Eliminiations title"
+        },
+        "info": {
+          "type": "string",
+          "description": "Eliminiations informations"
+        },
+        "order": {
+          "type": "number",
+          "description": "Eliminiations order"
         },
         "team_stats": {
           "type": "array",

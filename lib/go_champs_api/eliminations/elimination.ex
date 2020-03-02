@@ -6,6 +6,8 @@ defmodule GoChampsApi.Eliminations.Elimination do
 
   schema "eliminations" do
     field :title, :string
+    field :info, :string
+    field :order, :integer
 
     embeds_many :team_stats, TeamStats, on_replace: :delete do
       field :placeholder, :string
@@ -21,7 +23,7 @@ defmodule GoChampsApi.Eliminations.Elimination do
   @doc false
   def changeset(elimination, attrs) do
     elimination
-    |> cast(attrs, [:title, :phase_id])
+    |> cast(attrs, [:title, :info, :phase_id])
     |> cast_embed(:team_stats, with: &team_stats_changeset/2)
     |> validate_required([:team_stats, :phase_id])
   end

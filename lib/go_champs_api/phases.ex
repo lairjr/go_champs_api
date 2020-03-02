@@ -48,7 +48,15 @@ defmodule GoChampsApi.Phases do
 
   defp get_phase_next_order(changeset) do
     tournament_id = Ecto.Changeset.get_field(changeset, :tournament_id)
-    number_of_records = Repo.aggregate(Phase, :count, :id, tournament_id: tournament_id)
+
+    query =
+      if tournament_id do
+        from p in Phase, where: p.tournament_id == ^tournament_id
+      else
+        from(p in Phase)
+      end
+
+    number_of_records = Repo.aggregate(query, :count, :id)
     Ecto.Changeset.put_change(changeset, :order, Enum.sum([number_of_records, 1]))
   end
 

@@ -85,7 +85,7 @@ defmodule GoChampsApi.PhasesTest do
       assert {:ok, %Phase{} = second_phase} = Phases.create_phase(second_attrs)
 
       assert first_phase.order == 1
-      assert second_phase.order == 2
+      assert second_phase.order == 1
     end
 
     test "update_phase/2 with valid data updates the phase" do
