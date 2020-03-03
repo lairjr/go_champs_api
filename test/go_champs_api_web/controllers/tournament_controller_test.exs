@@ -5,8 +5,20 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
   alias GoChampsApi.Tournaments
   alias GoChampsApi.Tournaments.Tournament
 
-  @create_attrs %{name: "some name"}
-  @update_attrs %{name: "some updated name"}
+  @create_attrs %{
+    name: "some name",
+    slug: "some-slug",
+    facebook: "facebook",
+    instagram: "instagram",
+    site_url: "site url"
+  }
+  @update_attrs %{
+    name: "some updated name",
+    slug: "some-updated-slug",
+    facebook: "facebook updated",
+    instagram: "instagram updated",
+    site_url: "site url updated"
+  }
   @invalid_attrs %{name: nil}
 
   @organization_attrs %{name: "some organization", slug: "some-org-slug"}
@@ -56,8 +68,19 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       conn = get(conn, Routes.tournament_path(conn, :show, id))
 
       assert %{
-               "id" => id
+               "id" => id,
+               "name" => result_name,
+               "slug" => result_slug,
+               "facebook" => result_facebook,
+               "instagram" => result_instagram,
+               "site_url" => result_site
              } = json_response(conn, 200)["data"]
+
+      assert result_name == "some name"
+      assert result_slug == "some-slug"
+      assert result_facebook == "facebook"
+      assert result_instagram == "instagram"
+      assert result_site == "site url"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -81,8 +104,19 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       conn = get(conn, Routes.tournament_path(conn, :show, id))
 
       assert %{
-               "id" => id
+               "id" => id,
+               "name" => result_name,
+               "slug" => result_slug,
+               "facebook" => result_facebook,
+               "instagram" => result_instagram,
+               "site_url" => result_site
              } = json_response(conn, 200)["data"]
+
+      assert result_name == "some updated name"
+      assert result_slug == "some-updated-slug"
+      assert result_facebook == "facebook updated"
+      assert result_instagram == "instagram updated"
+      assert result_site == "site url updated"
     end
 
     test "renders errors when data is invalid", %{conn: conn, tournament: tournament} do

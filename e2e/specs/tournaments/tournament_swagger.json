@@ -126,6 +126,18 @@
           "type": "string",
           "description": "Tournament slug"
         },
+        "facebook": {
+          "type": "string",
+          "description": "Tournament facebook url"
+        },
+        "instagram": {
+          "type": "string",
+          "description": "Tournament instagram url"
+        },
+        "site_url": {
+          "type": "string",
+          "description": "Tournament site url"
+        },
         "organization_id": {
           "type": "string",
           "description": "Organization ID"

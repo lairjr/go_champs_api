@@ -8,8 +8,20 @@ defmodule GoChampsApi.TournamentsTest do
   describe "tournaments" do
     alias GoChampsApi.Tournaments.Tournament
 
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
+    @valid_attrs %{
+      name: "some name",
+      slug: "some-slug",
+      facebook: "facebook",
+      instagram: "instagram",
+      site_url: "site url"
+    }
+    @update_attrs %{
+      name: "some updated name",
+      slug: "some-updated-slug",
+      facebook: "facebook updated",
+      instagram: "instagram updated",
+      site_url: "site url updated"
+    }
     @invalid_attrs %{name: nil}
 
     def tournament_fixture(attrs \\ %{}) do
@@ -63,7 +75,13 @@ defmodule GoChampsApi.TournamentsTest do
 
     test "create_tournament/1 with valid data creates a tournament" do
       valid_tournament = OrganizationHelpers.map_organization_id(@valid_attrs)
+
       assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
+      assert tournament.name == "some name"
+      assert tournament.slug == "some-slug"
+      assert tournament.facebook == "facebook"
+      assert tournament.instagram == "instagram"
+      assert tournament.site_url == "site url"
     end
 
     test "create_tournament/1 with invalid data returns error changeset" do
@@ -75,6 +93,12 @@ defmodule GoChampsApi.TournamentsTest do
 
       assert {:ok, %Tournament{} = tournament} =
                Tournaments.update_tournament(tournament, @update_attrs)
+
+      assert tournament.name == "some updated name"
+      assert tournament.slug == "some-updated-slug"
+      assert tournament.facebook == "facebook updated"
+      assert tournament.instagram == "instagram updated"
+      assert tournament.site_url == "site url updated"
     end
 
     test "update_tournament/2 with invalid data returns error changeset" do
@@ -102,7 +126,7 @@ defmodule GoChampsApi.TournamentsTest do
         Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
 
       {:ok, first_tournament} =
-        %{name: "another name"}
+        %{name: "another name", slug: "some-slug"}
         |> Map.merge(%{organization_id: another_organization.id})
         |> Tournaments.create_tournament()
 
@@ -121,7 +145,7 @@ defmodule GoChampsApi.TournamentsTest do
         Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
 
       {:ok, first_tournament} =
-        %{name: "another name"}
+        %{name: "another name", slug: "another-slug"}
         |> Map.merge(%{organization_id: another_organization.id})
         |> Tournaments.create_tournament()
 

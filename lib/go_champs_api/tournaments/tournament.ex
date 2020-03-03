@@ -11,6 +11,10 @@ defmodule GoChampsApi.Tournaments.Tournament do
     field :slug, :string
     field :organization_slug, :string
 
+    field :facebook, :string
+    field :instagram, :string
+    field :site_url, :string
+
     belongs_to :organization, Organization
     has_many :phases, Phase
     has_many :teams, Team
@@ -21,7 +25,15 @@ defmodule GoChampsApi.Tournaments.Tournament do
   @doc false
   def changeset(tournament, attrs) do
     tournament
-    |> cast(attrs, [:name, :slug, :organization_id, :organization_slug])
-    |> validate_required([:name, :organization_id])
+    |> cast(attrs, [
+      :name,
+      :slug,
+      :organization_id,
+      :facebook,
+      :instagram,
+      :site_url,
+      :organization_slug
+    ])
+    |> validate_required([:name, :slug, :organization_id])
   end
 end

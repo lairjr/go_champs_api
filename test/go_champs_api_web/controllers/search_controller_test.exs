@@ -4,7 +4,7 @@ defmodule GoChampsApiWeb.SearchControllerTest do
   alias GoChampsApi.Organizations
   alias GoChampsApi.Tournaments
 
-  @create_attrs %{name: "some name"}
+  @create_attrs %{name: "some name", slug: "some-slug"}
 
   @organization_attrs %{name: "some organization", slug: "some-org-slug"}
 

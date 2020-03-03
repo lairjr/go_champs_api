@@ -77,6 +77,7 @@ defmodule GoChampsApi.PhasesTest do
       {:ok, second_tournament} =
         Tournaments.create_tournament(%{
           name: "some other tournament name",
+          slug: "some-other-slug",
           organization_id: organization.id
         })
 

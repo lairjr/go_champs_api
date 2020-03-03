@@ -4,7 +4,7 @@ defmodule GoChampsApi.Helpers.TournamentHelpers do
 
   def map_tournament_id(attrs \\ %{}) do
     {:ok, tournament} =
-      %{name: "some tournament"}
+      %{name: "some tournament", slug: "some-slug"}
       |> OrganizationHelpers.map_organization_id()
       |> Tournaments.create_tournament()
 
