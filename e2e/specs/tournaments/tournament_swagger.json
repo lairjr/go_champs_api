@@ -138,6 +138,10 @@
           "type": "string",
           "description": "Tournament site url"
         },
+        "twitter": {
+          "type": "string",
+          "description": "Tournament twitter url"
+        },
         "organization_id": {
           "type": "string",
           "description": "Organization ID"

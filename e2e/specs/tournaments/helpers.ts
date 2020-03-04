@@ -7,6 +7,7 @@ const randomTournament = (organizationId: string) => ({
   facebook: randomString(),
   instagram: randomString(),
   site_url: randomString(),
+  twitter: randomString(),
 });
 
 export const tournamentPayload = (organizationId: string) => (

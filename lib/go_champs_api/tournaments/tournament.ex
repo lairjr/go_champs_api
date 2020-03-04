@@ -14,6 +14,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
     field :facebook, :string
     field :instagram, :string
     field :site_url, :string
+    field :twitter, :string
 
     belongs_to :organization, Organization
     has_many :phases, Phase
@@ -32,6 +33,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
       :facebook,
       :instagram,
       :site_url,
+      :twitter,
       :organization_slug
     ])
     |> validate_required([:name, :slug, :organization_id])

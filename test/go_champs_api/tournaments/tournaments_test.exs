@@ -13,14 +13,16 @@ defmodule GoChampsApi.TournamentsTest do
       slug: "some-slug",
       facebook: "facebook",
       instagram: "instagram",
-      site_url: "site url"
+      site_url: "site url",
+      twitter: "twitter"
     }
     @update_attrs %{
       name: "some updated name",
       slug: "some-updated-slug",
       facebook: "facebook updated",
       instagram: "instagram updated",
-      site_url: "site url updated"
+      site_url: "site url updated",
+      twitter: "twitter updated"
     }
     @invalid_attrs %{name: nil}
 
@@ -82,6 +84,7 @@ defmodule GoChampsApi.TournamentsTest do
       assert tournament.facebook == "facebook"
       assert tournament.instagram == "instagram"
       assert tournament.site_url == "site url"
+      assert tournament.twitter == "twitter"
     end
 
     test "create_tournament/1 with invalid data returns error changeset" do
@@ -99,6 +102,7 @@ defmodule GoChampsApi.TournamentsTest do
       assert tournament.facebook == "facebook updated"
       assert tournament.instagram == "instagram updated"
       assert tournament.site_url == "site url updated"
+      assert tournament.twitter == "twitter updated"
     end
 
     test "update_tournament/2 with invalid data returns error changeset" do

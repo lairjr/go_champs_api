@@ -10,14 +10,16 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
     slug: "some-slug",
     facebook: "facebook",
     instagram: "instagram",
-    site_url: "site url"
+    site_url: "site url",
+    twitter: "twitter"
   }
   @update_attrs %{
     name: "some updated name",
     slug: "some-updated-slug",
     facebook: "facebook updated",
     instagram: "instagram updated",
-    site_url: "site url updated"
+    site_url: "site url updated",
+    twitter: "twitter updated"
   }
   @invalid_attrs %{name: nil}
 
@@ -73,7 +75,8 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
                "slug" => result_slug,
                "facebook" => result_facebook,
                "instagram" => result_instagram,
-               "site_url" => result_site
+               "site_url" => result_site,
+               "twitter" => result_twitter
              } = json_response(conn, 200)["data"]
 
       assert result_name == "some name"
@@ -81,6 +84,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_facebook == "facebook"
       assert result_instagram == "instagram"
       assert result_site == "site url"
+      assert result_twitter == "twitter"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -109,7 +113,8 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
                "slug" => result_slug,
                "facebook" => result_facebook,
                "instagram" => result_instagram,
-               "site_url" => result_site
+               "site_url" => result_site,
+               "twitter" => result_twitter
              } = json_response(conn, 200)["data"]
 
       assert result_name == "some updated name"
@@ -117,6 +122,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_facebook == "facebook updated"
       assert result_instagram == "instagram updated"
       assert result_site == "site url updated"
+      assert result_twitter == "twitter updated"
     end
 
     test "renders errors when data is invalid", %{conn: conn, tournament: tournament} do
