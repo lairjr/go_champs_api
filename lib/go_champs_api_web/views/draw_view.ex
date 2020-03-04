@@ -26,6 +26,8 @@ defmodule GoChampsApiWeb.DrawView do
       first_team_parent_id: match.first_team_parent_id,
       first_team_placeholder: match.first_team_placeholder,
       first_team_score: match.first_team_score,
+      info: match.info,
+      name: match.name,
       second_team_id: match.second_team_id,
       second_team_parent_id: match.second_team_parent_id,
       second_team_placeholder: match.second_team_placeholder,

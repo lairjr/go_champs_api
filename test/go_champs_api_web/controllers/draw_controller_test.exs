@@ -49,8 +49,21 @@ defmodule GoChampsApiWeb.DrawControllerTest do
 
       assert %{
                "id" => id,
-               "title" => "some title"
+               "title" => "some title",
+               "matches" => [
+                 %{
+                   "first_team_placeholder" => result_first_team_placeholder,
+                   "info" => result_info,
+                   "name" => result_name,
+                   "second_team_placeholder" => result_second_team_placeholder
+                 }
+               ]
              } = json_response(conn, 200)["data"]
+
+      assert result_first_team_placeholder == "some-first-team-placeholder"
+      assert result_info == "some info"
+      assert result_name == "some name"
+      assert result_second_team_placeholder == "some-second-team-placeholder"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -70,8 +83,21 @@ defmodule GoChampsApiWeb.DrawControllerTest do
 
       assert %{
                "id" => id,
-               "title" => "some updated title"
+               "title" => "some updated title",
+               "matches" => [
+                 %{
+                   "first_team_placeholder" => result_first_team_placeholder,
+                   "info" => result_info,
+                   "name" => result_name,
+                   "second_team_placeholder" => result_second_team_placeholder
+                 }
+               ]
              } = json_response(conn, 200)["data"]
+
+      assert result_first_team_placeholder == "some-updated-first-team-placeholder"
+      assert result_info == "some updated info"
+      assert result_name == "some updated name"
+      assert result_second_team_placeholder == "some-updated-second-team-placeholder"
     end
 
     test "renders errors when data is invalid", %{conn: conn, draw: draw} do
