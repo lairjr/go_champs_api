@@ -21,5 +21,5 @@ After that, you will be able to run your server:
 
 ## License
 
-- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+- **[MIT license](https://github.com/lairjr/go_champs_api/blob/master/LICENSE)**
 - Copyright 2019.
