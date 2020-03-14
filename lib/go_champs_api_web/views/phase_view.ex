@@ -27,8 +27,10 @@ defmodule GoChampsApiWeb.PhaseView do
   def render("phase.json", %{phase: phase}) do
     %{
       id: phase.id,
-      is_in_progress: phase.is_in_progress,
       order: phase.order,
+      elimination_stats:
+        render_many(phase.elimination_stats, PhaseView, "elimination_stats.json"),
+      is_in_progress: phase.is_in_progress,
       title: phase.title,
       type: phase.type
     }
