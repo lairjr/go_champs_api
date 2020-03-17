@@ -37,5 +37,6 @@ defmodule GoChampsApi.Tournaments.Tournament do
       :organization_slug
     ])
     |> validate_required([:name, :slug, :organization_id])
+    |> unique_constraint(:slug, name: :tournaments_slug_organization_id_index)
   end
 end

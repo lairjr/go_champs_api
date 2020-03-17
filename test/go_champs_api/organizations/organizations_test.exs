@@ -47,7 +47,6 @@ defmodule GoChampsApi.OrganizationsTest do
       Organizations.create_organization(@valid_attrs)
 
       assert {:error, changeset} = Organizations.create_organization(@valid_attrs)
-      changeset.errors[:slug]
 
       assert changeset.errors[:slug] ==
                {"has already been taken",

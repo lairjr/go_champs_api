@@ -91,6 +91,17 @@ defmodule GoChampsApi.TournamentsTest do
       assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament(@invalid_attrs)
     end
 
+    test "create_tournament/1 with repeated slug returns error changeset" do
+      valid_tournament = OrganizationHelpers.map_organization_id(@valid_attrs)
+      Tournaments.create_tournament(valid_tournament)
+
+      assert {:error, changeset} = Tournaments.create_tournament(valid_tournament)
+
+      assert changeset.errors[:slug] ==
+               {"has already been taken",
+                [constraint: :unique, constraint_name: "tournaments_slug_organization_id_index"]}
+    end
+
     test "update_tournament/2 with valid data updates the tournament" do
       tournament = tournament_fixture()
 
