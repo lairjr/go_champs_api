@@ -43,6 +43,17 @@ defmodule GoChampsApi.OrganizationsTest do
       assert {:error, %Ecto.Changeset{}} = Organizations.create_organization(@invalid_attrs)
     end
 
+    test "create_organization/1 with repeated slug returns error changeset" do
+      Organizations.create_organization(@valid_attrs)
+
+      assert {:error, changeset} = Organizations.create_organization(@valid_attrs)
+      changeset.errors[:slug]
+
+      assert changeset.errors[:slug] ==
+               {"has already been taken",
+                [constraint: :unique, constraint_name: "organizations_slug_index"]}
+    end
+
     test "update_organization/2 with valid data updates the organization" do
       organization = organization_fixture()
 

@@ -17,5 +17,6 @@ defmodule GoChampsApi.Organizations.Organization do
     organization
     |> cast(attrs, [:name, :slug])
     |> validate_required([:name, :slug])
+    |> unique_constraint(:slug)
   end
 end
