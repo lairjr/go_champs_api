@@ -7,6 +7,7 @@ defmodule GoChampsApi.Organizations do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.Organizations.Organization
+  alias GoChampsApi.Tournaments.Tournament
 
   @doc """
   Returns the list of organizations.
@@ -68,9 +69,19 @@ defmodule GoChampsApi.Organizations do
 
   """
   def update_organization(%Organization{} = organization, attrs) do
-    organization
-    |> Organization.changeset(attrs)
-    |> Repo.update()
+    associated_tournaments_query =
+      from t in Tournament, where: t.organization_id == ^organization.id
+
+    organization_changeset =
+      organization
+      |> Organization.changeset(attrs)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:organization, organization_changeset)
+    |> Ecto.Multi.update_all(:tournaments, associated_tournaments_query,
+      set: [organization_slug: Ecto.Changeset.get_change(organization_changeset, :slug)]
+    )
+    |> Repo.transaction()
   end
 
   @doc """

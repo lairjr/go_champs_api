@@ -30,9 +30,15 @@ defmodule GoChampsApiWeb.OrganizationController do
   def update(conn, %{"id" => id, "organization" => organization_params}) do
     organization = Organizations.get_organization!(id)
 
-    with {:ok, %Organization{} = organization} <-
-           Organizations.update_organization(organization, organization_params) do
-      render(conn, "show.json", organization: organization)
+    case Organizations.update_organization(organization, organization_params) do
+      {:ok, %{organization: result_organization}} ->
+        render(conn, "show.json", organization: organization)
+
+      {:error, :organization, %Ecto.Changeset{} = changeset, %{}} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> put_view(GoChampsApiWeb.ChangesetView)
+        |> render("error.json", changeset: changeset)
     end
   end
 

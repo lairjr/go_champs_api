@@ -2,9 +2,11 @@ defmodule GoChampsApi.OrganizationsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.Organizations
+  alias GoChampsApi.Tournaments
 
   describe "organizations" do
     alias GoChampsApi.Organizations.Organization
+    alias GoChampsApi.Tournaments.Tournament
 
     @valid_attrs %{slug: "some slug", name: "some name"}
     @update_attrs %{slug: "some updated slug", name: "some updated name"}
@@ -44,20 +46,38 @@ defmodule GoChampsApi.OrganizationsTest do
     test "update_organization/2 with valid data updates the organization" do
       organization = organization_fixture()
 
-      assert {:ok, %Organization{} = organization} =
+      assert {:ok, %{organization: result_organization}} =
                Organizations.update_organization(organization, @update_attrs)
 
-      assert organization.slug == "some updated slug"
-      assert organization.name == "some updated name"
+      assert result_organization.slug == "some updated slug"
+      assert result_organization.name == "some updated name"
     end
 
     test "update_organization/2 with invalid data returns error changeset" do
       organization = organization_fixture()
 
-      assert {:error, %Ecto.Changeset{}} =
+      assert {:error, :organization, %Ecto.Changeset{}, %{}} =
                Organizations.update_organization(organization, @invalid_attrs)
 
       assert organization == Organizations.get_organization!(organization.id)
+    end
+
+    test "when slug is updated, updates pertaining tournaments" do
+      organization = organization_fixture()
+
+      {:ok, %Tournament{} = tournament} =
+        Tournaments.create_tournament(%{
+          name: "some name",
+          slug: "some-slug",
+          organization_id: organization.id,
+          organization_slug: organization.slug
+        })
+
+      Organizations.update_organization(organization, @update_attrs)
+
+      update_tournament = Tournaments.get_tournament!(tournament.id)
+
+      assert update_tournament.organization_slug == "some updated slug"
     end
 
     test "delete_organization/1 deletes the organization" do
