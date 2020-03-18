@@ -17,6 +17,7 @@ defmodule GoChampsApi.Organizations.Organization do
     organization
     |> cast(attrs, [:name, :slug])
     |> validate_required([:name, :slug])
+    |> validate_format(:slug, ~r/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     |> unique_constraint(:slug)
   end
 end

@@ -91,6 +91,15 @@ defmodule GoChampsApi.TournamentsTest do
       assert {:error, %Ecto.Changeset{}} = Tournaments.create_tournament(@invalid_attrs)
     end
 
+    test "create_tournament/1 with invalid slug returns error changeset" do
+      invalid_attrs = %{name: "some name", slug: "Some Slug"}
+
+      assert {:error, %Ecto.Changeset{} = changeset} =
+               Tournaments.create_tournament(invalid_attrs)
+
+      assert changeset.errors[:slug] == {"has invalid format", [validation: :format]}
+    end
+
     test "create_tournament/1 with repeated slug returns error changeset" do
       valid_tournament = OrganizationHelpers.map_organization_id(@valid_attrs)
       Tournaments.create_tournament(valid_tournament)

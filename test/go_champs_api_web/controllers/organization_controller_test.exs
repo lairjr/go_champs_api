@@ -5,11 +5,11 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
   alias GoChampsApi.Organizations.Organization
 
   @create_attrs %{
-    slug: "some slug",
+    slug: "some-slug",
     name: "some name"
   }
   @update_attrs %{
-    slug: "some updated slug",
+    slug: "some-updated-slug",
     name: "some updated name"
   }
   @invalid_attrs %{slug: nil, name: nil}
@@ -39,7 +39,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
 
       assert %{
                "id" => id,
-               "slug" => "some slug",
+               "slug" => "some-slug",
                "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
@@ -68,7 +68,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
 
       assert %{
                "id" => id,
-               "slug" => "some updated slug",
+               "slug" => "some-updated-slug",
                "name" => "some updated name"
              } = json_response(conn, 200)["data"]
     end

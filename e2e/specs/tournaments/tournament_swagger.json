@@ -124,7 +124,8 @@
         },
         "slug": {
           "type": "string",
-          "description": "Tournament slug"
+          "description": "Tournament slug",
+          "pattern": "/^[a-z0-9]+(?:-[a-z0-9]+)*$/"
         },
         "facebook": {
           "type": "string",

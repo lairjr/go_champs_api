@@ -8,8 +8,8 @@ defmodule GoChampsApi.OrganizationsTest do
     alias GoChampsApi.Organizations.Organization
     alias GoChampsApi.Tournaments.Tournament
 
-    @valid_attrs %{slug: "some slug", name: "some name"}
-    @update_attrs %{slug: "some updated slug", name: "some updated name"}
+    @valid_attrs %{slug: "some-slug", name: "some name"}
+    @update_attrs %{slug: "some-updated-slug", name: "some updated name"}
     @invalid_attrs %{slug: nil, name: nil}
 
     def organization_fixture(attrs \\ %{}) do
@@ -35,11 +35,20 @@ defmodule GoChampsApi.OrganizationsTest do
       assert {:ok, %Organization{} = organization} =
                Organizations.create_organization(@valid_attrs)
 
-      assert organization.slug == "some slug"
+      assert organization.slug == "some-slug"
       assert organization.name == "some name"
     end
 
-    test "create_organization/1 with invalid data returns error changeset" do
+    test "create_organization/1 with invalid slug returns error changeset" do
+      invalid_attrs = %{name: "some name", slug: "Some Slug"}
+
+      assert {:error, %Ecto.Changeset{} = changeset} =
+               Organizations.create_organization(invalid_attrs)
+
+      assert changeset.errors[:slug] == {"has invalid format", [validation: :format]}
+    end
+
+    test "create_organization/1 with nil data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Organizations.create_organization(@invalid_attrs)
     end
 
@@ -59,7 +68,7 @@ defmodule GoChampsApi.OrganizationsTest do
       assert {:ok, %{organization: result_organization}} =
                Organizations.update_organization(organization, @update_attrs)
 
-      assert result_organization.slug == "some updated slug"
+      assert result_organization.slug == "some-updated-slug"
       assert result_organization.name == "some updated name"
     end
 
@@ -87,7 +96,7 @@ defmodule GoChampsApi.OrganizationsTest do
 
       update_tournament = Tournaments.get_tournament!(tournament.id)
 
-      assert update_tournament.organization_slug == "some updated slug"
+      assert update_tournament.organization_slug == "some-updated-slug"
     end
 
     test "delete_organization/1 deletes the organization" do
