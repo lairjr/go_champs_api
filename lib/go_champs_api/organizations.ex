@@ -69,19 +69,26 @@ defmodule GoChampsApi.Organizations do
 
   """
   def update_organization(%Organization{} = organization, attrs) do
-    associated_tournaments_query =
-      from t in Tournament, where: t.organization_id == ^organization.id
-
     organization_changeset =
       organization
       |> Organization.changeset(attrs)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:organization, organization_changeset)
-    |> Ecto.Multi.update_all(:tournaments, associated_tournaments_query,
-      set: [organization_slug: Ecto.Changeset.get_change(organization_changeset, :slug)]
-    )
-    |> Repo.transaction()
+    if Map.has_key?(attrs, :slug) do
+      associated_tournaments_query =
+        from t in Tournament,
+          where: t.organization_id == ^Ecto.Changeset.get_field(organization_changeset, :id)
+
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:organization, organization_changeset)
+      |> Ecto.Multi.update_all(:tournaments, associated_tournaments_query,
+        set: [organization_slug: Ecto.Changeset.get_change(organization_changeset, :slug)]
+      )
+      |> Repo.transaction()
+    else
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:organization, organization_changeset)
+      |> Repo.transaction()
+    end
   end
 
   @doc """

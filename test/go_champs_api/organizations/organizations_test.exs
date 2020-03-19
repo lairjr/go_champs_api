@@ -99,6 +99,24 @@ defmodule GoChampsApi.OrganizationsTest do
       assert update_tournament.organization_slug == "some-updated-slug"
     end
 
+    test "when slug is not updated, does not update pertaining tournaments" do
+      organization = organization_fixture()
+
+      {:ok, %Tournament{} = tournament} =
+        Tournaments.create_tournament(%{
+          name: "some name",
+          slug: "some-slug",
+          organization_id: organization.id,
+          organization_slug: organization.slug
+        })
+
+      Organizations.update_organization(organization, %{name: "some updated name"})
+
+      update_tournament = Tournaments.get_tournament!(tournament.id)
+
+      assert update_tournament.organization_slug == "some-slug"
+    end
+
     test "delete_organization/1 deletes the organization" do
       organization = organization_fixture()
       assert {:ok, %Organization{}} = Organizations.delete_organization(organization)
