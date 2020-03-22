@@ -36,5 +36,6 @@ defmodule GoChampsApi.Phases.Phase do
   defp elimination_stats_changeset(schema, params) do
     schema
     |> cast(params, [:title])
+    |> validate_required([:title])
   end
 end
