@@ -40,6 +40,12 @@ defmodule GoChampsApiWeb.PhaseController do
     end
   end
 
+  def bulk_update(conn, _params) do
+    version = %{version: "aqui"}
+
+    json(conn, version)
+  end
+
   def delete(conn, %{"id" => id}) do
     phase = Phases.get_phase!(id)
 

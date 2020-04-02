@@ -79,6 +79,31 @@ defmodule GoChampsApi.Phases do
   end
 
   @doc """
+  Updates many phases.
+
+  ## Examples
+
+      iex> update_phase([%{field: new_value}])
+      {:ok, [%Phase{}]}
+
+      iex> update_phase([%{field: bad_value}])
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_phases(phases) do
+    multi =
+      phases
+      |> Enum.reduce(Ecto.Multi.new(), fn phase, multi ->
+        current_phase = Repo.get_by!(Phase, id: phase.id)
+        changeset = Ecto.Changeset.change(current_phase, phase)
+
+        Ecto.Multi.update(multi, phase.id, changeset)
+      end)
+
+    Repo.transaction(multi)
+  end
+
+  @doc """
   Deletes a Phase.
 
   ## Examples

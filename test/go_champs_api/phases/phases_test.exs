@@ -111,6 +111,23 @@ defmodule GoChampsApi.PhasesTest do
       assert phase.id == result_phase.id
     end
 
+    test "update_phases/2 with valid data updates the phase" do
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+
+      {:ok, %Phase{} = first_phase} = Phases.create_phase(attrs)
+      {:ok, %Phase{} = second_phase} = Phases.create_phase(attrs)
+
+      first_updated_phase = %{id: first_phase.id, title: "some first updated title"}
+      second_updated_phase = %{id: second_phase.id, title: "some second updated title"}
+
+      {:ok, bulk_results} = Phases.update_phases([first_updated_phase, second_updated_phase])
+
+      assert bulk_results[first_phase.id].id == first_phase.id
+      assert bulk_results[first_phase.id].title == "some first updated title"
+      assert bulk_results[second_phase.id].id == second_phase.id
+      assert bulk_results[second_phase.id].title == "some second updated title"
+    end
+
     test "delete_phase/1 deletes the phase" do
       phase = phase_fixture()
       assert {:ok, %Phase{}} = Phases.delete_phase(phase)
