@@ -2,7 +2,7 @@ import { expect, tv4, use } from "chai";
 import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from "../tournaments/stubs";
 import { PHASES_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
-import { phasePayload, phaseWithEliminationPayload } from "./helpers";
+import { phasePayload, phaseWithEliminationPayload, phasesPatchPayload } from "./helpers";
 import schema from "./phase_swagger.json";
 import ChaiJsonSchema = require("chai-json-schema");
 
@@ -58,6 +58,37 @@ describe("Phases", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id);
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+  });
+
+  describe("PATCH /", () => {
+    it("matchs schema", async () => {
+      const { tournament, organization } = await createTournamentWithOrganizaion();
+
+      const httpClient = httpClientFactory(PHASES_URL);
+
+      const first_payload = phasePayload(tournament.id);
+      const second_payload = phasePayload(tournament.id);
+      const { data: first_created } = await httpClient.post(first_payload);
+      const { data: second_created } = await httpClient.post(second_payload);
+      const first_phase_to_patch = {
+        ...first_created.data,
+        tournament_id: tournament.id,
+      };
+      const second_phase_to_patch = {
+        ...second_created.data,
+        tournament_id: tournament.id,
+      };
+      
+      const patchBatchPayload = phasesPatchPayload([first_phase_to_patch, second_phase_to_patch]);
+      const { status, data: response } = await httpClient.patchBatch(patchBatchPayload);
+      expect(patchBatchPayload).to.be.jsonSchema(schema.definitions.PhaseBatchRequest);
+      expect(response).to.be.jsonSchema(schema.definitions.PhasesBatchRespose);
+      expect(status).to.be.equal(200);
+
+      await httpClient.delete(first_created.data.id);
+      await httpClient.delete(second_created.data.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
   });

@@ -16,6 +16,10 @@ const patch = (baseUri: string) => (resourceId: string, payload: any) => {
   return axios.patch(`${baseUri}/${resourceId}`, payload);
 };
 
+const patchBatch = (baseUri: string) => (payload: any) => {
+  return axios.patch(`${baseUri}`, payload);
+};
+
 const deleteRequest = (baseUri: string) => (resourceId: string) => {
   return axios.delete(`${baseUri}/${resourceId}`);
 };
@@ -26,6 +30,7 @@ const httpClientFactory = (baseUri: string) => {
     get: get(baseUri),
     getAll: getAll(baseUri),
     patch: patch(baseUri),
+    patchBatch: patchBatch(baseUri),
     post: post(baseUri),
   };
 };

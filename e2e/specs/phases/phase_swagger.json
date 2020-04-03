@@ -58,6 +58,21 @@
   },
   "host": "localhost:4000",
   "definitions": {
+    "PhasesBatchRespose": {
+      "type": "object",
+      "title": "PhasesBatchRespose",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Phase"
+          }
+        }
+      }
+    },
     "PhasesResponse": {
       "type": "object",
       "title": "PhasesReponse",
@@ -85,6 +100,22 @@
         }
       },
       "description": "Response schema for single tournament phases"
+    },
+    "PhaseBatchRequest": {
+      "type": "object",
+      "title": "PhaseBatchRequest",
+      "required": [
+        "phases"
+      ],
+      "properties": {
+        "phases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Phase"
+          },
+          "description": "The tournament phases to be patched"
+        }
+      }
     },
     "PhaseRequest": {
       "type": "object",

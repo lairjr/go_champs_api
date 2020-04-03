@@ -1,5 +1,10 @@
 import { randomString } from "../utils/random";
 
+interface PhaseEntity {
+  id: string;
+  tournament_id: string;
+}
+
 const randomPhase = (tournamentId: string) => ({
   title: randomString(),
   tournament_id: tournamentId,
@@ -29,4 +34,15 @@ export const phasePayload = (tournamentId: string) => (
 
 export const phaseWithEliminationPayload = (tournamentId: string) => ({
   phase: randomPhaseWithElimination(tournamentId),
+});
+
+export const phasesPatchPayload = (phases: PhaseEntity[]) => ({
+  phases: phases.map((phase: PhaseEntity) => {
+    const somePhase = randomPhase(phase.tournament_id);
+
+    return {
+      ...somePhase,
+      id: phase.id,
+    };
+  })
 });
