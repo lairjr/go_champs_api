@@ -94,10 +94,11 @@ defmodule GoChampsApi.Phases do
     multi =
       phases
       |> Enum.reduce(Ecto.Multi.new(), fn phase, multi ->
-        current_phase = Repo.get_by!(Phase, id: phase.id)
-        changeset = Ecto.Changeset.change(current_phase, phase)
+        %{"id" => id} = phase
+        current_phase = Repo.get_by!(Phase, id: id)
+        changeset = Phase.changeset(current_phase, phase)
 
-        Ecto.Multi.update(multi, phase.id, changeset)
+        Ecto.Multi.update(multi, id, changeset)
       end)
 
     Repo.transaction(multi)

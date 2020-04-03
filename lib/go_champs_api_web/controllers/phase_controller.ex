@@ -40,10 +40,10 @@ defmodule GoChampsApiWeb.PhaseController do
     end
   end
 
-  def bulk_update(conn, _params) do
-    version = %{version: "aqui"}
-
-    json(conn, version)
+  def batch_update(conn, %{"phases" => phases_param}) do
+    with {:ok, phases} <- Phases.update_phases(phases_param) do
+      render(conn, "batch_list.json", phases: phases)
+    end
   end
 
   def delete(conn, %{"id" => id}) do

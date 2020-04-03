@@ -100,6 +100,45 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
     end
   end
 
+  describe "batch update phase" do
+    setup %{conn: conn} do
+      first_phase = fixture(:phase)
+      attrs = Map.merge(@create_attrs, %{tournament_id: first_phase.tournament_id})
+      {:ok, second_phase} = Phases.create_phase(attrs)
+      {:ok, conn: conn, phases: [first_phase, second_phase]}
+    end
+
+    test "renders phases when data is valid", %{
+      conn: conn,
+      phases: [first_phase, second_phase]
+    } do
+      first_phase_update = Map.merge(%{id: first_phase.id}, %{title: "first title updated"})
+      second_phase_update = Map.merge(%{id: second_phase.id}, %{title: "second title updated"})
+      phases = [first_phase_update, second_phase_update]
+
+      conn =
+        patch(
+          conn,
+          Routes.phase_path(
+            conn,
+            :batch_update
+          ),
+          phases: phases
+        )
+
+      first_phase_id = first_phase.id
+      second_phase_id = second_phase.id
+
+      %{^first_phase_id => first_phase_result, ^second_phase_id => second_phase_result} =
+        json_response(conn, 200)["data"]
+
+      assert first_phase_result["id"] == first_phase.id
+      assert first_phase_result["title"] == "first title updated"
+      assert second_phase_result["id"] == second_phase.id
+      assert second_phase_result["title"] == "second title updated"
+    end
+  end
+
   describe "delete phase" do
     setup [:create_phase]
 

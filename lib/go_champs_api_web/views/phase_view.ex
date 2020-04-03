@@ -8,6 +8,21 @@ defmodule GoChampsApiWeb.PhaseView do
     %{data: render_many(phases, PhaseView, "phase.json")}
   end
 
+  def render("batch_list.json", %{phases: phases}) do
+    phases_view =
+      phases
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn phase_id, acc_phases ->
+        Map.put(
+          acc_phases,
+          phase_id,
+          render_one(Map.get(phases, phase_id), PhaseView, "phase.json")
+        )
+      end)
+
+    %{data: phases_view}
+  end
+
   def render("show.json", %{phase: phase}) do
     %{
       data: %{
