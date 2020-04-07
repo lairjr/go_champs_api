@@ -68,27 +68,27 @@ describe("Phases", () => {
 
       const httpClient = httpClientFactory(PHASES_URL);
 
-      const first_payload = phasePayload(tournament.id);
-      const second_payload = phasePayload(tournament.id);
-      const { data: first_created } = await httpClient.post(first_payload);
-      const { data: second_created } = await httpClient.post(second_payload);
-      const first_phase_to_patch = {
-        ...first_created.data,
+      const firstPayload = phasePayload(tournament.id);
+      const secondPayload = phasePayload(tournament.id);
+      const { data: firstCreated } = await httpClient.post(firstPayload);
+      const { data: secondCreated } = await httpClient.post(secondPayload);
+      const firstPhaseToPatch = {
+        ...firstCreated.data,
         tournament_id: tournament.id,
       };
-      const second_phase_to_patch = {
-        ...second_created.data,
+      const secondPhaseToPatch = {
+        ...secondCreated.data,
         tournament_id: tournament.id,
       };
-      
-      const patchBatchPayload = phasesPatchPayload([first_phase_to_patch, second_phase_to_patch]);
+
+      const patchBatchPayload = phasesPatchPayload([firstPhaseToPatch, secondPhaseToPatch]);
       const { status, data: response } = await httpClient.patchBatch(patchBatchPayload);
       expect(patchBatchPayload).to.be.jsonSchema(schema.definitions.PhaseBatchRequest);
       expect(response).to.be.jsonSchema(schema.definitions.PhasesBatchRespose);
       expect(status).to.be.equal(200);
 
-      await httpClient.delete(first_created.data.id);
-      await httpClient.delete(second_created.data.id);
+      await httpClient.delete(firstCreated.data.id);
+      await httpClient.delete(secondCreated.data.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
   });

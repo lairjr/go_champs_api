@@ -4,15 +4,15 @@
     "/api/phases/{phaseId}/elimination": {
       "post": {
         "tags": [
-          "Eliminiations"
+          "Elimination"
         ],
         "summary": "Post phase elimination",
         "responses": {
           "201": {
             "schema": {
-              "$ref": "#/definitions/EliminiationsResponse"
+              "$ref": "#/definitions/EliminationResponse"
             },
-            "description": "Eliminiations created OK"
+            "description": "Elimination created OK"
           }
         },
         "produces": [
@@ -21,7 +21,7 @@
         "parameters": [
           {
             "schema": {
-              "$ref": "#/definitions/EliminiationsRequest"
+              "$ref": "#/definitions/EliminationRequest"
             },
             "required": true,
             "name": "elimination",
@@ -36,13 +36,13 @@
       },
       "get": {
         "tags": [
-          "Eliminiations"
+          "Elimination"
         ],
         "summary": "List phase elimination",
         "responses": {
           "200": {
             "schema": {
-              "$ref": "#/definitions/EliminiationssResponse"
+              "$ref": "#/definitions/EliminationsResponse"
             }
           }
         },
@@ -58,9 +58,24 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "EliminiationsListResponse": {
+    "EliminationsBatchRespose": {
       "type": "object",
-      "title": "EliminiationsListResponse",
+      "title": "EliminationsBatchRespose",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Elimination"
+          }
+        }
+      }
+    },
+    "EliminationListResponse": {
+      "type": "object",
+      "title": "EliminationListResponse",
       "required": [
         "data"
       ],
@@ -68,34 +83,50 @@
         "data": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Eliminiations"
+            "$ref": "#/definitions/Elimination"
           },
           "description": "The phase elimination details"
         }
       },
       "description": "Response schema for multiple phase elimination"
     },
-    "EliminiationsResponse": {
+    "EliminationResponse": {
       "type": "object",
-      "title": "EliminiationsResponse",
+      "title": "EliminationResponse",
       "properties": {
         "data": {
           "description": "The phase elimination details",
-          "$ref": "#/definitions/Eliminiations"
+          "$ref": "#/definitions/Elimination"
         }
       },
       "description": "Response schema for single phase elimination"
     },
-    "EliminiationsRequest": {
+    "EliminationBatchRequest": {
       "type": "object",
-      "title": "EliminiationsRequest",
+      "title": "EliminationBatchRequest",
+      "required": [
+        "eliminations"
+      ],
+      "properties": {
+        "eliminations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Elimination"
+          },
+          "description": "The tournament eliminations to be patched"
+        }
+      }
+    },
+    "EliminationRequest": {
+      "type": "object",
+      "title": "EliminationRequest",
       "required": [
         "elimination"
       ],
       "properties": {
         "elimination": {
           "description": "The phase elimination details",
-          "$ref": "#/definitions/Eliminiations"
+          "$ref": "#/definitions/Elimination"
         }
       },
       "example": {
@@ -113,9 +144,9 @@
       },
       "description": "POST body for creating a phase elimination"
     },
-    "Eliminiations": {
+    "Elimination": {
       "type": "object",
-      "title": "Eliminiations",
+      "title": "Elimination",
       "required": [
         "order",
         "team_stats"
@@ -123,19 +154,19 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Eliminiations ID"
+          "description": "Elimination ID"
         },
         "title": {
           "type": "string",
-          "description": "Eliminiations title"
+          "description": "Elimination title"
         },
         "info": {
           "type": "string",
-          "description": "Eliminiations informations"
+          "description": "Elimination informations"
         },
         "order": {
           "type": "number",
-          "description": "Eliminiations order"
+          "description": "Elimination order"
         },
         "team_stats": {
           "type": "array",

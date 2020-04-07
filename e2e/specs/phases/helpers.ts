@@ -44,5 +44,5 @@ export const phasesPatchPayload = (phases: PhaseEntity[]) => ({
       ...somePhase,
       id: phase.id,
     };
-  })
+  }),
 });
