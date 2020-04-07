@@ -100,6 +100,51 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
     end
   end
 
+  describe "batch update elimination" do
+    setup %{conn: conn} do
+      first_elimination = fixture(:elimination)
+      attrs = Map.merge(@create_attrs, %{phase_id: first_elimination.phase_id})
+      {:ok, second_elimination} = Eliminations.create_elimination(attrs)
+      {:ok, conn: conn, eliminations: [first_elimination, second_elimination]}
+    end
+
+    test "renders eliminations when data is valid", %{
+      conn: conn,
+      eliminations: [first_elimination, second_elimination]
+    } do
+      first_elimination_update =
+        Map.merge(%{id: first_elimination.id}, %{title: "first title updated"})
+
+      second_elimination_update =
+        Map.merge(%{id: second_elimination.id}, %{title: "second title updated"})
+
+      eliminations = [first_elimination_update, second_elimination_update]
+
+      conn =
+        patch(
+          conn,
+          Routes.elimination_path(
+            conn,
+            :batch_update
+          ),
+          eliminations: eliminations
+        )
+
+      first_elimination_id = first_elimination.id
+      second_elimination_id = second_elimination.id
+
+      %{
+        ^first_elimination_id => first_elimination_result,
+        ^second_elimination_id => second_elimination_result
+      } = json_response(conn, 200)["data"]
+
+      assert first_elimination_result["id"] == first_elimination.id
+      assert first_elimination_result["title"] == "first title updated"
+      assert second_elimination_result["id"] == second_elimination.id
+      assert second_elimination_result["title"] == "second title updated"
+    end
+  end
+
   describe "delete elimination" do
     setup [:create_elimination]
 

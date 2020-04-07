@@ -125,6 +125,31 @@ defmodule GoChampsApi.EliminationsTest do
                Eliminations.get_elimination!(elimination.id)
     end
 
+    test "update_eliminations/2 with valid data updates the phase" do
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+
+      {:ok, %Elimination{} = first_elimination} = Eliminations.create_elimination(attrs)
+      {:ok, %Elimination{} = second_elimination} = Eliminations.create_elimination(attrs)
+
+      first_updated_elimination = %{
+        "id" => first_elimination.id,
+        "title" => "some first updated title"
+      }
+
+      second_updated_elimination = %{
+        "id" => second_elimination.id,
+        "title" => "some second updated title"
+      }
+
+      {:ok, batch_results} =
+        Eliminations.update_eliminations([first_updated_elimination, second_updated_elimination])
+
+      assert batch_results[first_elimination.id].id == first_elimination.id
+      assert batch_results[first_elimination.id].title == "some first updated title"
+      assert batch_results[second_elimination.id].id == second_elimination.id
+      assert batch_results[second_elimination.id].title == "some second updated title"
+    end
+
     test "delete_elimination/1 deletes the elimination" do
       elimination = elimination_fixture()
       assert {:ok, %Elimination{}} = Eliminations.delete_elimination(elimination)

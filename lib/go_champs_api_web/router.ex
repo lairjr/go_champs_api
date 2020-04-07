@@ -16,6 +16,7 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/draws", DrawController
     resources "/eliminations", EliminationController
+    patch "/eliminations", EliminationController, :batch_update
     resources "/games", GameController
     resources "/organizations", OrganizationController
     resources "/phases", PhaseController

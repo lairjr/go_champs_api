@@ -6,6 +6,21 @@ defmodule GoChampsApiWeb.EliminationView do
     %{data: render_many(eliminations, EliminationView, "elimination.json")}
   end
 
+  def render("batch_list.json", %{eliminations: eliminations}) do
+    eliminations_view =
+      eliminations
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn elimination_id, acc_eliminations ->
+        Map.put(
+          acc_eliminations,
+          elimination_id,
+          render_one(Map.get(eliminations, elimination_id), EliminationView, "elimination.json")
+        )
+      end)
+
+    %{data: eliminations_view}
+  end
+
   def render("show.json", %{elimination: elimination}) do
     %{data: render_one(elimination, EliminationView, "elimination.json")}
   end

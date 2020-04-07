@@ -30,6 +30,12 @@ defmodule GoChampsApiWeb.EliminationController do
     end
   end
 
+  def batch_update(conn, %{"eliminations" => eliminations_param}) do
+    with {:ok, eliminations} <- Eliminations.update_eliminations(eliminations_param) do
+      render(conn, "batch_list.json", eliminations: eliminations)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     elimination = Eliminations.get_elimination!(id)
 

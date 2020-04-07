@@ -76,6 +76,32 @@ defmodule GoChampsApi.Eliminations do
   end
 
   @doc """
+  Updates many eliminations.
+
+  ## Examples
+
+      iex> update_elimination([%{field: new_value}])
+      {:ok, [%Phase{}]}
+
+      iex> update_elimination([%{field: bad_value}])
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_eliminations(eliminations) do
+    multi =
+      eliminations
+      |> Enum.reduce(Ecto.Multi.new(), fn elimination, multi ->
+        %{"id" => id} = elimination
+        current_elimination = Repo.get_by!(Elimination, id: id)
+        changeset = Elimination.changeset(current_elimination, elimination)
+
+        Ecto.Multi.update(multi, id, changeset)
+      end)
+
+    Repo.transaction(multi)
+  end
+
+  @doc """
   Deletes a Elimination.
 
   ## Examples
