@@ -106,6 +106,49 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     end
   end
 
+  describe "batch update draw" do
+    setup %{conn: conn} do
+      first_draw = fixture(:draw)
+      attrs = Map.merge(@create_attrs, %{phase_id: first_draw.phase_id})
+      {:ok, second_draw} = Draws.create_draw(attrs)
+      {:ok, conn: conn, draws: [first_draw, second_draw]}
+    end
+
+    test "renders draws when data is valid", %{
+      conn: conn,
+      draws: [first_draw, second_draw]
+    } do
+      first_draw_update = Map.merge(%{id: first_draw.id}, %{title: "first title updated"})
+
+      second_draw_update = Map.merge(%{id: second_draw.id}, %{title: "second title updated"})
+
+      draws = [first_draw_update, second_draw_update]
+
+      conn =
+        patch(
+          conn,
+          Routes.draw_path(
+            conn,
+            :batch_update
+          ),
+          draws: draws
+        )
+
+      first_draw_id = first_draw.id
+      second_draw_id = second_draw.id
+
+      %{
+        ^first_draw_id => first_draw_result,
+        ^second_draw_id => second_draw_result
+      } = json_response(conn, 200)["data"]
+
+      assert first_draw_result["id"] == first_draw.id
+      assert first_draw_result["title"] == "first title updated"
+      assert second_draw_result["id"] == second_draw.id
+      assert second_draw_result["title"] == "second title updated"
+    end
+  end
+
   describe "delete draw" do
     setup [:create_draw]
 

@@ -28,6 +28,12 @@ defmodule GoChampsApiWeb.DrawController do
     end
   end
 
+  def batch_update(conn, %{"draws" => draws_param}) do
+    with {:ok, draws} <- Draws.update_draws(draws_param) do
+      render(conn, "batch_list.json", draws: draws)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     draw = Draws.get_draw!(id)
 

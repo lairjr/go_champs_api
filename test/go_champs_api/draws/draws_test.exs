@@ -97,6 +97,30 @@ defmodule GoChampsApi.DrawsTest do
                Draws.get_draw!(draw.id)
     end
 
+    test "update_draws/2 with valid data updates the phase" do
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+
+      {:ok, %Draw{} = first_draw} = Draws.create_draw(attrs)
+      {:ok, %Draw{} = second_draw} = Draws.create_draw(attrs)
+
+      first_updated_draw = %{
+        "id" => first_draw.id,
+        "title" => "some first updated title"
+      }
+
+      second_updated_draw = %{
+        "id" => second_draw.id,
+        "title" => "some second updated title"
+      }
+
+      {:ok, batch_results} = Draws.update_draws([first_updated_draw, second_updated_draw])
+
+      assert batch_results[first_draw.id].id == first_draw.id
+      assert batch_results[first_draw.id].title == "some first updated title"
+      assert batch_results[second_draw.id].id == second_draw.id
+      assert batch_results[second_draw.id].title == "some second updated title"
+    end
+
     test "delete_draw/1 deletes the draw" do
       draw = draw_fixture()
       assert {:ok, %Draw{}} = Draws.delete_draw(draw)

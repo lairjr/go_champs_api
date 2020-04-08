@@ -6,6 +6,21 @@ defmodule GoChampsApiWeb.DrawView do
     %{data: render_many(draws, DrawView, "draw.json")}
   end
 
+  def render("batch_list.json", %{draws: draws}) do
+    draws_view =
+      draws
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn draw_id, acc_draws ->
+        Map.put(
+          acc_draws,
+          draw_id,
+          render_one(Map.get(draws, draw_id), DrawView, "draw.json")
+        )
+      end)
+
+    %{data: draws_view}
+  end
+
   def render("show.json", %{draw: draw}) do
     %{data: render_one(draw, DrawView, "draw.json")}
   end

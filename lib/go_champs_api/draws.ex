@@ -77,6 +77,32 @@ defmodule GoChampsApi.Draws do
   end
 
   @doc """
+  Updates many draws.
+
+  ## Examples
+
+      iex> update_draws([%{field: new_value}])
+      {:ok, [%Phase{}]}
+
+      iex> update_draws([%{field: bad_value}])
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_draws(draws) do
+    multi =
+      draws
+      |> Enum.reduce(Ecto.Multi.new(), fn draw, multi ->
+        %{"id" => id} = draw
+        current_draw = Repo.get_by!(Draw, id: id)
+        changeset = Draw.changeset(current_draw, draw)
+
+        Ecto.Multi.update(multi, id, changeset)
+      end)
+
+    Repo.transaction(multi)
+  end
+
+  @doc """
   Deletes a Draw.
 
   ## Examples

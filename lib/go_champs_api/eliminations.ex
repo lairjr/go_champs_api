@@ -80,10 +80,10 @@ defmodule GoChampsApi.Eliminations do
 
   ## Examples
 
-      iex> update_elimination([%{field: new_value}])
+      iex> update_eliminations([%{field: new_value}])
       {:ok, [%Phase{}]}
 
-      iex> update_elimination([%{field: bad_value}])
+      iex> update_eliminations([%{field: bad_value}])
       {:error, %Ecto.Changeset{}}
 
   """
