@@ -3,7 +3,7 @@ import { createPhaseWithOrganizaion, deletePhaseAndOrganization } from "../phase
 import { DRAWS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
 import schema from "./draws_swagger.json";
-import { drawPayload } from "./helpers";
+import { drawPayload, drawsPatchPayload } from "./helpers";
 import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
@@ -46,6 +46,41 @@ describe("Draws", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id);
+      await deletePhaseAndOrganization(
+        tournament.id,
+        organization.id,
+        phase.id,
+      );
+    });
+  });
+
+  describe("PATCH /", () => {
+    it("matchs schema", async () => {
+      const { tournament, organization, phase } = await createPhaseWithOrganizaion();
+
+      const httpClient = httpClientFactory(DRAWS_URL);
+
+      const firstPayload = drawPayload(phase.id);
+      const secondPayload = drawPayload(phase.id);
+      const { data: firstCreated } = await httpClient.post(firstPayload);
+      const { data: secondCreated } = await httpClient.post(secondPayload);
+      const firstDrawToPatch = {
+        ...firstCreated.data,
+        phase_id: phase.id,
+      };
+      const secondDrawToPatch = {
+        ...secondCreated.data,
+        phase_id: phase.id,
+      };
+
+      const patchBatchPayload = drawsPatchPayload([firstDrawToPatch, secondDrawToPatch]);
+      const { status, data: response } = await httpClient.patchBatch(patchBatchPayload);
+      expect(patchBatchPayload).to.be.jsonSchema(schema.definitions.PhaseRoundsBatchRequest);
+      expect(response).to.be.jsonSchema(schema.definitions.PhaseRoundsBatchRespose);
+      expect(status).to.be.equal(200);
+
+      await httpClient.delete(firstCreated.data.id);
+      await httpClient.delete(secondCreated.data.id);
       await deletePhaseAndOrganization(
         tournament.id,
         organization.id,

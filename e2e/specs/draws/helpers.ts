@@ -1,5 +1,10 @@
 import { randomString } from "../utils/random";
 
+interface DrawEntity {
+  id: string;
+  phase_id: string;
+}
+
 const randomDraw = (phaseId: string) => ({
   matches: [
     {
@@ -23,3 +28,14 @@ export const drawPayload = (phaseId: string) => (
   {
     draw: randomDraw(phaseId),
   });
+
+export const drawsPatchPayload = (draws: DrawEntity[]) => ({
+  draws: draws.map((draw: DrawEntity) => {
+    const someDraw = randomDraw(draw.phase_id);
+
+    return {
+      ...someDraw,
+      id: draw.id,
+    };
+  }),
+});

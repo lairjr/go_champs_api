@@ -58,6 +58,21 @@
   },
   "host": "localhost:4000",
   "definitions": {
+    "PhaseRoundsBatchRespose": {
+      "type": "object",
+      "title": "PhaseRoundsBatchRespose",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/PhaseRounds"
+          }
+        }
+      }
+    },
     "PhaseRoundsListResponse": {
       "type": "object",
       "title": "PhaseRoundsListResponse",
@@ -85,6 +100,22 @@
         }
       },
       "description": "Response schema for single phase rounds"
+    },
+    "PhaseRoundsBatchRequest": {
+      "type": "object",
+      "title": "PhaseRoundsBatchRequest",
+      "required": [
+        "draws"
+      ],
+      "properties": {
+        "draws": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhaseRounds"
+          },
+          "description": "The tournament draws to be patched"
+        }
+      }
     },
     "PhaseRoundsRequest": {
       "type": "object",
