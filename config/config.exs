@@ -17,6 +17,10 @@ config :go_champs_api, GoChampsApiWeb.Endpoint,
   render_errors: [view: GoChampsApiWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: GoChampsApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :go_champs_api, GoChampsApiWeb.Auth.Guardian,
+  issuer: "go_champas_api",
+  secret_key: System.get_env("SECRET_AUTH_KEY") || "ptHFgyK8ePlG2uYnwP7KJhEzfp1s/Xmu6Agtj9iuJA5IU8+g8CCi8zScfaaT+yOX"
+
 # config :go_champs_api, :phoenix_swagger,
 #   swagger_files: %{
 #     "priv/static/swagger.json" => [
@@ -32,6 +36,7 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

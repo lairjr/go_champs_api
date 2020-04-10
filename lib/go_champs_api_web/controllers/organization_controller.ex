@@ -32,7 +32,7 @@ defmodule GoChampsApiWeb.OrganizationController do
 
     case Organizations.update_organization(organization, organization_params) do
       {:ok, %{organization: result_organization}} ->
-        render(conn, "show.json", organization: organization)
+        render(conn, "show.json", organization: result_organization)
 
       {:error, :organization, %Ecto.Changeset{} = changeset, %{}} ->
         conn

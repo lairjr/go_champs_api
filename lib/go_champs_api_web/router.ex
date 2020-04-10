@@ -23,7 +23,8 @@ defmodule GoChampsApiWeb.Router do
     resources "/phases", PhaseController
     patch "/phases", PhaseController, :batch_update
     get "/search", SearchController, :index
-    resources "/users", UserController
+    post "/users/signup", UserController, :create
+    post "/users/signin", UserController, :signin
     resources "/teams", TeamController
     resources "/tournaments", TournamentController
     get "/version", VersionController, :index

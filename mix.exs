@@ -44,7 +44,10 @@ defmodule GoChampsApi.MixProject do
       {:plug, "~> 1.0"},
       {:corsica, "~> 1.0"},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.5"}
+      {:ex_json_schema, "~> 0.5"},
+      {:guardian, "~> 2.0"},
+      {:comeonin, "~> 5.3.1"},
+      {:bcrypt_elixir, "~> 2.2.0"}
     ]
   end
 
