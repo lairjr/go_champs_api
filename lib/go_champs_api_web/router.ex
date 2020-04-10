@@ -5,6 +5,10 @@ defmodule GoChampsApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug GoChampsApiWeb.Auth.Pipeline
+  end
+
   scope "/api/swagger" do
     forward "/organization", PhoenixSwagger.Plug.SwaggerUI,
       otp_app: :go_champs_api,
@@ -19,7 +23,7 @@ defmodule GoChampsApiWeb.Router do
     resources "/eliminations", EliminationController
     patch "/eliminations", EliminationController, :batch_update
     resources "/games", GameController
-    resources "/organizations", OrganizationController
+    resources "/organizations", OrganizationController, only: [:index, :show]
     resources "/phases", PhaseController
     patch "/phases", PhaseController, :batch_update
     get "/search", SearchController, :index
@@ -28,6 +32,12 @@ defmodule GoChampsApiWeb.Router do
     resources "/teams", TeamController
     resources "/tournaments", TournamentController
     get "/version", VersionController, :index
+  end
+
+  scope "/api", GoChampsApiWeb do
+    pipe_through [:api, :auth]
+
+    resources "/organizations", OrganizationController, only: [:create, :update, :delete]
   end
 
   def swagger_info do
