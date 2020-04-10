@@ -38,6 +38,29 @@ defmodule GoChampsApi.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a single user by email.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user!("some@email.com")
+      %User{}
+
+      iex> get_user!("some-missing@email.com")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_by_email(email) do
+    case Repo.get_by(User, email: email) do
+      nil ->
+        {:error, :not_found}
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
