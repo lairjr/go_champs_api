@@ -15,6 +15,8 @@ defmodule GoChampsApiWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias GoChampsApi.Accounts
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -26,6 +28,11 @@ defmodule GoChampsApiWeb.ConnCase do
     end
   end
 
+  @user_attrs %{
+    email: "some@email.com",
+    password: "some password"
+  }
+
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(GoChampsApi.Repo)
 
@@ -33,6 +40,26 @@ defmodule GoChampsApiWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(GoChampsApi.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {conn, user} =
+      if tags[:authenticated] do
+        {:ok, user} = create_user()
+
+        {:ok, user, token} = GoChampsApiWeb.Auth.Guardian.authenticate(user.email, user.password)
+
+        conn =
+          Phoenix.ConnTest.build_conn()
+          |> Plug.Conn.put_req_header("authorization", "Bearer #{token}")
+
+        {conn, user}
+      else
+        {Phoenix.ConnTest.build_conn(), nil}
+      end
+
+    {:ok, conn: conn, user: user}
+  end
+
+  def create_user() do
+    @user_attrs
+    |> Accounts.create_user()
   end
 end

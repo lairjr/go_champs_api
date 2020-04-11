@@ -34,6 +34,18 @@ defmodule GoChampsApiWeb.Router do
     get "/version", VersionController, :index
   end
 
+  scope "/v1", GoChampsApiWeb, as: :v1 do
+    pipe_through :api
+
+    resources "/organizations", OrganizationController, only: [:index, :show]
+  end
+
+  scope "/v1", GoChampsApiWeb, as: :v1 do
+    pipe_through [:api, :auth]
+
+    resources "/organizations", OrganizationController, only: [:create, :update, :delete]
+  end
+
   def swagger_info do
     %{
       info: %{
