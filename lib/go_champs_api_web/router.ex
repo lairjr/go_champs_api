@@ -23,7 +23,7 @@ defmodule GoChampsApiWeb.Router do
     resources "/eliminations", EliminationController
     patch "/eliminations", EliminationController, :batch_update
     resources "/games", GameController
-    resources "/organizations", OrganizationController, only: [:index, :show]
+    resources "/organizations", OrganizationController
     resources "/phases", PhaseController
     patch "/phases", PhaseController, :batch_update
     get "/search", SearchController, :index
@@ -32,12 +32,6 @@ defmodule GoChampsApiWeb.Router do
     resources "/teams", TeamController
     resources "/tournaments", TournamentController
     get "/version", VersionController, :index
-  end
-
-  scope "/api", GoChampsApiWeb do
-    pipe_through [:api, :auth]
-
-    resources "/organizations", OrganizationController, only: [:create, :update, :delete]
   end
 
   def swagger_info do

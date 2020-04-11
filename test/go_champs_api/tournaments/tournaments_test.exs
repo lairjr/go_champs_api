@@ -36,18 +36,6 @@ defmodule GoChampsApi.TournamentsTest do
       tournament
     end
 
-    def map_tournament_team_id(attrs \\ %{}) do
-      {:ok, tournament_team} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> OrganizationHelpers.map_organization_id()
-        |> Tournaments.create_tournament()
-        |> map_tournament_team()
-        |> Tournaments.create_tournament_team()
-
-      Map.merge(attrs, %{tournament_team_id: tournament_team.id})
-    end
-
     def map_tournament_team({:ok, tournament}) do
       %{name: "some team name", tournament_id: tournament.id}
     end

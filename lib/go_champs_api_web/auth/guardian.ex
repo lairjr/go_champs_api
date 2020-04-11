@@ -11,7 +11,7 @@ defmodule GoChampsApiWeb.Auth.Guardian do
   def resource_from_claims(claims) do
     id = claims["sub"]
     resource = Accounts.get_user!(id)
-    {:ok,  resource}
+    {:ok, resource}
   end
 
   def authenticate(email, password) do
@@ -19,6 +19,7 @@ defmodule GoChampsApiWeb.Auth.Guardian do
       case validate_password(password, user.encrypted_password) do
         true ->
           create_token(user)
+
         false ->
           {:error, :unauthorized}
       end
@@ -26,11 +27,7 @@ defmodule GoChampsApiWeb.Auth.Guardian do
   end
 
   defp validate_password(password, encrypted_password) do
-    result = Bcrypt.verify_pass(password, encrypted_password)
-    IO.inspect("funfou")
-    IO.inspect(password)
-    IO.inspect(encrypted_password)
-    result
+    Bcrypt.verify_pass(password, encrypted_password)
   end
 
   defp create_token(user) do

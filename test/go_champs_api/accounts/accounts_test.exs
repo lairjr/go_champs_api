@@ -6,9 +6,9 @@ defmodule GoChampsApi.AccountsTest do
   describe "users" do
     alias GoChampsApi.Accounts.User
 
-    @valid_attrs %{email: "some email", encrypted_password: "some encrypted_password"}
-    @update_attrs %{email: "some updated email", encrypted_password: "some updated encrypted_password"}
-    @invalid_attrs %{email: nil, encrypted_password: nil}
+    @valid_attrs %{email: "some@email.com", password: "somepassword"}
+    @update_attrs %{email: "someupdated@email.com", password: "someupdatedpassword"}
+    @invalid_attrs %{email: nil, password: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -21,18 +21,27 @@ defmodule GoChampsApi.AccountsTest do
 
     test "list_users/0 returns all users" do
       user = user_fixture()
-      assert Accounts.list_users() == [user]
+      [result_user] = Accounts.list_users()
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.encrypted_password == user.encrypted_password
     end
 
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+
+      result_user = Accounts.get_user!(user.id)
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.encrypted_password == user.encrypted_password
     end
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
-      assert user.encrypted_password == "some encrypted_password"
+      assert user.email == "some@email.com"
+      assert user.password == "somepassword"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -42,14 +51,19 @@ defmodule GoChampsApi.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.email == "some updated email"
-      assert user.encrypted_password == "some updated encrypted_password"
+      assert user.email == "someupdated@email.com"
+      assert user.password == "someupdatedpassword"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+
+      result_user = Accounts.get_user!(user.id)
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.encrypted_password == user.encrypted_password
     end
 
     test "delete_user/1 deletes the user" do
