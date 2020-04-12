@@ -41,6 +41,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/eliminations", EliminationController, only: [:show]
 
+    resources "/games", GameController, only: [:index, :show]
+
     resources "/organizations", OrganizationController, only: [:index, :show]
 
     resources "/phases", PhaseController, only: [:show]
@@ -63,6 +65,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/eliminations", EliminationController, only: [:create, :update, :delete]
     patch "/eliminations", EliminationController, :batch_update
+
+    resources "/games", GameController, only: [:create, :update, :delete]
 
     resources "/organizations", OrganizationController, only: [:create, :update, :delete]
 

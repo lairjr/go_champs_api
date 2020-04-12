@@ -35,7 +35,7 @@ defmodule GoChampsApiWeb.GameControllerTest do
 
   describe "index" do
     test "lists all games", %{conn: conn} do
-      conn = get(conn, Routes.game_path(conn, :index))
+      conn = get(conn, Routes.v1_game_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
 
@@ -58,19 +58,20 @@ defmodule GoChampsApiWeb.GameControllerTest do
 
       where = %{"phase_id" => second_game.phase_id}
 
-      conn = get(conn, Routes.game_path(conn, :index, where: where))
+      conn = get(conn, Routes.v1_game_path(conn, :index, where: where))
       [game_result] = json_response(conn, 200)["data"]
       assert game_result["id"] == second_game.id
     end
   end
 
   describe "create game" do
+    @tag :authenticated
     test "renders game when data is valid", %{conn: conn} do
       create_attrs = PhaseHelpers.map_phase_id(@create_attrs)
-      conn = post(conn, Routes.game_path(conn, :create), game: create_attrs)
+      conn = post(conn, Routes.v1_game_path(conn, :create), game: create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.game_path(conn, :show, id))
+      conn = get(conn, Routes.v1_game_path(conn, :show, id))
 
       assert %{
                "away_score" => 10,
@@ -83,8 +84,9 @@ defmodule GoChampsApiWeb.GameControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.game_path(conn, :create), game: @invalid_attrs)
+      conn = post(conn, Routes.v1_game_path(conn, :create), game: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -92,11 +94,12 @@ defmodule GoChampsApiWeb.GameControllerTest do
   describe "update game" do
     setup [:create_game]
 
+    @tag :authenticated
     test "renders game when data is valid", %{conn: conn, game: %Game{id: id} = game} do
-      conn = put(conn, Routes.game_path(conn, :update, game), game: @update_attrs)
+      conn = put(conn, Routes.v1_game_path(conn, :update, game), game: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.game_path(conn, :show, id))
+      conn = get(conn, Routes.v1_game_path(conn, :show, id))
 
       assert %{
                "away_score" => 20,
@@ -109,8 +112,9 @@ defmodule GoChampsApiWeb.GameControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, game: game} do
-      conn = put(conn, Routes.game_path(conn, :update, game), game: @invalid_attrs)
+      conn = put(conn, Routes.v1_game_path(conn, :update, game), game: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -118,12 +122,13 @@ defmodule GoChampsApiWeb.GameControllerTest do
   describe "delete game" do
     setup [:create_game]
 
+    @tag :authenticated
     test "deletes chosen game", %{conn: conn, game: game} do
-      conn = delete(conn, Routes.game_path(conn, :delete, game))
+      conn = delete(conn, Routes.v1_game_path(conn, :delete, game))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.game_path(conn, :show, game))
+        get(conn, Routes.v1_game_path(conn, :show, game))
       end
     end
   end
