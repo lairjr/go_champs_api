@@ -40,12 +40,13 @@ defmodule GoChampsApiWeb.DrawControllerTest do
   end
 
   describe "create draw" do
+    @tag :authenticated
     test "renders draw when data is valid", %{conn: conn} do
       create_attrs = PhaseHelpers.map_phase_id(@create_attrs)
-      conn = post(conn, Routes.draw_path(conn, :create), draw: create_attrs)
+      conn = post(conn, Routes.v1_draw_path(conn, :create), draw: create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.draw_path(conn, :show, id))
+      conn = get(conn, Routes.v1_draw_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -66,8 +67,9 @@ defmodule GoChampsApiWeb.DrawControllerTest do
       assert result_second_team_placeholder == "some-second-team-placeholder"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.draw_path(conn, :create), draw: @invalid_attrs)
+      conn = post(conn, Routes.v1_draw_path(conn, :create), draw: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -75,11 +77,12 @@ defmodule GoChampsApiWeb.DrawControllerTest do
   describe "update draw" do
     setup [:create_draw]
 
+    @tag :authenticated
     test "renders draw when data is valid", %{conn: conn, draw: %Draw{id: id} = draw} do
-      conn = put(conn, Routes.draw_path(conn, :update, draw), draw: @update_attrs)
+      conn = put(conn, Routes.v1_draw_path(conn, :update, draw), draw: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.draw_path(conn, :show, id))
+      conn = get(conn, Routes.v1_draw_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -100,8 +103,9 @@ defmodule GoChampsApiWeb.DrawControllerTest do
       assert result_second_team_placeholder == "some-updated-second-team-placeholder"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, draw: draw} do
-      conn = put(conn, Routes.draw_path(conn, :update, draw), draw: @invalid_attrs)
+      conn = put(conn, Routes.v1_draw_path(conn, :update, draw), draw: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -114,6 +118,7 @@ defmodule GoChampsApiWeb.DrawControllerTest do
       {:ok, conn: conn, draws: [first_draw, second_draw]}
     end
 
+    @tag :authenticated
     test "renders draws when data is valid", %{
       conn: conn,
       draws: [first_draw, second_draw]
@@ -127,7 +132,7 @@ defmodule GoChampsApiWeb.DrawControllerTest do
       conn =
         patch(
           conn,
-          Routes.draw_path(
+          Routes.v1_draw_path(
             conn,
             :batch_update
           ),
@@ -152,12 +157,13 @@ defmodule GoChampsApiWeb.DrawControllerTest do
   describe "delete draw" do
     setup [:create_draw]
 
+    @tag :authenticated
     test "deletes chosen draw", %{conn: conn, draw: draw} do
-      conn = delete(conn, Routes.draw_path(conn, :delete, draw))
+      conn = delete(conn, Routes.v1_draw_path(conn, :delete, draw))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.draw_path(conn, :show, draw))
+        get(conn, Routes.v1_draw_path(conn, :show, draw))
       end
     end
   end

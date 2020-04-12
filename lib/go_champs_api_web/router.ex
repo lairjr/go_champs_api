@@ -37,17 +37,27 @@ defmodule GoChampsApiWeb.Router do
   scope "/v1", GoChampsApiWeb, as: :v1 do
     pipe_through :api
 
+    resources "/draws", DrawController, only: [:show]
+
     resources "/organizations", OrganizationController, only: [:index, :show]
+
     resources "/phases", PhaseController, only: [:show]
+
     get "/search", SearchController, :index
+
     resources "/tournaments", TournamentController, only: [:index, :show]
+
     post "/users/signup", UserController, :create
     post "/users/signin", UserController, :signin
+
     get "/version", VersionController, :index
   end
 
   scope "/v1", GoChampsApiWeb, as: :v1 do
     pipe_through [:api, :auth]
+
+    resources "/draws", DrawController, only: [:create, :update, :delete]
+    patch "/draws", DrawController, :batch_update
 
     resources "/organizations", OrganizationController, only: [:create, :update, :delete]
 
