@@ -39,6 +39,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/draws", DrawController, only: [:show]
 
+    resources "/eliminations", EliminationController, only: [:show]
+
     resources "/organizations", OrganizationController, only: [:index, :show]
 
     resources "/phases", PhaseController, only: [:show]
@@ -58,6 +60,9 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/draws", DrawController, only: [:create, :update, :delete]
     patch "/draws", DrawController, :batch_update
+
+    resources "/eliminations", EliminationController, only: [:create, :update, :delete]
+    patch "/eliminations", EliminationController, :batch_update
 
     resources "/organizations", OrganizationController, only: [:create, :update, :delete]
 

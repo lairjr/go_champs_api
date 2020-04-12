@@ -2,7 +2,7 @@ const API_HOST = process.env.API_HOST || "http://localhost:4000/api";
 const API_V1_HOST = "http://phoenix:4000/v1";
 
 export const DRAWS_URL = `${API_V1_HOST}/draws`;
-export const ELIMINATIONS_URL = `${API_HOST}/eliminations`;
+export const ELIMINATIONS_URL = `${API_V1_HOST}/eliminations`;
 export const GAMES_URL = `${API_HOST}/games`;
 export const ORGANIZATIONS_URL = `${API_V1_HOST}/organizations`;
 export const PHASES_URL = `${API_V1_HOST}/phases`;

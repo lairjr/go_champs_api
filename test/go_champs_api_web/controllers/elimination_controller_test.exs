@@ -32,12 +32,13 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
   end
 
   describe "create elimination" do
+    @tag :authenticated
     test "renders elimination when data is valid", %{conn: conn} do
       create_attrs = PhaseHelpers.map_phase_id(@create_attrs)
-      conn = post(conn, Routes.elimination_path(conn, :create), elimination: create_attrs)
+      conn = post(conn, Routes.v1_elimination_path(conn, :create), elimination: create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.elimination_path(conn, :show, id))
+      conn = get(conn, Routes.v1_elimination_path(conn, :show, id))
 
       %{
         "id" => result_id,
@@ -55,9 +56,10 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
       assert team_stat["placeholder"] == "placeholder"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
       invalid_attrs = PhaseHelpers.map_phase_id(@invalid_attrs)
-      conn = post(conn, Routes.elimination_path(conn, :create), elimination: invalid_attrs)
+      conn = post(conn, Routes.v1_elimination_path(conn, :create), elimination: invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -65,16 +67,19 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
   describe "update elimination" do
     setup [:create_elimination]
 
+    @tag :authenticated
     test "renders elimination when data is valid", %{
       conn: conn,
       elimination: %Elimination{id: id} = elimination
     } do
       conn =
-        put(conn, Routes.elimination_path(conn, :update, elimination), elimination: @update_attrs)
+        put(conn, Routes.v1_elimination_path(conn, :update, elimination),
+          elimination: @update_attrs
+        )
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.elimination_path(conn, :show, id))
+      conn = get(conn, Routes.v1_elimination_path(conn, :show, id))
 
       %{
         "id" => result_id,
@@ -92,9 +97,12 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
       assert team_stat["placeholder"] == "placeholder updated"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, elimination: elimination} do
       conn =
-        put(conn, Routes.elimination_path(conn, :update, elimination), elimination: @invalid_attrs)
+        put(conn, Routes.v1_elimination_path(conn, :update, elimination),
+          elimination: @invalid_attrs
+        )
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -108,6 +116,7 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
       {:ok, conn: conn, eliminations: [first_elimination, second_elimination]}
     end
 
+    @tag :authenticated
     test "renders eliminations when data is valid", %{
       conn: conn,
       eliminations: [first_elimination, second_elimination]
@@ -123,7 +132,7 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
       conn =
         patch(
           conn,
-          Routes.elimination_path(
+          Routes.v1_elimination_path(
             conn,
             :batch_update
           ),
@@ -148,12 +157,13 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
   describe "delete elimination" do
     setup [:create_elimination]
 
+    @tag :authenticated
     test "deletes chosen elimination", %{conn: conn, elimination: elimination} do
-      conn = delete(conn, Routes.elimination_path(conn, :delete, elimination))
+      conn = delete(conn, Routes.v1_elimination_path(conn, :delete, elimination))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.elimination_path(conn, :show, elimination))
+        get(conn, Routes.v1_elimination_path(conn, :show, elimination))
       end
     end
   end
