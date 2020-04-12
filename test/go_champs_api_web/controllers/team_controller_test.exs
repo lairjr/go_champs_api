@@ -27,12 +27,13 @@ defmodule GoChampsApiWeb.TeamControllerTest do
   end
 
   describe "create team" do
+    @tag :authenticated
     test "renders team when data is valid", %{conn: conn} do
       create_attrs = TournamentHelpers.map_tournament_id(@create_attrs)
-      conn = post(conn, Routes.team_path(conn, :create), team: create_attrs)
+      conn = post(conn, Routes.v1_team_path(conn, :create), team: create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.team_path(conn, :show, id))
+      conn = get(conn, Routes.v1_team_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -40,8 +41,9 @@ defmodule GoChampsApiWeb.TeamControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.team_path(conn, :create), team: @invalid_attrs)
+      conn = post(conn, Routes.v1_team_path(conn, :create), team: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -49,11 +51,12 @@ defmodule GoChampsApiWeb.TeamControllerTest do
   describe "update team" do
     setup [:create_team]
 
+    @tag :authenticated
     test "renders team when data is valid", %{conn: conn, team: %Team{id: id} = team} do
-      conn = put(conn, Routes.team_path(conn, :update, team), team: @update_attrs)
+      conn = put(conn, Routes.v1_team_path(conn, :update, team), team: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.team_path(conn, :show, id))
+      conn = get(conn, Routes.v1_team_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -61,8 +64,9 @@ defmodule GoChampsApiWeb.TeamControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, team: team} do
-      conn = put(conn, Routes.team_path(conn, :update, team), team: @invalid_attrs)
+      conn = put(conn, Routes.v1_team_path(conn, :update, team), team: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -70,12 +74,13 @@ defmodule GoChampsApiWeb.TeamControllerTest do
   describe "delete team" do
     setup [:create_team]
 
+    @tag :authenticated
     test "deletes chosen team", %{conn: conn, team: team} do
-      conn = delete(conn, Routes.team_path(conn, :delete, team))
+      conn = delete(conn, Routes.v1_team_path(conn, :delete, team))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.team_path(conn, :show, team))
+        get(conn, Routes.v1_team_path(conn, :show, team))
       end
     end
   end

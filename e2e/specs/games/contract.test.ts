@@ -49,8 +49,8 @@ describe("Games", () => {
       expect(data).to.be.jsonSchema(schema.definitions.PhaseGameResponse);
 
       await httpClient.delete(data.data.id, { headers: authHeader });
-      await deleteTeam(tournament.id, awayTeam.id);
-      await deleteTeam(tournament.id, homeTeam.id);
+      await deleteTeam(awayTeam.id);
+      await deleteTeam(homeTeam.id);
       await deletePhaseAndOrganization(
         tournament.id,
         organization.id,
@@ -125,8 +125,8 @@ describe("Games", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id, { headers: authHeader });
-      await deleteTeam(tournament.id, awayTeam.id);
-      await deleteTeam(tournament.id, homeTeam.id);
+      await deleteTeam(awayTeam.id);
+      await deleteTeam(homeTeam.id);
       await deletePhaseAndOrganization(
         tournament.id,
         organization.id,
