@@ -42,7 +42,7 @@ services:
       context: ./e2e/
     command: yarn test
     environment:
-      API_HOST: http://phoenix:4000/api
+      API_HOST: http://phoenix:4000/v1
     volumes:
     - ./e2e/specs:/contractTest/specs
     depends_on:
