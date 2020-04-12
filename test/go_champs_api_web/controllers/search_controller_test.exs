@@ -18,7 +18,7 @@ defmodule GoChampsApiWeb.SearchControllerTest do
 
   describe "index" do
     test "lists all tournaments", %{conn: conn} do
-      conn = get(conn, Routes.search_path(conn, :index))
+      conn = get(conn, Routes.v1_search_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
 
@@ -30,7 +30,7 @@ defmodule GoChampsApiWeb.SearchControllerTest do
 
       term = "another"
 
-      conn = get(conn, Routes.search_path(conn, :index, term: term))
+      conn = get(conn, Routes.v1_search_path(conn, :index, term: term))
       [tournament_result] = json_response(conn, 200)["data"]
       assert tournament_result["id"] == second_tournament.id
     end

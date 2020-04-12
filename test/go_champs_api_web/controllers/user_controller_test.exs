@@ -13,10 +13,10 @@ defmodule GoChampsApiWeb.UserControllerTest do
 
   describe "create user" do
     test "renders user when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
+      conn = post(conn, Routes.v1_user_path(conn, :create), user: @create_attrs)
       assert %{"email" => email} = json_response(conn, 201)["data"]
 
-      conn = post(conn, Routes.user_path(conn, :signin), @create_attrs)
+      conn = post(conn, Routes.v1_user_path(conn, :signin), @create_attrs)
 
       %{"email" => result_email, "token" => result_token} = json_response(conn, 200)["data"]
 
@@ -25,7 +25,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
+      conn = post(conn, Routes.v1_user_path(conn, :create), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

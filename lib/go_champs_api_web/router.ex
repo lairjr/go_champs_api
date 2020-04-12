@@ -38,7 +38,11 @@ defmodule GoChampsApiWeb.Router do
     pipe_through :api
 
     resources "/organizations", OrganizationController, only: [:index, :show]
+    get "/search", SearchController, :index
     resources "/tournaments", TournamentController, only: [:index, :show]
+    post "/users/signup", UserController, :create
+    post "/users/signin", UserController, :signin
+    get "/version", VersionController, :index
   end
 
   scope "/v1", GoChampsApiWeb, as: :v1 do
