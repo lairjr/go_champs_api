@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
-const post = (baseUri: string) => (payload: any) => {
-  return axios.post(baseUri, payload);
+const post = (baseUri: string) => (payload: any, config?: AxiosRequestConfig) => {
+  return axios.post(baseUri, payload, config);
 };
 
 const getAll = (baseUri: string) => () => (
@@ -12,16 +12,16 @@ const get = (baseUri: string) => (resourceId: string) => (
   axios.get(`${baseUri}/${resourceId}`)
 );
 
-const patch = (baseUri: string) => (resourceId: string, payload: any) => {
-  return axios.patch(`${baseUri}/${resourceId}`, payload);
+const patch = (baseUri: string) => (resourceId: string, payload: any, config?: AxiosRequestConfig) => {
+  return axios.patch(`${baseUri}/${resourceId}`, payload, config);
 };
 
-const patchBatch = (baseUri: string) => (payload: any) => {
-  return axios.patch(`${baseUri}`, payload);
+const patchBatch = (baseUri: string) => (payload: any, config?: AxiosRequestConfig) => {
+  return axios.patch(`${baseUri}`, payload, config);
 };
 
-const deleteRequest = (baseUri: string) => (resourceId: string) => {
-  return axios.delete(`${baseUri}/${resourceId}`);
+const deleteRequest = (baseUri: string) => (resourceId: string, config?: AxiosRequestConfig) => {
+  return axios.delete(`${baseUri}/${resourceId}`, config);
 };
 
 const httpClientFactory = (baseUri: string) => {

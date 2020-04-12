@@ -1,10 +1,10 @@
 import { expect, tv4, use } from "chai";
-import { stubOrganization } from "../organizations/stubs";
+import ChaiJsonSchema = require("chai-json-schema");
+import { stubOrganization, deleteStubOrganization } from "../organizations/stubs";
 import { ORGANIZATIONS_URL, TOURNAMENTS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentPayload } from "./helpers";
 import schema from "./tournament_swagger.json";
-import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
 
@@ -25,7 +25,7 @@ describe("Tournaments", () => {
       expect(data).to.be.jsonSchema(schema.definitions.TournamentResponse);
 
       await httpClient.delete(data.data.id);
-      await organizationClient.delete(organization.id);
+      await deleteStubOrganization(organization.id);
     });
   });
 
@@ -47,7 +47,7 @@ describe("Tournaments", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id);
-      await organizationClient.delete(organization.id);
+      await deleteStubOrganization(organization.id);
     });
   });
 
@@ -63,7 +63,7 @@ describe("Tournaments", () => {
       expect(status).to.be.equal(200);
 
       await httpClient.delete(created.data.id);
-      await organizationClient.delete(organization.id);
+      await deleteStubOrganization(organization.id);
     });
   });
 
@@ -75,7 +75,7 @@ describe("Tournaments", () => {
       const { status } = await httpClient.delete(created.data.id);
       expect(status).to.be.equal(204);
 
-      await organizationClient.delete(organization.id);
+      await deleteStubOrganization(organization.id);
     });
   });
 });
