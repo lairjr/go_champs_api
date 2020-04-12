@@ -6,20 +6,30 @@ const MOCK_USER = {
   password: "password",
 };
 
+let authenticationHeaderChace;
+
 export const authenticationHeader = async () => {
+  if (authenticationHeaderChace) {
+    return authenticationHeaderChace;
+  }
+
   try {
     const signUpResponse = await axios.post(`${USERS_URL}/signup`, { user: MOCK_USER });
 
     const signUpToken = signUpResponse.data.data.token;
 
-    return buildHeader(signUpToken);
+    authenticationHeaderChace = buildHeader(signUpToken);
+
+    return authenticationHeaderChace;
   } catch (err) {
     if (err.response.status === 422) {
       const signInResponse = await axios.post(`${USERS_URL}/signin`, MOCK_USER);
 
       const signInToken = signInResponse.data.data.token;
 
-      return buildHeader(signInToken);
+      authenticationHeaderChace = buildHeader(signInToken);
+
+      return authenticationHeaderChace;
     }
   }
 };
