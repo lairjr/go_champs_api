@@ -39,7 +39,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
 
   describe "index" do
     test "lists all tournaments", %{conn: conn} do
-      conn = get(conn, Routes.tournament_path(conn, :index))
+      conn = get(conn, Routes.v1_tournament_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
 
@@ -51,23 +51,24 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
 
       where = %{"organization_id" => second_tournament.organization_id}
 
-      conn = get(conn, Routes.tournament_path(conn, :index, where: where))
+      conn = get(conn, Routes.v1_tournament_path(conn, :index, where: where))
       [tournament_result] = json_response(conn, 200)["data"]
       assert tournament_result["id"] == second_tournament.id
     end
   end
 
   describe "create tournament" do
+    @tag :authenticated
     test "renders tournament when data is valid", %{conn: conn} do
       {:ok, organization} =
         Organizations.create_organization(%{name: "some organization", slug: "some-org-slug"})
 
       attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
 
-      conn = post(conn, Routes.tournament_path(conn, :create), tournament: attrs)
+      conn = post(conn, Routes.v1_tournament_path(conn, :create), tournament: attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.tournament_path(conn, :show, id))
+      conn = get(conn, Routes.v1_tournament_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -87,8 +88,9 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_twitter == "twitter"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.tournament_path(conn, :create), tournament: @invalid_attrs)
+      conn = post(conn, Routes.v1_tournament_path(conn, :create), tournament: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -96,16 +98,17 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
   describe "update tournament" do
     setup [:create_tournament]
 
+    @tag :authenticated
     test "renders tournament when data is valid", %{
       conn: conn,
       tournament: %Tournament{id: id} = tournament
     } do
       conn =
-        put(conn, Routes.tournament_path(conn, :update, tournament), tournament: @update_attrs)
+        put(conn, Routes.v1_tournament_path(conn, :update, tournament), tournament: @update_attrs)
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.tournament_path(conn, :show, id))
+      conn = get(conn, Routes.v1_tournament_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -125,9 +128,10 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_twitter == "twitter updated"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, tournament: tournament} do
       conn =
-        put(conn, Routes.tournament_path(conn, :update, tournament), tournament: @invalid_attrs)
+        put(conn, Routes.v1_tournament_path(conn, :update, tournament), tournament: @invalid_attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -136,12 +140,13 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
   describe "delete tournament" do
     setup [:create_tournament]
 
+    @tag :authenticated
     test "deletes chosen tournament", %{conn: conn, tournament: tournament} do
-      conn = delete(conn, Routes.tournament_path(conn, :delete, tournament))
+      conn = delete(conn, Routes.v1_tournament_path(conn, :delete, tournament))
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, Routes.tournament_path(conn, :show, tournament))
+        get(conn, Routes.v1_tournament_path(conn, :show, tournament))
       end
     end
   end

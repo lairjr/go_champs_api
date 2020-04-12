@@ -1,7 +1,7 @@
 import { organizationPayload } from "../organizations/helpers";
 import { ORGANIZATIONS_URL } from "../URLs";
-import httpClientFactory from "../utils/httpClientFactory";
 import { authenticationHeader } from "../utils/auth";
+import httpClientFactory from "../utils/httpClientFactory";
 
 const httpClient = httpClientFactory(ORGANIZATIONS_URL);
 
