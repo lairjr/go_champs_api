@@ -28,14 +28,15 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
   end
 
   describe "create phase" do
+    @tag :authenticated
     test "renders phase when data is valid", %{conn: conn} do
       attrs = TournamentHelpers.map_tournament_id(@create_attrs)
 
-      conn = post(conn, Routes.phase_path(conn, :create), phase: attrs)
+      conn = post(conn, Routes.v1_phase_path(conn, :create), phase: attrs)
 
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, Routes.phase_path(conn, :show, id))
+      conn = get(conn, Routes.v1_phase_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -45,10 +46,11 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
       attrs = TournamentHelpers.map_tournament_id(@invalid_attrs)
 
-      conn = post(conn, Routes.phase_path(conn, :create), phase: attrs)
+      conn = post(conn, Routes.v1_phase_path(conn, :create), phase: attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -57,6 +59,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
   describe "update phase" do
     setup [:create_phase]
 
+    @tag :authenticated
     test "renders phase when data is valid", %{
       conn: conn,
       phase: %Phase{id: id} = phase
@@ -64,7 +67,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       conn =
         put(
           conn,
-          Routes.phase_path(
+          Routes.v1_phase_path(
             conn,
             :update,
             phase
@@ -74,7 +77,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
 
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, Routes.phase_path(conn, :show, id))
+      conn = get(conn, Routes.v1_phase_path(conn, :show, id))
 
       assert %{
                "id" => id,
@@ -84,11 +87,12 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn, phase: phase} do
       conn =
         put(
           conn,
-          Routes.phase_path(
+          Routes.v1_phase_path(
             conn,
             :update,
             phase
@@ -108,6 +112,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       {:ok, conn: conn, phases: [first_phase, second_phase]}
     end
 
+    @tag :authenticated
     test "renders phases when data is valid", %{
       conn: conn,
       phases: [first_phase, second_phase]
@@ -119,7 +124,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       conn =
         patch(
           conn,
-          Routes.phase_path(
+          Routes.v1_phase_path(
             conn,
             :batch_update
           ),
@@ -142,11 +147,12 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
   describe "delete phase" do
     setup [:create_phase]
 
+    @tag :authenticated
     test "deletes chosen phase", %{conn: conn, phase: phase} do
       conn =
         delete(
           conn,
-          Routes.phase_path(
+          Routes.v1_phase_path(
             conn,
             :delete,
             phase
@@ -158,7 +164,7 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       assert_error_sent 404, fn ->
         get(
           conn,
-          Routes.phase_path(
+          Routes.v1_phase_path(
             conn,
             :show,
             phase

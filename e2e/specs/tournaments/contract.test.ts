@@ -1,7 +1,7 @@
 import { expect, tv4, use } from "chai";
 import ChaiJsonSchema = require("chai-json-schema");
 import { deleteStubOrganization, stubOrganization } from "../organizations/stubs";
-import { ORGANIZATIONS_URL, TOURNAMENTS_URL } from "../URLs";
+import { TOURNAMENTS_URL } from "../URLs";
 import { authenticationHeader } from "../utils/auth";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentPayload } from "./helpers";
@@ -12,7 +12,6 @@ use(ChaiJsonSchema);
 tv4.addSchema("#/definitions/Tournament", schema.definitions.Tournament);
 
 const httpClient = httpClientFactory(TOURNAMENTS_URL);
-const organizationClient = httpClientFactory(ORGANIZATIONS_URL);
 
 describe("Tournaments", () => {
   describe("POST /", () => {

@@ -38,6 +38,7 @@ defmodule GoChampsApiWeb.Router do
     pipe_through :api
 
     resources "/organizations", OrganizationController, only: [:index, :show]
+    resources "/phases", PhaseController, only: [:show]
     get "/search", SearchController, :index
     resources "/tournaments", TournamentController, only: [:index, :show]
     post "/users/signup", UserController, :create
@@ -49,6 +50,10 @@ defmodule GoChampsApiWeb.Router do
     pipe_through [:api, :auth]
 
     resources "/organizations", OrganizationController, only: [:create, :update, :delete]
+
+    patch "/phases", PhaseController, :batch_update
+    resources "/phases", PhaseController, only: [:create, :update, :delete]
+
     resources "/tournaments", TournamentController, only: [:create, :update, :delete]
   end
 

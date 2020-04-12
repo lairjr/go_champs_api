@@ -1,10 +1,10 @@
 import { expect, tv4, use } from "chai";
+import ChaiJsonSchema = require("chai-json-schema");
 import { createPhaseWithOrganizaion, deletePhaseAndOrganization } from "../phases/stubs";
 import { DRAWS_URL } from "../URLs";
 import httpClientFactory from "../utils/httpClientFactory";
 import schema from "./draws_swagger.json";
 import { drawPayload, drawsPatchPayload } from "./helpers";
-import ChaiJsonSchema = require("chai-json-schema");
 
 use(ChaiJsonSchema);
 
