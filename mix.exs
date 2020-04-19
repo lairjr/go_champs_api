@@ -20,7 +20,7 @@ defmodule GoChampsApi.MixProject do
   def application do
     [
       mod: {GoChampsApi.Application, []},
-      extra_applications: [:corsica, :logger, :runtime_tools]
+      extra_applications: [:corsica, :logger, :runtime_tools, :recaptcha]
     ]
   end
 
@@ -47,7 +47,8 @@ defmodule GoChampsApi.MixProject do
       {:ex_json_schema, "~> 0.5"},
       {:guardian, "~> 2.0"},
       {:comeonin, "~> 5.3.1"},
-      {:bcrypt_elixir, "~> 2.2.0"}
+      {:bcrypt_elixir, "~> 2.2.0"},
+      {:recaptcha, "~> 3.0"}
     ]
   end
 
