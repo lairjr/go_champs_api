@@ -19,3 +19,6 @@ config :go_champs_api, GoChampsApi.Repo,
   port: System.get_env("DATABASE_PORT") || "5432",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
+
+config :recaptcha,
+  secret: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
