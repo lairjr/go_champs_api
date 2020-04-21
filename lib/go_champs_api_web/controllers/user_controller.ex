@@ -18,6 +18,25 @@ defmodule GoChampsApiWeb.UserController do
     end
   end
 
+  def update(conn, %{"user" => user_params}) do
+    if user_params["email"] != nil and user_params["password"] != nil do
+      {:ok, current_user} = Accounts.get_by_email(user_params["email"])
+
+      with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
+        with {:ok, %User{} = user} <- Accounts.update_user(current_user, user_params),
+             {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+          conn
+          |> put_status(:ok)
+          |> render("user.json", %{user: user, token: token})
+        end
+      end
+    else
+      conn
+      |> put_status(:unprocessable_entity)
+      |> json(%{email: "invalid email"})
+    end
+  end
+
   def signin(conn, %{"email" => email, "password" => password}) do
     with {:ok, user, token} <- Guardian.authenticate(email, password) do
       conn
