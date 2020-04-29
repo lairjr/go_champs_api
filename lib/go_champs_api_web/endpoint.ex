@@ -43,7 +43,7 @@ defmodule GoChampsApiWeb.Endpoint do
   plug Corsica,
     origins: "*",
     log: [rejected: :error, invalid: :warn, accepted: :debug],
-    allow_headers: ["content-type"],
+    allow_headers: ["authorization", "content-type"],
     allow_credentials: true
 
   plug GoChampsApiWeb.Router
