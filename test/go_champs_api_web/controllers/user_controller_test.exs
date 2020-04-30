@@ -2,7 +2,6 @@ defmodule GoChampsApiWeb.UserControllerTest do
   use GoChampsApiWeb.ConnCase
 
   alias GoChampsApi.Accounts
-  alias GoChampsApi.Accounts.User
 
   @create_attrs %{
     email: "some@email.com",
@@ -46,8 +45,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
     setup [:create_user]
 
     test "renders user when data is valid", %{
-      conn: conn,
-      user: %User{id: id} = user
+      conn: conn
     } do
       conn = patch(conn, Routes.v1_user_path(conn, :update), %{user: @update_attrs})
       %{"email" => result_email} = json_response(conn, 200)["data"]

@@ -6,11 +6,21 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
 
   @create_attrs %{
     slug: "some-slug",
-    name: "some name"
+    name: "some name",
+    members: [
+      %{
+        email: "some@email.com"
+      }
+    ]
   }
   @update_attrs %{
     slug: "some-updated-slug",
-    name: "some updated name"
+    name: "some updated name",
+    members: [
+      %{
+        email: "some-updated@email.com"
+      }
+    ]
   }
   @invalid_attrs %{slug: nil, name: nil}
 

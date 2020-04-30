@@ -8,8 +8,24 @@ defmodule GoChampsApi.OrganizationsTest do
     alias GoChampsApi.Organizations.Organization
     alias GoChampsApi.Tournaments.Tournament
 
-    @valid_attrs %{slug: "some-slug", name: "some name"}
-    @update_attrs %{slug: "some-updated-slug", name: "some updated name"}
+    @valid_attrs %{
+      slug: "some-slug",
+      name: "some name",
+      members: [
+        %{
+          email: "some@email.com"
+        }
+      ]
+    }
+    @update_attrs %{
+      slug: "some-updated-slug",
+      name: "some updated name",
+      members: [
+        %{
+          email: "some-updated@email.com"
+        }
+      ]
+    }
     @invalid_attrs %{slug: nil, name: nil}
 
     def organization_fixture(attrs \\ %{}) do
@@ -37,6 +53,8 @@ defmodule GoChampsApi.OrganizationsTest do
 
       assert organization.slug == "some-slug"
       assert organization.name == "some name"
+      [member] = organization.members
+      assert member.email == "some@email.com"
     end
 
     test "create_organization/1 with invalid slug returns error changeset" do
@@ -70,6 +88,8 @@ defmodule GoChampsApi.OrganizationsTest do
 
       assert result_organization.slug == "some-updated-slug"
       assert result_organization.name == "some updated name"
+      [member] = result_organization.members
+      assert member.email == "some-updated@email.com"
     end
 
     test "update_organization/2 with invalid data returns error changeset" do
