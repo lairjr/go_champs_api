@@ -6,9 +6,17 @@ defmodule GoChampsApi.AccountsTest do
   describe "users" do
     alias GoChampsApi.Accounts.User
 
-    @valid_attrs %{email: "some@email.com", password: "somepassword"}
-    @update_attrs %{email: "someupdated@email.com", password: "someupdatedpassword"}
-    @invalid_attrs %{email: nil, password: nil}
+    @valid_attrs %{
+      email: "some@email.com",
+      password: "somepassword",
+      username: "someuser"
+    }
+    @update_attrs %{
+      email: "someupdated@email.com",
+      password: "someupdatedpassword",
+      username: "someupdateduser"
+    }
+    @invalid_attrs %{email: nil, password: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -25,6 +33,7 @@ defmodule GoChampsApi.AccountsTest do
 
       assert result_user.id == user.id
       assert result_user.email == user.email
+      assert result_user.username == user.username
       assert result_user.encrypted_password == user.encrypted_password
     end
 
@@ -35,6 +44,7 @@ defmodule GoChampsApi.AccountsTest do
 
       assert result_user.id == user.id
       assert result_user.email == user.email
+      assert result_user.username == user.username
       assert result_user.encrypted_password == user.encrypted_password
     end
 
@@ -42,6 +52,7 @@ defmodule GoChampsApi.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some@email.com"
       assert user.password == "somepassword"
+      assert user.username == "someuser"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -53,17 +64,13 @@ defmodule GoChampsApi.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
       assert user.email == "someupdated@email.com"
       assert user.password == "someupdatedpassword"
+      assert user.username == "someupdateduser"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
+
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-
-      result_user = Accounts.get_user!(user.id)
-
-      assert result_user.id == user.id
-      assert result_user.email == user.email
-      assert result_user.encrypted_password == user.encrypted_password
     end
 
     test "delete_user/1 deletes the user" do

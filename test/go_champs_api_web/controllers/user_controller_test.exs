@@ -5,11 +5,13 @@ defmodule GoChampsApiWeb.UserControllerTest do
 
   @create_attrs %{
     email: "some@email.com",
-    password: "some password"
+    password: "some password",
+    username: "someuser"
   }
   @update_attrs %{
     email: "some@email.com",
-    password: "some other password"
+    password: "some other password",
+    username: "someupdateduser"
   }
   @invalid_attrs %{email: nil, password: nil}
 

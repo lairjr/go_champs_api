@@ -30,7 +30,8 @@ defmodule GoChampsApiWeb.ConnCase do
 
   @user_attrs %{
     email: "some@email.com",
-    password: "some password"
+    password: "some password",
+    username: "someuser"
   }
 
   setup tags do
