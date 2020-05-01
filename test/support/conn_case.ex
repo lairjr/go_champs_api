@@ -45,7 +45,8 @@ defmodule GoChampsApiWeb.ConnCase do
       if tags[:authenticated] do
         {:ok, user} = create_user()
 
-        {:ok, user, token} = GoChampsApiWeb.Auth.Guardian.authenticate(user.email, user.password)
+        {:ok, user, token} =
+          GoChampsApiWeb.Auth.Guardian.authenticate(user.username, user.password)
 
         conn =
           Phoenix.ConnTest.build_conn()

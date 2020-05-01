@@ -14,8 +14,8 @@ defmodule GoChampsApiWeb.Auth.Guardian do
     {:ok, resource}
   end
 
-  def authenticate(email, password) do
-    with {:ok, user} <- Accounts.get_by_email(email) do
+  def authenticate(username, password) do
+    with {:ok, user} <- Accounts.get_by_username(username) do
       case validate_password(password, user.encrypted_password) do
         true ->
           create_token(user)

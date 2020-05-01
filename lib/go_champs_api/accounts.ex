@@ -44,15 +44,15 @@ defmodule GoChampsApi.Accounts do
 
   ## Examples
 
-      iex> get_user!("some@email.com")
+      iex> get_user!("someuser")
       %User{}
 
-      iex> get_user!("some-missing@email.com")
+      iex> get_user!("somemissinguser")
       ** (Ecto.NoResultsError)
 
   """
-  def get_by_email(email) do
-    case Repo.get_by(User, email: email) do
+  def get_by_username(username) do
+    case Repo.get_by(User, username: username) do
       nil ->
         {:error, :not_found}
 

@@ -5,7 +5,8 @@ defmodule GoChampsApiWeb.UserView do
     %{
       data: %{
         email: user.email,
-        token: token
+        token: token,
+        username: user.username
       }
     }
   end

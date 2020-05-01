@@ -11,7 +11,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
   @update_attrs %{
     email: "some@email.com",
     password: "some other password",
-    username: "someupdateduser"
+    username: "someuser"
   }
   @invalid_attrs %{email: nil, password: nil}
 
@@ -31,10 +31,12 @@ defmodule GoChampsApiWeb.UserControllerTest do
 
       conn = post(conn, Routes.v1_user_path(conn, :signin), @create_attrs)
 
-      %{"email" => result_email, "token" => result_token} = json_response(conn, 200)["data"]
+      %{"email" => result_email, "token" => result_token, "username" => result_username} =
+        json_response(conn, 200)["data"]
 
       assert result_email == "some@email.com"
       assert result_token != nil
+      assert result_username == "someuser"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -55,10 +57,12 @@ defmodule GoChampsApiWeb.UserControllerTest do
 
       conn = post(conn, Routes.v1_user_path(conn, :signin), @update_attrs)
 
-      %{"email" => result_email, "token" => result_token} = json_response(conn, 200)["data"]
+      %{"email" => result_email, "token" => result_token, "username" => result_username} =
+        json_response(conn, 200)["data"]
 
       assert result_email == "some@email.com"
       assert result_token != nil
+      assert result_username == "someuser"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
