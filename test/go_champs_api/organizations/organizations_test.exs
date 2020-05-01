@@ -13,7 +13,7 @@ defmodule GoChampsApi.OrganizationsTest do
       name: "some name",
       members: [
         %{
-          email: "some@email.com"
+          username: "someusername"
         }
       ]
     }
@@ -22,7 +22,7 @@ defmodule GoChampsApi.OrganizationsTest do
       name: "some updated name",
       members: [
         %{
-          email: "some-updated@email.com"
+          username: "someupdatedusername"
         }
       ]
     }
@@ -54,7 +54,7 @@ defmodule GoChampsApi.OrganizationsTest do
       assert organization.slug == "some-slug"
       assert organization.name == "some name"
       [member] = organization.members
-      assert member.email == "some@email.com"
+      assert member.username == "someusername"
     end
 
     test "create_organization/1 with invalid slug returns error changeset" do
@@ -89,7 +89,7 @@ defmodule GoChampsApi.OrganizationsTest do
       assert result_organization.slug == "some-updated-slug"
       assert result_organization.name == "some updated name"
       [member] = result_organization.members
-      assert member.email == "some-updated@email.com"
+      assert member.username == "someupdatedusername"
     end
 
     test "update_organization/2 with invalid data returns error changeset" do

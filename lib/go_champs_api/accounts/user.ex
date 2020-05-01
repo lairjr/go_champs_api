@@ -21,6 +21,7 @@ defmodule GoChampsApi.Accounts.User do
     |> validate_format(:username, ~r/^([A-Za-z0-9]+(?:.-[a-z0-9]+)*){4,20}$/)
     |> validate_length(:password, min: 6)
     |> unique_constraint(:email)
+    |> unique_constraint(:username)
     |> put_hashed_password
   end
 

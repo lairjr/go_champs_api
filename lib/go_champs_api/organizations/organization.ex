@@ -9,7 +9,7 @@ defmodule GoChampsApi.Organizations.Organization do
     field :name, :string
 
     embeds_many :members, Member, on_replace: :delete do
-      field :email, :string
+      field :username, :string
     end
 
     has_many :tournaments, Tournament
@@ -29,6 +29,6 @@ defmodule GoChampsApi.Organizations.Organization do
 
   defp member_changeset(schema, params) do
     schema
-    |> cast(params, [:email])
+    |> cast(params, [:username])
   end
 end
