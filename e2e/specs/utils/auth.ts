@@ -4,6 +4,7 @@ import { USERS_URL } from "../URLs";
 const MOCK_USER = {
   email: "some@email.com",
   password: "password",
+  username: "username",
 };
 
 let authenticationHeaderChace;
