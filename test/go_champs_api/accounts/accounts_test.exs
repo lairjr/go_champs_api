@@ -48,6 +48,28 @@ defmodule GoChampsApi.AccountsTest do
       assert result_user.encrypted_password == user.encrypted_password
     end
 
+    test "get_by_email!/1 returns the user with given id" do
+      user = user_fixture()
+
+      assert {:ok, %User{} = result_user} = Accounts.get_by_email!("some@email.com")
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.username == user.username
+      assert result_user.encrypted_password == user.encrypted_password
+    end
+
+    test "get_by_username!/1 returns the user with given id" do
+      user = user_fixture()
+
+      assert {:ok, %User{} = result_user} = Accounts.get_by_username!("someuser")
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.username == user.username
+      assert result_user.encrypted_password == user.encrypted_password
+    end
+
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some@email.com"

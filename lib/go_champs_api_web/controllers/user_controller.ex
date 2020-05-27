@@ -20,7 +20,7 @@ defmodule GoChampsApiWeb.UserController do
 
   def update(conn, %{"user" => user_params}) do
     if user_params["email"] != nil and user_params["password"] != nil do
-      {:ok, current_user} = Accounts.get_by_username(user_params["username"])
+      {:ok, current_user} = Accounts.get_by_username!(user_params["username"])
 
       with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
         with {:ok, %User{} = user} <- Accounts.update_user(current_user, user_params),
