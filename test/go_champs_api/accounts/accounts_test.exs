@@ -95,6 +95,13 @@ defmodule GoChampsApi.AccountsTest do
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
     end
 
+    test "update_recovery_token/1 with valid data" do
+      user = user_fixture()
+      assert {:ok, %User{} = result_user} = Accounts.update_recovery_token(user)
+
+      assert result_user.recovery_token != nil
+    end
+
     test "delete_user/1 deletes the user" do
       user = user_fixture()
       assert {:ok, %User{}} = Accounts.delete_user(user)
