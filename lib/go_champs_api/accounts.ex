@@ -134,11 +134,8 @@ defmodule GoChampsApi.Accounts do
 
   """
   def update_recovery_token(%User{} = user) do
-    alphabet = Enum.to_list(?a..?z) ++ Enum.to_list(?0..?9) ++ Enum.to_list(?A..?Z)
-    random = Enum.take_random(alphabet, 20)
-
     user
-    |> User.changeset(%{recovery_token: Bcrypt.hash_pwd_salt("#{random}")})
+    |> User.recovery_changeset()
     |> Repo.update()
   end
 
