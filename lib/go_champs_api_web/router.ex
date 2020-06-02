@@ -58,6 +58,7 @@ defmodule GoChampsApiWeb.Router do
     post "/users/signup", UserController, :create
     post "/users/signin", UserController, :signin
     post "/users/recovery", UserController, :recovey_account
+    post "/users/reset", UserController, :reset_password
 
     get "/version", VersionController, :index
   end

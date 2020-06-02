@@ -75,4 +75,14 @@ defmodule GoChampsApiWeb.UserController do
       end
     end
   end
+
+  def reset_password(conn, %{"user" => user_params}) do
+    with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
+      with {:ok, %User{} = user} <- Accounts.get_by_username!(user_params["username"]) do
+        with {:ok, %User{} = result_user} <- Accounts.reset_password(user_params) do
+          send_resp(conn, 200, "")
+        end
+      end
+    end
+  end
 end
