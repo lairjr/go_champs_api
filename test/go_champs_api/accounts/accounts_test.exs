@@ -81,6 +81,33 @@ defmodule GoChampsApi.AccountsTest do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
     end
 
+    test "reset_user/2 with valid data update password" do
+      user = user_fixture()
+      {:ok, %User{} = recovery_user} = Accounts.update_recovery_token(user)
+
+      valid_attrs = %{
+        password: "someotherpassword",
+        recovery_token: recovery_user.recovery_token
+      }
+
+      {:ok, %User{} = reset_user} = Accounts.reset_password(recovery_user, valid_attrs)
+      assert reset_user.password == "someotherpassword"
+      assert reset_user.recovery_token == nil
+    end
+
+    test "reset_user/2 with invalid recovery token data update password" do
+      user = user_fixture()
+      {:ok, %User{} = recovery_user} = Accounts.update_recovery_token(user)
+
+      invalid_attrs = %{
+        password: "someotherpassword",
+        recovery_token: "some dumb token"
+      }
+
+      assert {:error, changeset} = Accounts.reset_password(recovery_user, invalid_attrs)
+      assert changeset.errors == [recovery_token: {"Invalid recovery token", []}]
+    end
+
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)

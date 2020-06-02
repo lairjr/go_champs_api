@@ -27,6 +27,22 @@ defmodule GoChampsApi.Accounts.User do
   end
 
   @doc false
+  def reset_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:password, :recovery_token])
+    |> validate_change(:recovery_token, fn :recovery_token, recovery_token ->
+      if recovery_token == user.recovery_token do
+        []
+      else
+        [recovery_token: "Invalid recovery token"]
+      end
+    end)
+    |> validate_length(:password, min: 6)
+    |> put_hashed_password
+    |> put_change(:recovery_token, nil)
+  end
+
+  @doc false
   def recovery_changeset(user) do
     alphabet = Enum.to_list(?a..?z) ++ Enum.to_list(?0..?9) ++ Enum.to_list(?A..?Z)
     random = Enum.take_random(alphabet, 20)

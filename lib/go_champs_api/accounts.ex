@@ -104,6 +104,24 @@ defmodule GoChampsApi.Accounts do
   end
 
   @doc """
+  Reset user password.
+
+  ## Examples
+
+      iex> reset_password(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> reset_password(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def reset_password(%User{} = user, attrs) do
+    user
+    |> User.reset_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Updates a user.
 
   ## Examples
