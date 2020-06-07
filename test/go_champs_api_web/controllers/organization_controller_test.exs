@@ -9,7 +9,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     name: "some name",
     members: [
       %{
-        email: "some@email.com"
+        username: "someusername"
       }
     ]
   }
@@ -18,7 +18,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     name: "some updated name",
     members: [
       %{
-        email: "some-updated@email.com"
+        username: "someupdatedusername"
       }
     ]
   }
@@ -51,7 +51,12 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
       assert %{
                "id" => id,
                "slug" => "some-slug",
-               "name" => "some name"
+               "name" => "some name",
+               "members" => [
+                 %{
+                   "username" => "someusername"
+                 }
+               ]
              } = json_response(conn, 200)["data"]
     end
 
@@ -82,7 +87,12 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
       assert %{
                "id" => id,
                "slug" => "some-updated-slug",
-               "name" => "some updated name"
+               "name" => "some updated name",
+               "members" => [
+                 %{
+                   "username" => "someupdatedusername"
+                 }
+               ]
              } = json_response(conn, 200)["data"]
     end
 

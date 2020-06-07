@@ -7,10 +7,23 @@ defmodule GoChampsApiWeb.OrganizationView do
   end
 
   def render("show.json", %{organization: organization}) do
-    %{data: render_one(organization, OrganizationView, "organization.json")}
+    %{data: render_one(organization, OrganizationView, "complete_organization.json")}
   end
 
   def render("organization.json", %{organization: organization}) do
     %{id: organization.id, name: organization.name, slug: organization.slug}
+  end
+
+  def render("complete_organization.json", %{organization: organization}) do
+    %{
+      id: organization.id,
+      name: organization.name,
+      slug: organization.slug,
+      members: render_many(organization.members, OrganizationView, "member.json")
+    }
+  end
+
+  def render("member.json", %{organization: member}) do
+    %{username: member.username}
   end
 end
