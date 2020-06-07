@@ -7,8 +7,22 @@ defmodule GoChampsApiWeb.OrganizationController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
-  def index(conn, _params) do
-    organizations = Organizations.list_organizations()
+  defp map_to_keyword(map) do
+    Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
+    organizations =
+      case params do
+        %{"where" => where} ->
+          where
+          |> map_to_keyword()
+          |> Organizations.list_organizations()
+
+        _ ->
+          Organizations.list_organizations()
+      end
+
     render(conn, "index.json", organizations: organizations)
   end
 

@@ -23,6 +23,20 @@ defmodule GoChampsApi.Organizations do
   end
 
   @doc """
+  Returns the list of organization filter by keywork param.
+
+  ## Examples
+
+      iex> list_organizations([name: "some name"])
+      [%Tournament{}, ...]
+
+  """
+  def list_organizations(where) do
+    query = from t in Organization, where: ^where
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single organization.
 
   Raises `Ecto.NoResultsError` if the Organization does not exist.

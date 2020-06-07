@@ -38,6 +38,22 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
       conn = get(conn, Routes.v1_organization_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
+
+    test "lists all organizations matching where", %{conn: conn} do
+      fixture(:organization)
+
+      {:ok, second_organization} =
+        Organizations.create_organization(%{
+          name: "another organization",
+          slug: "another-org-slug"
+        })
+
+      where = %{"slug" => second_organization.slug}
+
+      conn = get(conn, Routes.v1_organization_path(conn, :index, where: where))
+      [organization_result] = json_response(conn, 200)["data"]
+      assert organization_result["id"] == second_organization.id
+    end
   end
 
   describe "create organization" do

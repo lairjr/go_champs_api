@@ -42,6 +42,16 @@ defmodule GoChampsApi.OrganizationsTest do
       assert Organizations.list_organizations() == [organization]
     end
 
+    test "list_organizations/1 returns all tournaments pertaining to some organization" do
+      organization_fixture()
+
+      {:ok, second_organization} =
+        Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
+
+      where = [slug: second_organization.slug]
+      assert Organizations.list_organizations(where) == [second_organization]
+    end
+
     test "get_organization!/1 returns the organization with given id" do
       organization = organization_fixture()
       assert Organizations.get_organization!(organization.id) == organization
