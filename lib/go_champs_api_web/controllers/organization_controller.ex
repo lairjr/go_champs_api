@@ -7,6 +7,8 @@ defmodule GoChampsApiWeb.OrganizationController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedOrganization when action in [:update, :delete]
+
   defp map_to_keyword(map) do
     Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
   end

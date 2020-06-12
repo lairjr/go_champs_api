@@ -18,7 +18,7 @@ config :go_champs_api, GoChampsApiWeb.Endpoint,
   pubsub: [name: GoChampsApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :go_champs_api, GoChampsApiWeb.Auth.Guardian,
-  issuer: "go_champas_api",
+  issuer: "go_champs_api",
   secret_key:
     System.get_env("SECRET_AUTH_KEY") ||
       "ptHFgyK8ePlG2uYnwP7KJhEzfp1s/Xmu6Agtj9iuJA5IU8+g8CCi8zScfaaT+yOX"
