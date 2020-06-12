@@ -1,4 +1,5 @@
 defmodule GoChampsApiWeb.Plugs.AuthorizedOrganization do
+  import Phoenix.Controller
   import Plug.Conn
 
   alias GoChampsApi.Organizations
@@ -17,6 +18,7 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedOrganization do
     else
       conn
       |> put_status(:forbidden)
+      |> text("Forbidden")
       |> halt
     end
   end

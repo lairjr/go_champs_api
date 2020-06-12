@@ -25,10 +25,24 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
       }
     ]
   }
+  @org_with_member_attrs %{
+    slug: "some-slug",
+    name: "some name",
+    members: [
+      %{
+        username: "someotheruser"
+      }
+    ]
+  }
   @invalid_attrs %{slug: nil, name: nil}
 
   def fixture(:organization) do
     {:ok, organization} = Organizations.create_organization(@create_attrs)
+    organization
+  end
+
+  def fixture(:organization_with_member) do
+    {:ok, organization} = Organizations.create_organization(@org_with_member_attrs)
     organization
   end
 
@@ -129,6 +143,23 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     end
   end
 
+  describe "update organization with different member" do
+    setup [:create_organization_for_member]
+
+    @tag :authenticated
+    test "return forbidden for an user that is not a member", %{
+      conn: conn,
+      organization: %Organization{} = organization
+    } do
+      conn =
+        put(conn, Routes.v1_organization_path(conn, :update, organization),
+          organization: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete organization" do
     setup [:create_organization]
 
@@ -145,6 +176,11 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
 
   defp create_organization(_) do
     organization = fixture(:organization)
+    {:ok, organization: organization}
+  end
+
+  defp create_organization_for_member(_) do
+    organization = fixture(:organization_with_member)
     {:ok, organization: organization}
   end
 end
