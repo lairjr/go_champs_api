@@ -7,11 +7,11 @@ const MOCK_USER = {
   username: "username",
 };
 
-let authenticationHeaderChace;
+let authenticationHeaderCache;
 
 export const authenticationHeader = async () => {
-  if (authenticationHeaderChace) {
-    return authenticationHeaderChace;
+  if (authenticationHeaderCache) {
+    return authenticationHeaderCache;
   }
 
   try {
@@ -19,18 +19,18 @@ export const authenticationHeader = async () => {
 
     const signUpToken = signUpResponse.data.data.token;
 
-    authenticationHeaderChace = buildHeader(signUpToken);
+    authenticationHeaderCache = buildHeader(signUpToken);
 
-    return authenticationHeaderChace;
+    return authenticationHeaderCache;
   } catch (err) {
     if (err.response.status === 422) {
       const signInResponse = await axios.post(`${USERS_URL}/signin`, MOCK_USER);
 
       const signInToken = signInResponse.data.data.token;
 
-      authenticationHeaderChace = buildHeader(signInToken);
+      authenticationHeaderCache = buildHeader(signInToken);
 
-      return authenticationHeaderChace;
+      return authenticationHeaderCache;
     }
   }
 };
