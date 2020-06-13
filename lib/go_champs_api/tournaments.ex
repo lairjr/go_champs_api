@@ -57,6 +57,30 @@ defmodule GoChampsApi.Tournaments do
   end
 
   @doc """
+  Gets a tournament organization for a given tournament id.
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+      iex> get_tournament_organization!(123)
+      %Tournament{}
+
+      iex> get_tournament_organization!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tournament_organization!(id) do
+    {:ok, organization} =
+      Tournament
+      |> Repo.get!(id)
+      |> Repo.preload([:organization])
+      |> Map.fetch(:organization)
+
+    organization
+  end
+
+  @doc """
   Creates a tournament.
 
   ## Examples

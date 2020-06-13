@@ -63,6 +63,15 @@ defmodule GoChampsApi.TournamentsTest do
       assert Tournaments.get_tournament!(tournament.id).id == tournament.id
     end
 
+    test "get_tournament_organization!/1 returns the organization with a give tournament id" do
+      tournament = tournament_fixture()
+      organization = Tournaments.get_tournament_organization!(tournament.id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == tournament.organization_id
+    end
+
     test "create_tournament/1 with valid data creates a tournament" do
       valid_tournament = OrganizationHelpers.map_organization_id(@valid_attrs)
 

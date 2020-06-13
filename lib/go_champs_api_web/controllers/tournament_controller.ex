@@ -6,7 +6,8 @@ defmodule GoChampsApiWeb.TournamentController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
-  plug GoChampsApiWeb.Plugs.AuthorizedTournament when action in [:create]
+  plug GoChampsApiWeb.Plugs.AuthorizedTournament, :id when action in [:update, :delete]
+  plug GoChampsApiWeb.Plugs.AuthorizedTournament, :tournament when action in [:create]
 
   defp map_to_keyword(map) do
     Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
