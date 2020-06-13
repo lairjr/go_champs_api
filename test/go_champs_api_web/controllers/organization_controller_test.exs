@@ -174,6 +174,20 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     end
   end
 
+  describe "delete organization with different member" do
+    setup [:create_organization_for_member]
+
+    @tag :authenticated
+    test "return forbidden for an user that is not a member", %{
+      conn: conn,
+      organization: %Organization{} = organization
+    } do
+      conn = delete(conn, Routes.v1_organization_path(conn, :delete, organization))
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_organization(_) do
     organization = fixture(:organization)
     {:ok, organization: organization}
