@@ -147,7 +147,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     setup [:create_organization_for_member]
 
     @tag :authenticated
-    test "return forbidden for an user that is not a member", %{
+    test "returns forbidden for an user that is not a member", %{
       conn: conn,
       organization: %Organization{} = organization
     } do
@@ -178,7 +178,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     setup [:create_organization_for_member]
 
     @tag :authenticated
-    test "return forbidden for an user that is not a member", %{
+    test "returns forbidden for an user that is not a member", %{
       conn: conn,
       organization: %Organization{} = organization
     } do

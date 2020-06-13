@@ -23,7 +23,15 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
   }
   @invalid_attrs %{name: nil}
 
-  @organization_attrs %{name: "some organization", slug: "some-org-slug"}
+  @organization_attrs %{
+    name: "some organization",
+    slug: "some-org-slug",
+    members: [
+      %{
+        username: "someuser"
+      }
+    ]
+  }
 
   def fixture(:tournament, organization_params \\ @organization_attrs) do
     {:ok, organization} = Organizations.create_organization(organization_params)
@@ -60,8 +68,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
   describe "create tournament" do
     @tag :authenticated
     test "renders tournament when data is valid", %{conn: conn} do
-      {:ok, organization} =
-        Organizations.create_organization(%{name: "some organization", slug: "some-org-slug"})
+      {:ok, organization} = Organizations.create_organization(@organization_attrs)
 
       attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
 
@@ -90,8 +97,34 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
 
     @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.v1_tournament_path(conn, :create), tournament: @invalid_attrs)
+      {:ok, organization} = Organizations.create_organization(@organization_attrs)
+
+      attrs = Map.merge(@invalid_attrs, %{organization_id: organization.id})
+
+      conn = post(conn, Routes.v1_tournament_path(conn, :create), tournament: attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create tournament with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      {:ok, organization} =
+        Organizations.create_organization(%{
+          members: [
+            %{
+              username: "someotheruser"
+            }
+          ],
+          name: "some organization",
+          slug: "some-org-slug"
+        })
+
+      attrs = Map.merge(@create_attrs, %{organization_id: organization.id})
+
+      conn = post(conn, Routes.v1_tournament_path(conn, :create), tournament: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
