@@ -23,6 +23,12 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
     phase
   end
 
+  def fixture(:phase_with_different_member) do
+    attrs = TournamentHelpers.map_tournament_id_with_other_member(@create_attrs)
+    {:ok, phase} = Phases.create_phase(attrs)
+    phase
+  end
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -53,6 +59,17 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
       conn = post(conn, Routes.v1_phase_path(conn, :create), phase: attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create phase with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      attrs = TournamentHelpers.map_tournament_id_with_other_member(@create_attrs)
+
+      conn = post(conn, Routes.v1_phase_path(conn, :create), phase: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -176,6 +193,11 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
 
   defp create_phase(_) do
     phase = fixture(:phase)
+    {:ok, phase: phase}
+  end
+
+  defp create_phase_with_different_member(_) do
+    phase = fixture(:phase_with_different_member)
     {:ok, phase: phase}
   end
 end

@@ -10,4 +10,13 @@ defmodule GoChampsApi.Helpers.PhaseHelpers do
 
     Map.merge(attrs, %{phase_id: phase.id})
   end
+
+  def map_phase_id_with_other_member(attrs \\ %{}) do
+    {:ok, phase} =
+      %{title: "some phase", type: "stadings"}
+      |> TournamentHelpers.map_tournament_id_with_other_member()
+      |> Phases.create_phase()
+
+    Map.merge(attrs, %{phase_id: phase.id})
+  end
 end
