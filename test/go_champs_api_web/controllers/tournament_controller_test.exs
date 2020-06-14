@@ -170,6 +170,29 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
     end
   end
 
+  describe "update tournament with different member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn
+    } do
+      tournament =
+        fixture(:tournament, %{
+          name: "another organization",
+          slug: "another-org-slug",
+          members: [
+            %{
+              username: "someotheruser"
+            }
+          ]
+        })
+
+      conn =
+        put(conn, Routes.v1_tournament_path(conn, :update, tournament), tournament: @update_attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete tournament" do
     setup [:create_tournament]
 
