@@ -89,6 +89,26 @@ defmodule GoChampsApiWeb.TeamControllerTest do
     end
   end
 
+  describe "update team with different member" do
+    setup [:create_team_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, team: team} do
+      conn =
+        put(
+          conn,
+          Routes.v1_team_path(
+            conn,
+            :update,
+            team
+          ),
+          team: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete team" do
     setup [:create_team]
 
@@ -103,8 +123,32 @@ defmodule GoChampsApiWeb.TeamControllerTest do
     end
   end
 
+  describe "delete team with different member" do
+    setup [:create_team_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, team: team} do
+      conn =
+        delete(
+          conn,
+          Routes.v1_team_path(
+            conn,
+            :delete,
+            team
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_team(_) do
     team = fixture(:team)
+    {:ok, team: team}
+  end
+
+  defp create_team_with_different_member(_) do
+    team = fixture(:team_with_different_member)
     {:ok, team: team}
   end
 end

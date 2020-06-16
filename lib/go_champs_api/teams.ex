@@ -25,6 +25,33 @@ defmodule GoChampsApi.Teams do
   def get_team!(id), do: Repo.get!(Team, id)
 
   @doc """
+  Gets a team organization for a given team id..
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+      iex> get_team_organization!(123)
+      %Tournament{}
+
+      iex> get_team_organization!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_team_organization!(id) do
+    {:ok, tournament} =
+      Repo.get_by!(Team, id: id)
+      |> Repo.preload(tournament: :organization)
+      |> Map.fetch(:tournament)
+
+    {:ok, organization} =
+      tournament
+      |> Map.fetch(:organization)
+
+    organization
+  end
+
+  @doc """
   Creates a team.
 
   ## Examples

@@ -4,6 +4,7 @@ defmodule GoChampsApi.TeamsTest do
   alias GoChampsApi.Helpers.TournamentHelpers
   alias GoChampsApi.Teams
   alias GoChampsApi.Teams.Team
+  alias GoChampsApi.Tournaments
 
   describe "teams" do
     alias GoChampsApi.Teams.Team
@@ -25,6 +26,18 @@ defmodule GoChampsApi.TeamsTest do
     test "get_team!/1 returns the team with given id" do
       team = team_fixture()
       assert Teams.get_team!(team.id) == team
+    end
+
+    test "get_team_organization!/1 returns the organization with a give team id" do
+      team = team_fixture()
+
+      organization = Teams.get_team_organization!(team.id)
+
+      tournament = Tournaments.get_tournament!(team.tournament_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == tournament.organization_id
     end
 
     test "create_team/1 with valid data creates a team" do

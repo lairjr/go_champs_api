@@ -6,6 +6,7 @@ defmodule GoChampsApiWeb.TeamController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedTeam, :id when action in [:delete, :update]
   plug GoChampsApiWeb.Plugs.AuthorizedTeam, :team when action in [:create]
 
   def create(conn, %{"team" => team_params}) do
