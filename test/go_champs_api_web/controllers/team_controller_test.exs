@@ -22,6 +22,12 @@ defmodule GoChampsApiWeb.TeamControllerTest do
     team
   end
 
+  def fixture(:team_with_different_member) do
+    attrs = TournamentHelpers.map_tournament_id_with_other_member(@create_attrs)
+    {:ok, team} = Teams.create_team(attrs)
+    team
+  end
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -43,8 +49,20 @@ defmodule GoChampsApiWeb.TeamControllerTest do
 
     @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.v1_team_path(conn, :create), team: @invalid_attrs)
+      create_attrs = TournamentHelpers.map_tournament_id(@invalid_attrs)
+      conn = post(conn, Routes.v1_team_path(conn, :create), team: create_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create team with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      attrs = TournamentHelpers.map_tournament_id_with_other_member(@create_attrs)
+
+      conn = post(conn, Routes.v1_team_path(conn, :create), team: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
