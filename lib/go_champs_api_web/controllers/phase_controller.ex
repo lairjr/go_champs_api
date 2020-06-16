@@ -7,6 +7,8 @@ defmodule GoChampsApiWeb.PhaseController do
   action_fallback GoChampsApiWeb.FallbackController
 
   plug GoChampsApiWeb.Plugs.AuthorizedPhase, :phase when action in [:create]
+  plug GoChampsApiWeb.Plugs.AuthorizedPhase, :phases when action in [:batch_update]
+  plug GoChampsApiWeb.Plugs.AuthorizedPhase, :id when action in [:delete, :update]
 
   def create(conn, %{
         "phase" => phase_params

@@ -121,6 +121,26 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
     end
   end
 
+  describe "update phase with different member" do
+    setup [:create_phase_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, phase: phase} do
+      conn =
+        put(
+          conn,
+          Routes.v1_phase_path(
+            conn,
+            :update,
+            phase
+          ),
+          phase: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "batch update phase" do
     setup %{conn: conn} do
       first_phase = fixture(:phase)
@@ -161,6 +181,27 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
     end
   end
 
+  describe "batch update phase with different member" do
+    setup [:create_phase_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, phase: phase} do
+      phase_update = Map.merge(%{id: phase.id}, %{title: "title updated"})
+
+      conn =
+        patch(
+          conn,
+          Routes.v1_phase_path(
+            conn,
+            :batch_update
+          ),
+          phases: [phase_update]
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete phase" do
     setup [:create_phase]
 
@@ -188,6 +229,25 @@ defmodule GoChampsApiWeb.PhaseControllerTest do
           )
         )
       end
+    end
+  end
+
+  describe "delete phase with different member" do
+    setup [:create_phase_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, phase: phase} do
+      conn =
+        delete(
+          conn,
+          Routes.v1_phase_path(
+            conn,
+            :delete,
+            phase
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 

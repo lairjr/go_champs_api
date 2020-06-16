@@ -39,6 +39,18 @@ defmodule GoChampsApi.PhasesTest do
       assert Phases.get_phase!(phase.id).id == phase.id
     end
 
+    test "get_phase_organization!/1 returns the organization with a give phase id" do
+      phase = phase_fixture()
+
+      organization = Phases.get_phase_organization!(phase.id)
+
+      tournament = Tournaments.get_tournament!(phase.tournament_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == tournament.organization_id
+    end
+
     test "create_phase/1 with valid data creates a phase" do
       attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
 
@@ -111,7 +123,7 @@ defmodule GoChampsApi.PhasesTest do
       assert phase.id == result_phase.id
     end
 
-    test "update_phases/2 with valid data updates the phase" do
+    test "update_phases/1 with valid data updates the phase" do
       attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
 
       {:ok, %Phase{} = first_phase} = Phases.create_phase(attrs)
@@ -126,6 +138,44 @@ defmodule GoChampsApi.PhasesTest do
       assert batch_results[first_phase.id].title == "some first updated title"
       assert batch_results[second_phase.id].id == second_phase.id
       assert batch_results[second_phase.id].title == "some second updated title"
+    end
+
+    test "get_phases_tournament_id/1 with valid data return pertaning tournament" do
+      attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+
+      {:ok, %Phase{} = first_phase} = Phases.create_phase(attrs)
+      {:ok, %Phase{} = second_phase} = Phases.create_phase(attrs)
+
+      first_updated_phase = %{"id" => first_phase.id, "title" => "some first updated title"}
+      second_updated_phase = %{"id" => second_phase.id, "title" => "some second updated title"}
+
+      {:ok, tournament_id} =
+        Phases.get_phases_tournament_id([first_updated_phase, second_updated_phase])
+
+      assert tournament_id == attrs.tournament_id
+    end
+
+    test "get_phases_tournament_id/1 with multiple tournament associated returns error" do
+      first_attrs = TournamentHelpers.map_tournament_id(@valid_attrs)
+      tournament = Tournaments.get_tournament!(first_attrs.tournament_id)
+
+      {:ok, second_tournament} =
+        Tournaments.create_tournament(%{
+          name: "some other tournament name",
+          slug: "some-other-slug",
+          organization_id: tournament.organization.id
+        })
+
+      second_attrs = Map.merge(@valid_attrs, %{tournament_id: second_tournament.id})
+
+      {:ok, %Phase{} = first_phase} = Phases.create_phase(first_attrs)
+      {:ok, %Phase{} = second_phase} = Phases.create_phase(second_attrs)
+
+      first_updated_phase = %{"id" => first_phase.id, "title" => "some first updated title"}
+      second_updated_phase = %{"id" => second_phase.id, "title" => "some second updated title"}
+
+      assert {:error, "Can only update phase from same tournament"} =
+               Phases.get_phases_tournament_id([first_updated_phase, second_updated_phase])
     end
 
     test "delete_phase/1 deletes the phase" do

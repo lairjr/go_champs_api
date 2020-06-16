@@ -24,6 +24,33 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedPhase do
     end
   end
 
+  def call(conn, :phases) do
+    {:ok, phases} = Map.fetch(conn.params, "phases")
+
+    case Phases.get_phases_tournament_id(phases) do
+      {:ok, tournament_id} ->
+        organization = Tournaments.get_tournament_organization!(tournament_id)
+        current_user = Guardian.Plug.current_resource(conn)
+
+        if Enum.any?(organization.members, fn member ->
+             member.username == current_user.username
+           end) do
+          conn
+        else
+          conn
+          |> put_status(:forbidden)
+          |> text("Forbidden")
+          |> halt
+        end
+
+      {:error, message} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> text(message)
+        |> halt
+    end
+  end
+
   def call(conn, :id) do
     {:ok, phase_id} = Map.fetch(conn.params, "id")
 
