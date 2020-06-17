@@ -7,6 +7,7 @@ defmodule GoChampsApi.Draws do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.Draws.Draw
+  alias GoChampsApi.Phases
 
   @doc """
   Gets a single draw.
@@ -23,6 +24,15 @@ defmodule GoChampsApi.Draws do
 
   """
   def get_draw!(id), do: Repo.get!(Draw, id)
+
+  def get_draw_organization!(id) do
+    {:ok, phase} =
+      Repo.get!(Draw, id)
+      |> Repo.preload([:phase])
+      |> Map.fetch(:phase)
+
+    Phases.get_phase_organization!(phase.id)
+  end
 
   @doc """
   Creates a draw.

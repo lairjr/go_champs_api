@@ -35,6 +35,15 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     draw
   end
 
+  def fixture(:draw_with_different_member) do
+    {:ok, draw} =
+      @create_attrs
+      |> PhaseHelpers.map_phase_id_with_other_member()
+      |> Draws.create_draw()
+
+    draw
+  end
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -122,6 +131,26 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     end
   end
 
+  describe "update draw with different member" do
+    setup [:create_draw_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, draw: draw} do
+      conn =
+        put(
+          conn,
+          Routes.v1_draw_path(
+            conn,
+            :update,
+            draw
+          ),
+          draw: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "batch update draw" do
     setup %{conn: conn} do
       first_draw = fixture(:draw)
@@ -180,8 +209,32 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     end
   end
 
+  describe "delete draw with different member" do
+    setup [:create_draw_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, draw: draw} do
+      conn =
+        delete(
+          conn,
+          Routes.v1_draw_path(
+            conn,
+            :delete,
+            draw
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_draw(_) do
     draw = fixture(:draw)
+    {:ok, draw: draw}
+  end
+
+  defp create_draw_with_different_member(_) do
+    draw = fixture(:draw_with_different_member)
     {:ok, draw: draw}
   end
 end

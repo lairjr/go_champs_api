@@ -2,6 +2,7 @@ defmodule GoChampsApi.DrawsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.Draws
+  alias GoChampsApi.Phases
   alias GoChampsApi.Helpers.PhaseHelpers
 
   describe "draws" do
@@ -46,6 +47,18 @@ defmodule GoChampsApi.DrawsTest do
 
       assert Draws.get_draw!(draw.id) ==
                draw
+    end
+
+    test "get_draw_organization/1 returns the organization with a give team id" do
+      draw = draw_fixture()
+
+      organization = Draws.get_draw_organization!(draw.id)
+
+      draw_organization = Phases.get_phase_organization!(draw.phase_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == draw_organization.id
     end
 
     test "create_draw/1 with valid data creates a draw" do
