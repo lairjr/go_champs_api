@@ -24,6 +24,33 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedDraw do
     end
   end
 
+  def call(conn, :draws) do
+    {:ok, draws} = Map.fetch(conn.params, "draws")
+
+    case Draws.get_draws_phase_id(draws) do
+      {:ok, phase_id} ->
+        organization = Phases.get_phase_organization!(phase_id)
+        current_user = Guardian.Plug.current_resource(conn)
+
+        if Enum.any?(organization.members, fn member ->
+             member.username == current_user.username
+           end) do
+          conn
+        else
+          conn
+          |> put_status(:forbidden)
+          |> text("Forbidden")
+          |> halt
+        end
+
+      {:error, message} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> text(message)
+        |> halt
+    end
+  end
+
   def call(conn, :id) do
     {:ok, draw_id} = Map.fetch(conn.params, "id")
 

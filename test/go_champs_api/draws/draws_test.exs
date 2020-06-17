@@ -134,6 +134,44 @@ defmodule GoChampsApi.DrawsTest do
       assert batch_results[second_draw.id].title == "some second updated title"
     end
 
+    test "get_draws_phase_id/1 with valid data return pertaning phase" do
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+
+      {:ok, %Draw{} = first_draw} = Draws.create_draw(attrs)
+      {:ok, %Draw{} = second_draw} = Draws.create_draw(attrs)
+
+      first_updated_draw = %{"id" => first_draw.id, "title" => "some first updated title"}
+      second_updated_draw = %{"id" => second_draw.id, "title" => "some second updated title"}
+
+      {:ok, phase_id} = Draws.get_draws_phase_id([first_updated_draw, second_updated_draw])
+
+      assert phase_id == attrs.phase_id
+    end
+
+    test "get_draws_phase_id/1 with multiple phase associated returns error" do
+      first_attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+      phase = Phases.get_phase!(first_attrs.phase_id)
+
+      {:ok, second_phase} =
+        Phases.create_phase(%{
+          title: "some other title",
+          type: "draw",
+          is_in_progress: true,
+          tournament_id: phase.tournament_id
+        })
+
+      second_attrs = Map.merge(@valid_attrs, %{phase_id: second_phase.id})
+
+      {:ok, %Draw{} = first_draw} = Draws.create_draw(first_attrs)
+      {:ok, %Draw{} = second_draw} = Draws.create_draw(second_attrs)
+
+      first_updated_draw = %{"id" => first_draw.id, "title" => "some first updated title"}
+      second_updated_draw = %{"id" => second_draw.id, "title" => "some second updated title"}
+
+      assert {:error, "Can only update draw from same phase"} =
+               Draws.get_draws_phase_id([first_updated_draw, second_updated_draw])
+    end
+
     test "delete_draw/1 deletes the draw" do
       draw = draw_fixture()
       assert {:ok, %Draw{}} = Draws.delete_draw(draw)

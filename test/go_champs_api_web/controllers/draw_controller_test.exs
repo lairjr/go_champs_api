@@ -195,6 +195,27 @@ defmodule GoChampsApiWeb.DrawControllerTest do
     end
   end
 
+  describe "batch update draw with different member" do
+    setup [:create_draw_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, draw: draw} do
+      draw_update = Map.merge(%{id: draw.id}, %{title: "title updated"})
+
+      conn =
+        patch(
+          conn,
+          Routes.v1_draw_path(
+            conn,
+            :batch_update
+          ),
+          draws: [draw_update]
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete draw" do
     setup [:create_draw]
 

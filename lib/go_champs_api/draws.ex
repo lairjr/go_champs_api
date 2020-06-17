@@ -35,6 +35,37 @@ defmodule GoChampsApi.Draws do
   end
 
   @doc """
+  Gets a draws phase id.
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+  iex> get_draws_phase_id!(123)
+  %Tournament{}
+
+  iex> get_draws_phase_id!(456)
+  ** (Ecto.NoResultsError)
+
+  """
+  def get_draws_phase_id(draws) do
+    draws_id = Enum.map(draws, fn draw -> draw["id"] end)
+
+    case Repo.all(
+           from draw in Draw,
+             where: draw.id in ^draws_id,
+             group_by: draw.phase_id,
+             select: draw.phase_id
+         ) do
+      [phase_id] ->
+        {:ok, phase_id}
+
+      _ ->
+        {:error, "Can only update draw from same phase"}
+    end
+  end
+
+  @doc """
   Creates a draw.
 
   ## Examples

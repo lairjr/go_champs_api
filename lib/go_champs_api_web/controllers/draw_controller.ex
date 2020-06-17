@@ -7,6 +7,7 @@ defmodule GoChampsApiWeb.DrawController do
   action_fallback GoChampsApiWeb.FallbackController
 
   plug GoChampsApiWeb.Plugs.AuthorizedDraw, :draw when action in [:create]
+  plug GoChampsApiWeb.Plugs.AuthorizedDraw, :draws when action in [:batch_update]
   plug GoChampsApiWeb.Plugs.AuthorizedDraw, :id when action in [:delete, :update]
 
   def create(conn, %{"draw" => draw_params}) do
