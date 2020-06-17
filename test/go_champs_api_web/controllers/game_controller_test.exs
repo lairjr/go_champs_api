@@ -18,12 +18,20 @@ defmodule GoChampsApiWeb.GameControllerTest do
     home_score: 30,
     location: "another location"
   }
-  @invalid_attrs %{phase_id: nil}
 
   def fixture(:game) do
     {:ok, game} =
       @create_attrs
       |> PhaseHelpers.map_phase_id()
+      |> Games.create_game()
+
+    game
+  end
+
+  def fixture(:game_with_different_member) do
+    {:ok, game} =
+      @create_attrs
+      |> PhaseHelpers.map_phase_id_with_other_member()
       |> Games.create_game()
 
     game
@@ -116,11 +124,25 @@ defmodule GoChampsApiWeb.GameControllerTest do
                "location" => "another location"
              } = json_response(conn, 200)["data"]
     end
+  end
+
+  describe "update game with different member" do
+    setup [:create_game_with_different_member]
 
     @tag :authenticated
-    test "renders errors when data is invalid", %{conn: conn, game: game} do
-      conn = put(conn, Routes.v1_game_path(conn, :update, game), game: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+    test "returns forbidden for an user that is not a member", %{conn: conn, game: game} do
+      conn =
+        put(
+          conn,
+          Routes.v1_game_path(
+            conn,
+            :update,
+            game
+          ),
+          game: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -140,6 +162,11 @@ defmodule GoChampsApiWeb.GameControllerTest do
 
   defp create_game(_) do
     game = fixture(:game)
+    {:ok, game: game}
+  end
+
+  defp create_game_with_different_member(_) do
+    game = fixture(:game_with_different_member)
     {:ok, game: game}
   end
 end

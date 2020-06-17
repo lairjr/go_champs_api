@@ -3,6 +3,7 @@ defmodule GoChampsApi.GamesTest do
 
   alias GoChampsApi.Helpers.PhaseHelpers
   alias GoChampsApi.Games
+  alias GoChampsApi.Phases
 
   describe "games" do
     alias GoChampsApi.Games.Game
@@ -37,6 +38,18 @@ defmodule GoChampsApi.GamesTest do
       result_game = Games.get_game!(game.id)
 
       assert result_game.id == game.id
+    end
+
+    test "get_game_organization/1 returns the organization with a give team id" do
+      game = game_fixture()
+
+      organization = Games.get_game_organization!(game.id)
+
+      game_organization = Phases.get_phase_organization!(game.phase_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == game_organization.id
     end
 
     test "create_game/1 with valid data creates a game" do

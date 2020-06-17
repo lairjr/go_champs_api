@@ -7,6 +7,7 @@ defmodule GoChampsApi.Games do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.Games.Game
+  alias GoChampsApi.Phases
 
   @doc """
   Returns the list of games filter by keywork param.
@@ -42,6 +43,26 @@ defmodule GoChampsApi.Games do
     do:
       Repo.get!(Game, id)
       |> Repo.preload([:away_team, :home_team])
+
+  @doc """
+  Gets a game organization for a given game id.
+
+  Raises `Ecto.NoResultsError` if the Game does not exist.
+
+  ## Examples
+
+      iex> get_game_organization("some-id")
+      [%Game{}, ...]
+
+  """
+  def get_game_organization!(id) do
+    {:ok, phase} =
+      Repo.get!(Game, id)
+      |> Repo.preload([:phase])
+      |> Map.fetch(:phase)
+
+    Phases.get_phase_organization!(phase.id)
+  end
 
   @doc """
   Creates a game.
