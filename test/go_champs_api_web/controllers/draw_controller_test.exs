@@ -69,8 +69,20 @@ defmodule GoChampsApiWeb.DrawControllerTest do
 
     @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.v1_draw_path(conn, :create), draw: @invalid_attrs)
+      invalid_attrs = PhaseHelpers.map_phase_id(@invalid_attrs)
+      conn = post(conn, Routes.v1_draw_path(conn, :create), draw: invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create draw with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      attrs = PhaseHelpers.map_phase_id_with_other_member(@create_attrs)
+
+      conn = post(conn, Routes.v1_draw_path(conn, :create), draw: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
