@@ -160,6 +160,25 @@ defmodule GoChampsApiWeb.GameControllerTest do
     end
   end
 
+  describe "delete game with different member" do
+    setup [:create_game_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn, game: game} do
+      conn =
+        delete(
+          conn,
+          Routes.v1_game_path(
+            conn,
+            :delete,
+            game
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_game(_) do
     game = fixture(:game)
     {:ok, game: game}
