@@ -7,6 +7,7 @@ defmodule GoChampsApi.Eliminations do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.Eliminations.Elimination
+  alias GoChampsApi.Phases
 
   @doc """
   Gets a single elimination.
@@ -23,6 +24,46 @@ defmodule GoChampsApi.Eliminations do
 
   """
   def get_elimination!(id), do: Repo.get!(Elimination, id)
+
+  def get_elimination_organization!(id) do
+    {:ok, phase} =
+      Repo.get!(Elimination, id)
+      |> Repo.preload([:phase])
+      |> Map.fetch(:phase)
+
+    Phases.get_phase_organization!(phase.id)
+  end
+
+  @doc """
+  Gets a eliminations phase id.
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+  iex> get_eliminations_phase_id([])
+  [%Elimination{}]
+
+  iex> get_eliminations_phase_id([])
+  ** (Ecto.NoResultsError)
+
+  """
+  def get_eliminations_phase_id(eliminations) do
+    eliminations_id = Enum.map(eliminations, fn elimination -> elimination["id"] end)
+
+    case Repo.all(
+           from elimination in Elimination,
+             where: elimination.id in ^eliminations_id,
+             group_by: elimination.phase_id,
+             select: elimination.phase_id
+         ) do
+      [phase_id] ->
+        {:ok, phase_id}
+
+      _ ->
+        {:error, "Can only update elimination from same phase"}
+    end
+  end
 
   @doc """
   Creates a elimination.

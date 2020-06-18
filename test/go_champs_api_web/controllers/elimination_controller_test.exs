@@ -27,6 +27,15 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
     elimination
   end
 
+  def fixture(:elimination_with_different_member) do
+    {:ok, elimination} =
+      @create_attrs
+      |> PhaseHelpers.map_phase_id_with_other_member()
+      |> Eliminations.create_elimination()
+
+    elimination
+  end
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -61,6 +70,17 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
       invalid_attrs = PhaseHelpers.map_phase_id(@invalid_attrs)
       conn = post(conn, Routes.v1_elimination_path(conn, :create), elimination: invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create elimination with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      attrs = PhaseHelpers.map_phase_id_with_other_member(@create_attrs)
+
+      conn = post(conn, Routes.v1_elimination_path(conn, :create), elimination: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -105,6 +125,29 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
         )
 
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "update elimination with different member" do
+    setup [:create_elimination_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      elimination: elimination
+    } do
+      conn =
+        put(
+          conn,
+          Routes.v1_elimination_path(
+            conn,
+            :update,
+            elimination
+          ),
+          elimination: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -154,6 +197,30 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
     end
   end
 
+  describe "batch update elimination with different member" do
+    setup [:create_elimination_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      elimination: elimination
+    } do
+      elimination_update = Map.merge(%{id: elimination.id}, %{title: "title updated"})
+
+      conn =
+        patch(
+          conn,
+          Routes.v1_elimination_path(
+            conn,
+            :batch_update
+          ),
+          eliminations: [elimination_update]
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete elimination" do
     setup [:create_elimination]
 
@@ -168,8 +235,35 @@ defmodule GoChampsApiWeb.EliminationControllerTest do
     end
   end
 
+  describe "delete elimination with different member" do
+    setup [:create_elimination_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      elimination: elimination
+    } do
+      conn =
+        delete(
+          conn,
+          Routes.v1_elimination_path(
+            conn,
+            :delete,
+            elimination
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_elimination(_) do
     elimination = fixture(:elimination)
+    {:ok, elimination: elimination}
+  end
+
+  defp create_elimination_with_different_member(_) do
+    elimination = fixture(:elimination_with_different_member)
     {:ok, elimination: elimination}
   end
 end

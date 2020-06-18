@@ -42,6 +42,77 @@ defmodule GoChampsApi.EliminationsTest do
       assert Eliminations.get_elimination!(elimination.id) == elimination
     end
 
+    test "get_elimination_organization/1 returns the organization with a give team id" do
+      elimination = elimination_fixture()
+
+      organization = Eliminations.get_elimination_organization!(elimination.id)
+
+      elimination_organization = Phases.get_phase_organization!(elimination.phase_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == elimination_organization.id
+    end
+
+    test "get_eliminations_phase_id/1 with valid data return pertaning phase" do
+      attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+
+      {:ok, %Elimination{} = first_elimination} = Eliminations.create_elimination(attrs)
+      {:ok, %Elimination{} = second_elimination} = Eliminations.create_elimination(attrs)
+
+      first_updated_elimination = %{
+        "id" => first_elimination.id,
+        "title" => "some first updated title"
+      }
+
+      second_updated_elimination = %{
+        "id" => second_elimination.id,
+        "title" => "some second updated title"
+      }
+
+      {:ok, phase_id} =
+        Eliminations.get_eliminations_phase_id([
+          first_updated_elimination,
+          second_updated_elimination
+        ])
+
+      assert phase_id == attrs.phase_id
+    end
+
+    test "get_eliminations_phase_id/1 with multiple phase associated returns error" do
+      first_attrs = PhaseHelpers.map_phase_id(@valid_attrs)
+      phase = Phases.get_phase!(first_attrs.phase_id)
+
+      {:ok, second_phase} =
+        Phases.create_phase(%{
+          title: "some other title",
+          type: "elimination",
+          is_in_progress: true,
+          tournament_id: phase.tournament_id
+        })
+
+      second_attrs = Map.merge(@valid_attrs, %{phase_id: second_phase.id})
+
+      {:ok, %Elimination{} = first_elimination} = Eliminations.create_elimination(first_attrs)
+      {:ok, %Elimination{} = second_elimination} = Eliminations.create_elimination(second_attrs)
+
+      first_updated_elimination = %{
+        "id" => first_elimination.id,
+        "title" => "some first updated title"
+      }
+
+      second_updated_elimination = %{
+        "id" => second_elimination.id,
+        "title" => "some second updated title"
+      }
+
+      assert {:error, "Can only update elimination from same phase"} =
+               Eliminations.get_eliminations_phase_id([
+                 first_updated_elimination,
+                 second_updated_elimination
+               ])
+    end
+
     test "create_elimination/1 with valid data creates a elimination" do
       attrs = PhaseHelpers.map_phase_id(@valid_attrs)
       assert {:ok, %Elimination{} = elimination} = Eliminations.create_elimination(attrs)

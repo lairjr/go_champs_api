@@ -6,6 +6,10 @@ defmodule GoChampsApiWeb.EliminationController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedElimination, :elimination when action in [:create]
+  plug GoChampsApiWeb.Plugs.AuthorizedElimination, :eliminations when action in [:batch_update]
+  plug GoChampsApiWeb.Plugs.AuthorizedElimination, :id when action in [:delete, :update]
+
   def create(conn, %{"elimination" => elimination_params}) do
     with {:ok, %Elimination{} = elimination} <-
            Eliminations.create_elimination(elimination_params) do
