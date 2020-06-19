@@ -3,6 +3,7 @@ defmodule GoChampsApiWeb.UserController do
 
   alias GoChampsApi.Accounts
   alias GoChampsApi.Accounts.User
+  alias GoChampsApi.Organizations
   alias GoChampsApiWeb.Auth.Guardian
 
   action_fallback GoChampsApiWeb.FallbackController
@@ -23,7 +24,8 @@ defmodule GoChampsApiWeb.UserController do
   def show(conn, %{"username" => username}) do
     case Accounts.get_by_username!(username) do
       {:ok, user} ->
-        render(conn, "show.json", user: user)
+        user_organizations = Organizations.list_organizations_by_member(username)
+        render(conn, "show.json", %{user: user, organizations: user_organizations})
 
       {:error, status} ->
         conn

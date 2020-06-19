@@ -1,12 +1,13 @@
 defmodule GoChampsApiWeb.UserView do
   use GoChampsApiWeb, :view
+  alias GoChampsApiWeb.OrganizationView
 
-  def render("show.json", %{user: user}) do
+  def render("show.json", %{user: user, organizations: organizations}) do
     %{
       data: %{
         email: user.email,
         username: user.username,
-        organizations: []
+        organizations: render_many(organizations, OrganizationView, "organization.json")
       }
     }
   end

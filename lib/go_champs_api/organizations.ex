@@ -32,7 +32,32 @@ defmodule GoChampsApi.Organizations do
 
   """
   def list_organizations(where) do
-    query = from t in Organization, where: ^where
+    query = from o in Organization, where: ^where
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns the list of organizations filter by username param.
+
+  TODO: Find a better way of storing/retriving members
+
+  ## Examples
+
+      iex> list_organizations_by_member([name: "some name"])
+      [%Tournament{}, ...]
+
+  """
+  def list_organizations_by_member(username) do
+    query =
+      from o in Organization,
+        where:
+          fragment(
+            "exists (select * from unnest(?) member where member->>'username' ilike
+                  ?)",
+            o.members,
+            ^"%#{username}%"
+          )
+
     Repo.all(query)
   end
 

@@ -2,6 +2,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
   use GoChampsApiWeb.ConnCase
 
   alias GoChampsApi.Accounts
+  alias GoChampsApi.Organizations
 
   @create_attrs %{
     email: "someuser@email.com",
@@ -14,6 +15,25 @@ defmodule GoChampsApiWeb.UserControllerTest do
     username: "someusername"
   }
   @invalid_attrs %{email: nil, password: nil}
+
+  @associated_org %{
+    slug: "associated-org-slug",
+    name: "associated org name",
+    members: [
+      %{
+        username: "someuser"
+      }
+    ]
+  }
+  @not_associated_org %{
+    slug: "not-associated-org-slug",
+    name: "not associated org name",
+    members: [
+      %{
+        username: "someotheruser"
+      }
+    ]
+  }
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
@@ -78,12 +98,19 @@ defmodule GoChampsApiWeb.UserControllerTest do
     test "renders user when data associated with token", %{
       conn: conn
     } do
+      {:ok, associated_org} = Organizations.create_organization(@associated_org)
+      {:ok, not_associated_org} = Organizations.create_organization(@not_associated_org)
       conn = get(conn, Routes.v1_user_path(conn, :show, username: "someuser"))
 
       assert %{
                "email" => "some@email.com",
                "username" => "someuser",
-               "organizations" => []
+               "organizations" => [
+                 %{
+                   "slug" => "associated-org-slug",
+                   "name" => "associated org name"
+                 }
+               ]
              } = json_response(conn, 200)["data"]
     end
 
