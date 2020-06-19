@@ -98,8 +98,8 @@ defmodule GoChampsApiWeb.UserControllerTest do
     test "renders user when data associated with token", %{
       conn: conn
     } do
-      {:ok, associated_org} = Organizations.create_organization(@associated_org)
-      {:ok, not_associated_org} = Organizations.create_organization(@not_associated_org)
+      {:ok, _associated_org} = Organizations.create_organization(@associated_org)
+      {:ok, _not_associated_org} = Organizations.create_organization(@not_associated_org)
       conn = get(conn, Routes.v1_user_path(conn, :show, username: "someuser"))
 
       assert %{
