@@ -86,6 +86,15 @@ defmodule GoChampsApiWeb.UserControllerTest do
                "organizations" => []
              } = json_response(conn, 200)["data"]
     end
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not associated with the token", %{
+      conn: conn
+    } do
+      conn = get(conn, Routes.v1_user_path(conn, :show, username: "someotheruser"))
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
   end
 
   defp create_user(_) do

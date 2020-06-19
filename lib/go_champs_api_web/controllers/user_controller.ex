@@ -7,6 +7,8 @@ defmodule GoChampsApiWeb.UserController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedUser when action in [:show]
+
   def create(conn, %{"user" => user_params}) do
     with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
       with {:ok, %User{} = user} <- Accounts.create_user(user_params),
@@ -19,8 +21,15 @@ defmodule GoChampsApiWeb.UserController do
   end
 
   def show(conn, %{"username" => username}) do
-    {:ok, user} = Accounts.get_by_username!(username)
-    render(conn, "show.json", user: user)
+    case Accounts.get_by_username!(username) do
+      {:ok, user} ->
+        render(conn, "show.json", user: user)
+
+      {:error, status} ->
+        conn
+        |> put_status(status)
+        |> text("Error")
+    end
   end
 
   def update(conn, %{"user" => user_params}) do
