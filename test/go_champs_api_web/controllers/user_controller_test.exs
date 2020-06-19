@@ -4,14 +4,14 @@ defmodule GoChampsApiWeb.UserControllerTest do
   alias GoChampsApi.Accounts
 
   @create_attrs %{
-    email: "some@email.com",
+    email: "someuser@email.com",
     password: "some password",
-    username: "someuser"
+    username: "someusername"
   }
   @update_attrs %{
-    email: "some@email.com",
+    email: "someuser@email.com",
     password: "some other password",
-    username: "someuser"
+    username: "someusername"
   }
   @invalid_attrs %{email: nil, password: nil}
 
@@ -34,9 +34,9 @@ defmodule GoChampsApiWeb.UserControllerTest do
       %{"email" => result_email, "token" => result_token, "username" => result_username} =
         json_response(conn, 200)["data"]
 
-      assert result_email == "some@email.com"
+      assert result_email == "someuser@email.com"
       assert result_token != nil
-      assert result_username == "someuser"
+      assert result_username == "someusername"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -48,23 +48,25 @@ defmodule GoChampsApiWeb.UserControllerTest do
   describe "update user" do
     setup [:create_user]
 
+    @tag :authenticated
     test "renders user when data is valid", %{
       conn: conn
     } do
       conn = patch(conn, Routes.v1_user_path(conn, :update), %{user: @update_attrs})
       %{"email" => result_email} = json_response(conn, 200)["data"]
-      assert result_email == "some@email.com"
+      assert result_email == "someuser@email.com"
 
       conn = post(conn, Routes.v1_user_path(conn, :signin), @update_attrs)
 
       %{"email" => result_email, "token" => result_token, "username" => result_username} =
         json_response(conn, 200)["data"]
 
-      assert result_email == "some@email.com"
+      assert result_email == "someuser@email.com"
       assert result_token != nil
-      assert result_username == "someuser"
+      assert result_username == "someusername"
     end
 
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
       conn = patch(conn, Routes.v1_user_path(conn, :update), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}

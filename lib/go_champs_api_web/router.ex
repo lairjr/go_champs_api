@@ -54,7 +54,6 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/tournaments", TournamentController, only: [:index, :show]
 
-    patch "/users", UserController, :update
     post "/users/signup", UserController, :create
     post "/users/signin", UserController, :signin
     post "/users/recovery", UserController, :recovey_account
@@ -82,6 +81,8 @@ defmodule GoChampsApiWeb.Router do
     resources "/teams", TeamController, only: [:create, :update, :delete]
 
     resources "/tournaments", TournamentController, only: [:create, :update, :delete]
+
+    patch "/users", UserController, :update
   end
 
   def swagger_info do
