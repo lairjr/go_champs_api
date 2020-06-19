@@ -73,6 +73,21 @@ defmodule GoChampsApiWeb.UserControllerTest do
     end
   end
 
+  describe "show user" do
+    @tag :authenticated
+    test "renders user when data associated with token", %{
+      conn: conn
+    } do
+      conn = get(conn, Routes.v1_user_path(conn, :show, username: "someuser"))
+
+      assert %{
+               "email" => "some@email.com",
+               "username" => "someuser",
+               "organizations" => []
+             } = json_response(conn, 200)["data"]
+    end
+  end
+
   defp create_user(_) do
     user = fixture(:user)
     {:ok, user: user}

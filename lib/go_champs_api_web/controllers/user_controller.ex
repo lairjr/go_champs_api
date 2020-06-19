@@ -18,6 +18,11 @@ defmodule GoChampsApiWeb.UserController do
     end
   end
 
+  def show(conn, %{"username" => username}) do
+    {:ok, user} = Accounts.get_by_username!(username)
+    render(conn, "show.json", user: user)
+  end
+
   def update(conn, %{"user" => user_params}) do
     if user_params["email"] != nil and user_params["password"] != nil do
       {:ok, current_user} = Accounts.get_by_username!(user_params["username"])
@@ -65,7 +70,7 @@ defmodule GoChampsApiWeb.UserController do
           case HTTPoison.post(url, body, [
                  {"Content-Type", "application/json"}
                ]) do
-            {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+            {:ok, %HTTPoison.Response{status_code: 200, body: _body}} ->
               send_resp(conn, 200, "")
 
             _ ->
@@ -79,7 +84,7 @@ defmodule GoChampsApiWeb.UserController do
   def reset_password(conn, %{"user" => user_params}) do
     with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
       with {:ok, %User{} = user} <- Accounts.get_by_username!(user_params["username"]) do
-        with {:ok, %User{} = result_user} <- Accounts.reset_password(user, user_params) do
+        with {:ok, _} <- Accounts.reset_password(user, user_params) do
           send_resp(conn, 200, "")
         end
       end
