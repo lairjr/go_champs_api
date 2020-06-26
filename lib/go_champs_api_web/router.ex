@@ -82,7 +82,7 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/tournaments", TournamentController, only: [:create, :update, :delete]
 
-    get "/users", UserController, :show
+    get "/users/:username", UserController, :show
     patch "/users", UserController, :update
   end
 

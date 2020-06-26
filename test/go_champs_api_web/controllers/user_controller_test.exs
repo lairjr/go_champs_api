@@ -100,7 +100,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
     } do
       {:ok, _associated_org} = Organizations.create_organization(@associated_org)
       {:ok, _not_associated_org} = Organizations.create_organization(@not_associated_org)
-      conn = get(conn, Routes.v1_user_path(conn, :show, username: "someuser"))
+      conn = get(conn, Routes.v1_user_path(conn, :show, "someuser"))
 
       assert %{
                "email" => "some@email.com",
@@ -118,7 +118,7 @@ defmodule GoChampsApiWeb.UserControllerTest do
     test "returns forbidden for an user that is not associated with the token", %{
       conn: conn
     } do
-      conn = get(conn, Routes.v1_user_path(conn, :show, username: "someotheruser"))
+      conn = get(conn, Routes.v1_user_path(conn, :show, "someotheruser"))
 
       assert text_response(conn, 403) == "Forbidden"
     end
