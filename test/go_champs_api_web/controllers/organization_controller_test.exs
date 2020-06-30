@@ -34,7 +34,7 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
       }
     ]
   }
-  @invalid_attrs %{slug: nil, name: nil}
+  @invalid_attrs %{slug: nil, name: nil, members: [%{username: "someuser"}]}
 
   def fixture(:organization) do
     {:ok, organization} = Organizations.create_organization(@create_attrs)
@@ -97,6 +97,25 @@ defmodule GoChampsApiWeb.OrganizationControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.v1_organization_path(conn, :create), organization: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create organization with different member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      attrs = %{
+        members: [
+          %{
+            username: "someotheruser"
+          }
+        ],
+        name: "some organization",
+        slug: "some-org-slug"
+      }
+
+      conn = post(conn, Routes.v1_organization_path(conn, :create), organization: attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
