@@ -3,7 +3,6 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedOrganization do
   import Plug.Conn
 
   alias GoChampsApi.Organizations
-  alias GoChampsApi.Accounts.User
 
   def init(default), do: default
 

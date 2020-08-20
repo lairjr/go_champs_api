@@ -52,10 +52,10 @@ defmodule GoChampsApi.Organizations do
       from o in Organization,
         where:
           fragment(
-            "exists (select * from unnest(?) member where member->>'username' ilike
+            "exists (select * from unnest(?) member where member->>'username' =
                   ?)",
             o.members,
-            ^"%#{username}%"
+            ^"#{username}"
           )
 
     Repo.all(query)
