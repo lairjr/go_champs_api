@@ -9,6 +9,7 @@ defmodule GoChampsApi.Accounts.User do
     field :encrypted_password, :string
     field :password, :string, virtual: true
     field :recovery_token, :string
+    field :facebook_id, :string
 
     timestamps()
   end
@@ -49,6 +50,17 @@ defmodule GoChampsApi.Accounts.User do
 
     user
     |> cast(%{recovery_token: Bcrypt.hash_pwd_salt("#{random}")}, [:recovery_token])
+  end
+
+  @doc false
+  def facebook_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :facebook_id, :username])
+    |> validate_required([:email, :facebook_id, :username])
+    |> validate_format(:email, ~r/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/)
+    |> validate_format(:username, ~r/^([A-Za-z0-9]+(?:.-[a-z0-9]+)*){4,20}$/)
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
   end
 
   defp put_hashed_password(changeset) do

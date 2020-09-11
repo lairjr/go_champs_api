@@ -16,6 +16,11 @@ defmodule GoChampsApi.AccountsTest do
       password: "someupdatedpassword",
       username: "someupdateduser"
     }
+    @valid_facebook_attrs %{
+      email: "some@email.com",
+      facebook_id: "some-facebook-id",
+      username: "someuser"
+    }
     @invalid_attrs %{email: nil, password: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -79,6 +84,17 @@ defmodule GoChampsApi.AccountsTest do
 
     test "create_user/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
+    end
+
+    test "create_user_with_facebook/1 with valid data creates a user" do
+      assert {:ok, %User{} = user} = Accounts.create_user_with_facebook(@valid_facebook_attrs)
+      assert user.email == "some@email.com"
+      assert user.facebook_id == "some-facebook-id"
+      assert user.username == "someuser"
+    end
+
+    test "create_user_with_facebook/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_with_facebook(@invalid_attrs)
     end
 
     test "reset_user/2 with valid data update password" do

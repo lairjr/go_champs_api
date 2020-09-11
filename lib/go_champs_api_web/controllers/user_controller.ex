@@ -21,6 +21,17 @@ defmodule GoChampsApiWeb.UserController do
     end
   end
 
+  def create_with_facebook(conn, %{"user" => user_params}) do
+    with {:ok, _response} <- Recaptcha.verify(user_params["recaptcha"]) do
+      with {:ok, %User{} = user} <- Accounts.create_user_with_facebook(user_params),
+           {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
+        conn
+        |> put_status(:created)
+        |> render("user.json", %{user: user, token: token})
+      end
+    end
+  end
+
   def show(conn, %{"username" => username}) do
     case Accounts.get_by_username!(username) do
       {:ok, user} ->

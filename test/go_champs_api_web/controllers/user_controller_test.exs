@@ -9,6 +9,11 @@ defmodule GoChampsApiWeb.UserControllerTest do
     password: "some password",
     username: "someusername"
   }
+  @create_with_facebook_attrs %{
+    email: "someuser@email.com",
+    facebook_id: "some-facebook-id",
+    username: "someusername"
+  }
   @update_attrs %{
     email: "someuser@email.com",
     password: "some other password",
@@ -56,6 +61,26 @@ defmodule GoChampsApiWeb.UserControllerTest do
 
       assert result_email == "someuser@email.com"
       assert result_token != nil
+      assert result_username == "someusername"
+    end
+
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, Routes.v1_user_path(conn, :create), user: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create user with facebook" do
+    test "renders user when data is valid", %{conn: conn} do
+      conn =
+        post(conn, Routes.v1_user_path(conn, :create_with_facebook),
+          user: @create_with_facebook_attrs
+        )
+
+      assert %{"email" => result_email, "username" => result_username} =
+               json_response(conn, 201)["data"]
+
+      assert result_email == "someuser@email.com"
       assert result_username == "someusername"
     end
 

@@ -104,6 +104,24 @@ defmodule GoChampsApi.Accounts do
   end
 
   @doc """
+  Creates a user with facebook data.
+
+  ## Examples
+
+      iex> create_user_with_facebook(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_user_with_facebook(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user_with_facebook(attrs \\ %{}) do
+    %User{}
+    |> User.facebook_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Reset user password.
 
   ## Examples

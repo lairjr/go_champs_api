@@ -55,6 +55,7 @@ defmodule GoChampsApiWeb.Router do
     resources "/tournaments", TournamentController, only: [:index, :show]
 
     post "/accounts/signup", UserController, :create
+    post "/accounts/facebook-signup", UserController, :create_with_facebook
     post "/accounts/signin", UserController, :signin
     post "/accounts/recovery", UserController, :recovey_account
     post "/accounts/reset", UserController, :reset_password
