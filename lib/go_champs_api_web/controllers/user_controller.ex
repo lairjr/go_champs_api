@@ -71,6 +71,13 @@ defmodule GoChampsApiWeb.UserController do
     end
   end
 
+  def signin_with_facebook(conn, %{"facebook_id" => facebook_id}) do
+    with {:ok, user, token} <- Guardian.authenticate_by_facebook(facebook_id) do
+      conn
+      |> render("user.json", %{user: user, token: token})
+    end
+  end
+
   def recovey_account(conn, %{"email" => email, "recaptcha" => recaptcha}) do
     with {:ok, _response} <- Recaptcha.verify(recaptcha) do
       with {:ok, %User{} = user} <- Accounts.get_by_email!(email) do

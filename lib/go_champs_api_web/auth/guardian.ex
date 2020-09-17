@@ -26,6 +26,16 @@ defmodule GoChampsApiWeb.Auth.Guardian do
     end
   end
 
+  def authenticate_by_facebook(facebook_id) do
+    case Accounts.get_by_facebook_id!(facebook_id) do
+      {:ok, user} ->
+        create_token(user)
+
+      false ->
+        {:error, :unauthorized}
+    end
+  end
+
   defp validate_password(password, encrypted_password) do
     Bcrypt.verify_pass(password, encrypted_password)
   end

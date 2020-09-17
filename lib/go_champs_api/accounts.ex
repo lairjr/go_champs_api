@@ -86,6 +86,30 @@ defmodule GoChampsApi.Accounts do
   end
 
   @doc """
+  Gets a single user by facebook id.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user!("someuser")
+      %User{}
+
+      iex> get_user!("somemissinguser")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_by_facebook_id!(facebook_id) do
+    case Repo.get_by(User, facebook_id: facebook_id) do
+      nil ->
+        {:error, :not_found}
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples

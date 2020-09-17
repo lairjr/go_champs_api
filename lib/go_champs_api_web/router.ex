@@ -57,6 +57,7 @@ defmodule GoChampsApiWeb.Router do
     post "/accounts/signup", UserController, :create
     post "/accounts/facebook-signup", UserController, :create_with_facebook
     post "/accounts/signin", UserController, :signin
+    post "/accounts/facebook-signin", UserController, :signin_with_facebook
     post "/accounts/recovery", UserController, :recovey_account
     post "/accounts/reset", UserController, :reset_password
 

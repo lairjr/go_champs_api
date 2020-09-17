@@ -75,6 +75,17 @@ defmodule GoChampsApi.AccountsTest do
       assert result_user.encrypted_password == user.encrypted_password
     end
 
+    test "get_by_facebook_id!/1 returns the user with given facebook_id" do
+      assert {:ok, %User{} = user} = Accounts.create_user_with_facebook(@valid_facebook_attrs)
+
+      assert {:ok, %User{} = result_user} = Accounts.get_by_facebook_id!("some-facebook-id")
+
+      assert result_user.id == user.id
+      assert result_user.email == user.email
+      assert result_user.username == user.username
+      assert result_user.facebook_id == user.facebook_id
+    end
+
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some@email.com"
