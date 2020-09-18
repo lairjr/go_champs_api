@@ -1,0 +1,166 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/tournaments/{tournamentId}/players": {
+      "post": {
+        "tags": [
+          "Player"
+        ],
+        "summary": "Post tournament players",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PlayerResponse"
+            },
+            "description": "Player created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PlayerRequest"
+            },
+            "required": true,
+            "name": "player",
+            "in": "body",
+            "description": "The tournament players details"
+          }
+        ],
+        "description": "Creates a new tournament players",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Player"
+        ],
+        "summary": "List tournament players",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PlayersResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PlayersResponse": {
+      "type": "object",
+      "title": "PlayersReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Player"
+          },
+          "description": "The tournament players details"
+        }
+      },
+      "description": "Response schema for multiple tournament players"
+    },
+    "PlayerResponse": {
+      "type": "object",
+      "title": "PlayerResponse",
+      "properties": {
+        "data": {
+          "description": "The tournament players details",
+          "$ref": "#/definitions/Player"
+        }
+      },
+      "description": "Response schema for single tournament players"
+    },
+    "PlayerRequest": {
+      "type": "object",
+      "title": "PlayerRequest",
+      "required": [
+        "player"
+      ],
+      "properties": {
+        "player": {
+          "description": "The tournament players details",
+          "$ref": "#/definitions/Player"
+        }
+      },
+      "example": {
+        "player": {
+          "name": "Player name",
+          "slug": "tournament-name"
+        }
+      },
+      "description": "POST body for creating a tournament players"
+    },
+    "Player": {
+      "type": "object",
+      "title": "Player",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Player ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Player name"
+        },
+        "facebook": {
+          "type": "string",
+          "description": "Facebook link"
+        },
+        "instagram": {
+          "type": "string",
+          "description": "Instagram link"
+        },
+        "twitter": {
+          "type": "string",
+          "description": "Twitter link"
+        },
+        "tournament_id": {
+          "type": "string",
+          "description": "Tournament ID"
+        },
+        "team_id": {
+          "type": "string",
+          "description": "Team ID"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "name": "First player"
+      },
+      "description": "A tournament players of the app"
+    }
+  }
+}
