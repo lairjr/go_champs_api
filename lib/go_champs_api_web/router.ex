@@ -48,6 +48,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/phases", PhaseController, only: [:show]
 
+    resources "/players", PlayerController, only: [:show]
+
     get "/search", SearchController, :index
 
     resources "/teams", TeamController, only: [:show]
@@ -79,6 +81,8 @@ defmodule GoChampsApiWeb.Router do
 
     patch "/phases", PhaseController, :batch_update
     resources "/phases", PhaseController, only: [:create, :update, :delete]
+
+    resources "/players", PlayerController, only: [:create, :update, :delete]
 
     resources "/teams", TeamController, only: [:create, :update, :delete]
 
