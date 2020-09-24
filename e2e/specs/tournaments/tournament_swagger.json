@@ -172,6 +172,13 @@
             "type": "object"
           }
         },
+        "players": {
+          "type": "array",
+          "description": "Tournament players",
+          "items": {
+            "type": "object"
+          }
+        },
         "teams": {
           "type": "array",
           "description": "Tournament teams",
