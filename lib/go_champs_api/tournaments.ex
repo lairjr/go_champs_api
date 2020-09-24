@@ -53,7 +53,7 @@ defmodule GoChampsApi.Tournaments do
   def get_tournament!(id) do
     Tournament
     |> Repo.get!(id)
-    |> Repo.preload([:organization, :phases, :teams])
+    |> Repo.preload([:organization, :phases, :players, :teams])
   end
 
   @doc """

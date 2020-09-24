@@ -4,6 +4,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
   import Ecto.Changeset
   alias GoChampsApi.Organizations.Organization
   alias GoChampsApi.Phases.Phase
+  alias GoChampsApi.Players.Player
   alias GoChampsApi.Teams.Team
 
   schema "tournaments" do
@@ -18,6 +19,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
 
     belongs_to :organization, Organization
     has_many :phases, Phase
+    has_many :players, Player
     has_many :teams, Team
 
     timestamps()

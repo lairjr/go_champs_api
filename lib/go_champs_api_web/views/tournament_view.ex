@@ -3,6 +3,7 @@ defmodule GoChampsApiWeb.TournamentView do
   alias GoChampsApiWeb.OrganizationView
   alias GoChampsApiWeb.TournamentView
   alias GoChampsApiWeb.PhaseView
+  alias GoChampsApiWeb.PlayerView
   alias GoChampsApiWeb.TeamView
 
   def render("index.json", %{tournaments: tournaments}) do
@@ -21,6 +22,7 @@ defmodule GoChampsApiWeb.TournamentView do
         twitter: tournament.twitter,
         organization: render_one(tournament.organization, OrganizationView, "organization.json"),
         phases: render_many(tournament.phases, PhaseView, "phase.json"),
+        players: render_many(tournament.players, PlayerView, "player.json"),
         teams: render_many(tournament.teams, TeamView, "team.json")
       }
     }
