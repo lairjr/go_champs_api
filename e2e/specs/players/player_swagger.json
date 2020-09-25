@@ -129,17 +129,18 @@
           "type": "string",
           "description": "Instagram link"
         },
-        "twitter": {
-          "type": "string",
-          "description": "Twitter link"
+        "team_id": {
+          "type": ["string", "null"],
+          "description": "Team ID",
+          "nullable": true
         },
         "tournament_id": {
           "type": "string",
           "description": "Tournament ID"
         },
-        "team_id": {
+        "twitter": {
           "type": "string",
-          "description": "Team ID"
+          "description": "Twitter link"
         },
         "username": {
           "type": "string",

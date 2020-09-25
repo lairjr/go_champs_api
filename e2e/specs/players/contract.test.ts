@@ -4,8 +4,9 @@ import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from
 import { PLAYERS_URL } from "../URLs";
 import { authenticationHeader } from "../utils/auth";
 import httpClientFactory from "../utils/httpClientFactory";
-import { tournamentPlayerPayload } from "./helpers";
+import { tournamentPlayerPayload, tournamentPlayerWithTeamPayload } from "./helpers";
 import schema from "./player_swagger.json";
+import { createTeam, deleteTeam } from "../teams/stubs";
 
 use(ChaiJsonSchema);
 
@@ -26,6 +27,22 @@ describe("Players", () => {
       expect(data).to.be.jsonSchema(schema.definitions.PlayerResponse);
 
       await httpClient.delete(data.data.id, { headers: authHeader });
+      await deleteTournamentAndOrganization(tournament.id, organization.id);
+    });
+
+    it("matches schema with player team", async () => {
+      const authHeader = await authenticationHeader();
+      const { tournament, organization } = await createTournamentWithOrganizaion();
+      const { team } = await createTeam(tournament.id);
+
+      const payload = tournamentPlayerWithTeamPayload(tournament.id, team.id);
+      const { status, data } = await httpClient.post(payload, { headers: authHeader });
+      expect(payload).to.be.jsonSchema(schema.definitions.PlayerRequest);
+      expect(status).to.be.equal(201);
+      expect(data).to.be.jsonSchema(schema.definitions.PlayerResponse);
+
+      await httpClient.delete(data.data.id, { headers: authHeader });
+      await deleteTeam(team.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
   });
