@@ -186,6 +186,26 @@
             "type": "object"
           }
         },
+        "player_stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Stat id"
+              },
+              "title": {
+                "type": "string",
+                "description": "Stat title"
+              },
+              "aggregation_type": {
+                "type": "string",
+                "description": "Stat title"
+              }
+            }
+          }
+        },
         "inserted_at": {
           "type": "string",
           "format": "datetime",
