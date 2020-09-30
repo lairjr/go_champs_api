@@ -14,7 +14,21 @@ defmodule GoChampsApi.TournamentsTest do
       facebook: "facebook",
       instagram: "instagram",
       site_url: "site url",
-      twitter: "twitter"
+      twitter: "twitter",
+      player_stats: [
+        %{
+          title: "fixed stat",
+          aggregation_type: "fixed"
+        },
+        %{
+          title: "sum stat",
+          aggregation_type: "sum"
+        },
+        %{
+          title: "average stat",
+          aggregation_type: "average"
+        }
+      ]
     }
     @update_attrs %{
       name: "some updated name",
@@ -82,6 +96,15 @@ defmodule GoChampsApi.TournamentsTest do
       assert tournament.instagram == "instagram"
       assert tournament.site_url == "site url"
       assert tournament.twitter == "twitter"
+
+      [fixed_stat, sum_stat, average_stat] = tournament.player_stats
+
+      assert fixed_stat.title == "fixed stat"
+      assert fixed_stat.aggregation_type == "fixed"
+      assert sum_stat.title == "sum stat"
+      assert sum_stat.aggregation_type == "sum"
+      assert average_stat.title == "average stat"
+      assert average_stat.aggregation_type == "average"
     end
 
     test "create_tournament/1 with invalid data returns error changeset" do

@@ -11,7 +11,21 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
     facebook: "facebook",
     instagram: "instagram",
     site_url: "site url",
-    twitter: "twitter"
+    twitter: "twitter",
+    player_stats: [
+      %{
+        title: "fixed stat",
+        aggregation_type: "fixed"
+      },
+      %{
+        title: "sum stat",
+        aggregation_type: "sum"
+      },
+      %{
+        title: "average stat",
+        aggregation_type: "average"
+      }
+    ]
   }
   @update_attrs %{
     name: "some updated name",
@@ -84,7 +98,8 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
                "facebook" => result_facebook,
                "instagram" => result_instagram,
                "site_url" => result_site,
-               "twitter" => result_twitter
+               "twitter" => result_twitter,
+               "player_stats" => result_player_stats
              } = json_response(conn, 200)["data"]
 
       assert result_name == "some name"
@@ -93,6 +108,15 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_instagram == "instagram"
       assert result_site == "site url"
       assert result_twitter == "twitter"
+
+      [fixed_stat, sum_stat, average_stat] = result_player_stats
+
+      assert fixed_stat["title"] == "fixed stat"
+      assert fixed_stat["aggregation_type"] == "fixed"
+      assert sum_stat["title"] == "sum stat"
+      assert sum_stat["aggregation_type"] == "sum"
+      assert average_stat["title"] == "average stat"
+      assert average_stat["aggregation_type"] == "average"
     end
 
     @tag :authenticated

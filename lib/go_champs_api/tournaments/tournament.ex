@@ -17,6 +17,11 @@ defmodule GoChampsApi.Tournaments.Tournament do
     field :site_url, :string
     field :twitter, :string
 
+    embeds_many :player_stats, PlayerStats, on_replace: :delete do
+      field :title, :string
+      field :aggregation_type, :string
+    end
+
     belongs_to :organization, Organization
     has_many :phases, Phase
     has_many :players, Player
@@ -38,8 +43,16 @@ defmodule GoChampsApi.Tournaments.Tournament do
       :twitter,
       :organization_slug
     ])
+    |> cast_embed(:player_stats, with: &player_stats_changeset/2)
     |> validate_required([:name, :slug, :organization_id])
     |> validate_format(:slug, ~r/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     |> unique_constraint(:slug, name: :tournaments_slug_organization_id_index)
+  end
+
+  defp player_stats_changeset(schema, params) do
+    schema
+    |> cast(params, [:aggregation_type, :title])
+    |> validate_required([:title])
+    |> validate_inclusion(:aggregation_type, ["fixed", "sum", "average"])
   end
 end
