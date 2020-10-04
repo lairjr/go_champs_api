@@ -50,6 +50,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/players", PlayerController, only: [:show]
 
+    resources "/player-stats-logs", PlayerStatsLogController, only: [:index, :show]
+
     get "/search", SearchController, :index
 
     resources "/teams", TeamController, only: [:show]
@@ -83,6 +85,8 @@ defmodule GoChampsApiWeb.Router do
     resources "/phases", PhaseController, only: [:create, :update, :delete]
 
     resources "/players", PlayerController, only: [:create, :update, :delete]
+
+    resources "/player-stats-logs", PlayerStatsLogController, only: [:create, :update, :delete]
 
     resources "/teams", TeamController, only: [:create, :update, :delete]
 

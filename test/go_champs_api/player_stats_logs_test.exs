@@ -1,0 +1,96 @@
+defmodule GoChampsApi.PlayerStatsLogsTest do
+  use GoChampsApi.DataCase
+
+  alias GoChampsApi.PlayerStatsLogs
+  alias GoChampsApi.Tournaments
+  alias GoChampsApi.Helpers.PlayerHelpers
+
+  describe "player_stats_log" do
+    alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
+
+    @valid_attrs %{stats: %{"some" => "some"}}
+    @update_attrs %{stats: %{"some" => "some updated"}}
+    @invalid_attrs %{datetime: nil, stats: nil}
+
+    def player_stats_log_fixture(attrs \\ %{}) do
+      {:ok, player_stats_log} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> PlayerHelpers.map_player_id_and_tournament_id()
+        |> PlayerStatsLogs.create_player_stats_log()
+
+      player_stats_log
+    end
+
+    test "list_player_stats_log/0 returns all player_stats_log" do
+      player_stats_log = player_stats_log_fixture()
+      assert PlayerStatsLogs.list_player_stats_log() == [player_stats_log]
+    end
+
+    test "get_player_stats_log!/1 returns the player_stats_log with given id" do
+      player_stats_log = player_stats_log_fixture()
+      assert PlayerStatsLogs.get_player_stats_log!(player_stats_log.id) == player_stats_log
+    end
+
+    test "get_player_stats_log_organization!/1 returns the organization with a give player id" do
+      player_stats_log = player_stats_log_fixture()
+
+      organization = PlayerStatsLogs.get_player_stats_log_organization!(player_stats_log.id)
+
+      tournament = Tournaments.get_tournament!(player_stats_log.tournament_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == tournament.organization_id
+    end
+
+    test "create_player_stats_log/1 with valid data creates a player_stats_log" do
+      valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
+
+      assert {:ok, %PlayerStatsLog{} = player_stats_log} =
+               PlayerStatsLogs.create_player_stats_log(valid_attrs)
+
+      assert player_stats_log.stats == %{
+               "some" => "some"
+             }
+    end
+
+    test "create_player_stats_log/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = PlayerStatsLogs.create_player_stats_log(@invalid_attrs)
+    end
+
+    test "update_player_stats_log/2 with valid data updates the player_stats_log" do
+      player_stats_log = player_stats_log_fixture()
+
+      assert {:ok, %PlayerStatsLog{} = player_stats_log} =
+               PlayerStatsLogs.update_player_stats_log(player_stats_log, @update_attrs)
+
+      assert player_stats_log.stats == %{
+               "some" => "some updated"
+             }
+    end
+
+    test "update_player_stats_log/2 with invalid data returns error changeset" do
+      player_stats_log = player_stats_log_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               PlayerStatsLogs.update_player_stats_log(player_stats_log, @invalid_attrs)
+
+      assert player_stats_log == PlayerStatsLogs.get_player_stats_log!(player_stats_log.id)
+    end
+
+    test "delete_player_stats_log/1 deletes the player_stats_log" do
+      player_stats_log = player_stats_log_fixture()
+      assert {:ok, %PlayerStatsLog{}} = PlayerStatsLogs.delete_player_stats_log(player_stats_log)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        PlayerStatsLogs.get_player_stats_log!(player_stats_log.id)
+      end
+    end
+
+    test "change_player_stats_log/1 returns a player_stats_log changeset" do
+      player_stats_log = player_stats_log_fixture()
+      assert %Ecto.Changeset{} = PlayerStatsLogs.change_player_stats_log(player_stats_log)
+    end
+  end
+end
