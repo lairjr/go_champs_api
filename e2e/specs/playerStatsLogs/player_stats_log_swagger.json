@@ -1,0 +1,170 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/tournaments/{tournamentId}/player-stats-logs": {
+      "post": {
+        "tags": [
+          "PlayerStatsLog"
+        ],
+        "summary": "Post tournament player stats logs",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/PlayerStatsLogResponse"
+            },
+            "description": "PlayerStatsLog created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/PlayerStatsLogRequest"
+            },
+            "required": true,
+            "name": "player_stats_log",
+            "in": "body",
+            "description": "The tournament player stats logs details"
+          }
+        ],
+        "description": "Creates a new tournament player stats logs",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "PlayerStatsLog"
+        ],
+        "summary": "List tournament player stats logs",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/PlayerStatsLogsResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "PlayerStatsLogsResponse": {
+      "type": "object",
+      "title": "PlayerStatsLogsReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PlayerStatsLog"
+          },
+          "description": "The tournament player stats logs details"
+        }
+      },
+      "description": "Response schema for multiple tournament player stats logs"
+    },
+    "PlayerStatsLogResponse": {
+      "type": "object",
+      "title": "PlayerStatsLogResponse",
+      "properties": {
+        "data": {
+          "description": "The tournament player stats logs details",
+          "$ref": "#/definitions/PlayerStatsLog"
+        }
+      },
+      "description": "Response schema for single tournament player stats logs"
+    },
+    "PlayerStatsLogRequest": {
+      "type": "object",
+      "title": "PlayerStatsLogRequest",
+      "required": [
+        "player_stats_log"
+      ],
+      "properties": {
+        "player_stats_log": {
+          "description": "The tournament player stats logs details",
+          "$ref": "#/definitions/PlayerStatsLog"
+        }
+      },
+      "example": {
+        "player_stats_log": {
+          "name": "PlayerStatsLog name",
+          "slug": "tournament-name"
+        }
+      },
+      "description": "POST body for creating a tournament player stats logs"
+    },
+    "PlayerStatsLog": {
+      "type": "object",
+      "title": "PlayerStatsLog",
+      "required": [
+        "player_id",
+        "tournament_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PlayerStatsLog ID"
+        },
+        "stats": {
+          "type": "object",
+          "patternProperties": {
+            "^[0-9a-fA-F-]+$": {
+              "type": "string"
+            }
+          }
+        },
+        "team_id": {
+          "type": ["string", "null"],
+          "description": "Team ID",
+          "nullable": true
+        },
+        "tournament_id": {
+          "type": "string",
+          "description": "Tournament ID"
+        },
+        "game_id": {
+          "type": ["string", "null"],
+          "description": "Game ID",
+          "nullable": true
+        },
+        "phase_id": {
+          "type": ["string", "null"],
+          "description": "Phase ID",
+          "nullable": true
+        },
+        "player_id": {
+          "type": "string",
+          "description": "Player ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "name": "First player"
+      },
+      "description": "A tournament player stats logs of the app"
+    }
+  }
+}

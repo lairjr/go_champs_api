@@ -5,6 +5,7 @@ export const ELIMINATIONS_URL = `${API_HOST}/eliminations`;
 export const GAMES_URL = `${API_HOST}/games`;
 export const ORGANIZATIONS_URL = `${API_HOST}/organizations`;
 export const PHASES_URL = `${API_HOST}/phases`;
+export const PLAYER_STATS_LOGS_URL = `${API_HOST}/player-stats-logs`;
 export const PLAYERS_URL = `${API_HOST}/players`;
 export const TEAMS_URL = `${API_HOST}/teams`;
 export const TOURNAMENTS_URL = `${API_HOST}/tournaments`;

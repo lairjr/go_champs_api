@@ -11,6 +11,14 @@ defmodule GoChampsApiWeb.PlayerStatsLogView do
   end
 
   def render("player_stats_log.json", %{player_stats_log: player_stats_log}) do
-    %{id: player_stats_log.id, stats: player_stats_log.stats}
+    %{
+      id: player_stats_log.id,
+      stats: player_stats_log.stats,
+      game_id: player_stats_log.game_id,
+      phase_id: player_stats_log.phase_id,
+      player_id: player_stats_log.player_id,
+      team_id: player_stats_log.team_id,
+      tournament_id: player_stats_log.tournament_id
+    }
   end
 end

@@ -1,9 +1,9 @@
-import { TEAMS_URL } from "../URLs";
+import { PLAYERS_URL } from "../URLs";
 import { authenticationHeader } from "../utils/auth";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentPlayerPayload } from "./helpers";
 
-const httpClient = httpClientFactory(TEAMS_URL);
+const httpClient = httpClientFactory(PLAYERS_URL);
 
 export const createPlayer = async (tournamentId: string) => {
   const authHeader = await authenticationHeader();
@@ -14,8 +14,8 @@ export const createPlayer = async (tournamentId: string) => {
 };
 
 export const deletePlayer = async (
-  tournamentPlayerId: string,
+  playerId: string,
 ) => {
   const authHeader = await authenticationHeader();
-  await httpClient.delete(tournamentPlayerId, { headers: authHeader });
+  await httpClient.delete(playerId, { headers: authHeader });
 };
