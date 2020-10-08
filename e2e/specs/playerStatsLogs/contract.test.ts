@@ -10,7 +10,7 @@ import schema from "./player_stats_log_swagger.json";
 
 use(ChaiJsonSchema);
 
-tv4.addSchema("#/definitions/Player", schema.definitions.PlayerStatsLog);
+tv4.addSchema("#/definitions/PlayerStatsLog", schema.definitions.PlayerStatsLog);
 
 const httpClient = httpClientFactory(PLAYER_STATS_LOGS_URL);
 
@@ -26,10 +26,8 @@ describe("PlayerStatsLogs", () => {
 
       const { status, data } = await httpClient.post(payload, { headers: authHeader });
 
-      console.log('reuslt', data);
       expect(payload).to.be.jsonSchema(schema.definitions.PlayerStatsLogRequest);
       expect(status).to.be.equal(201);
-      console.log(data);
       expect(data).to.be.jsonSchema(schema.definitions.PlayerStatsLogResponse);
 
       await httpClient.delete(data.data.id, { headers: authHeader });

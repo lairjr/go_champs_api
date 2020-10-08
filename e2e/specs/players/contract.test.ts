@@ -1,12 +1,12 @@
 import { expect, tv4, use } from "chai";
 import ChaiJsonSchema = require("chai-json-schema");
+import { createTeam, deleteTeam } from "../teams/stubs";
 import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from "../tournaments/stubs";
 import { PLAYERS_URL } from "../URLs";
 import { authenticationHeader } from "../utils/auth";
 import httpClientFactory from "../utils/httpClientFactory";
 import { tournamentPlayerPayload, tournamentPlayerWithTeamPayload } from "./helpers";
 import schema from "./player_swagger.json";
-import { createTeam, deleteTeam } from "../teams/stubs";
 
 use(ChaiJsonSchema);
 
