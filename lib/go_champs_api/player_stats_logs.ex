@@ -83,6 +83,32 @@ defmodule GoChampsApi.PlayerStatsLogs do
   end
 
   @doc """
+  Create many player stats logs.
+
+  ## Examples
+
+      iex> create_player_stats_logs([%{field: new_value}])
+      {:ok, [%PlayerStatsLog{}]}
+
+      iex> create_player_stats_logs([%{field: bad_value}])
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_player_stats_logs(player_stats_logs) do
+    {multi, _} =
+      player_stats_logs
+      |> Enum.reduce({Ecto.Multi.new(), 0}, fn player_stats_log, {multi, index} ->
+        changeset =
+          %PlayerStatsLog{}
+          |> PlayerStatsLog.changeset(player_stats_log)
+
+        {Ecto.Multi.insert(multi, index, changeset), index + 1}
+      end)
+
+    Repo.transaction(multi)
+  end
+
+  @doc """
   Updates a player_stats_log.
 
   ## Examples

@@ -59,6 +59,34 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert {:error, %Ecto.Changeset{}} = PlayerStatsLogs.create_player_stats_log(@invalid_attrs)
     end
 
+    test "create_player_stats_logs/1 with valid data creates a player_stats_log" do
+      first_valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
+
+      second_valid_attrs =
+        @valid_attrs
+        |> Map.merge(%{
+          player_id: first_valid_attrs.player_id,
+          tournament_id: first_valid_attrs.tournament_id
+        })
+
+      assert {:ok, batch_results} =
+               PlayerStatsLogs.create_player_stats_logs([first_valid_attrs, second_valid_attrs])
+
+      assert batch_results[0].player_id == first_valid_attrs.player_id
+      assert batch_results[0].tournament_id == first_valid_attrs.tournament_id
+
+      assert batch_results[0].stats == %{
+               "some" => "some"
+             }
+
+      assert batch_results[1].player_id == first_valid_attrs.player_id
+      assert batch_results[1].tournament_id == first_valid_attrs.tournament_id
+
+      assert batch_results[1].stats == %{
+               "some" => "some"
+             }
+    end
+
     test "update_player_stats_log/2 with valid data updates the player_stats_log" do
       player_stats_log = player_stats_log_fixture()
 
