@@ -107,6 +107,71 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
     end
   end
 
+  describe "batch update player_stats_log" do
+    setup %{conn: conn} do
+      first_player_stats_log = fixture(:player_stats_log)
+
+      attrs =
+        Map.merge(@create_attrs, %{
+          player_id: first_player_stats_log.player_id,
+          tournament_id: first_player_stats_log.tournament_id
+        })
+
+      {:ok, second_player_stats_log} = PlayerStatsLogs.create_player_stats_log(attrs)
+      {:ok, conn: conn, player_stats_logs: [first_player_stats_log, second_player_stats_log]}
+    end
+
+    @tag :authenticated
+    test "renders player_stats_logs when data is valid", %{
+      conn: conn,
+      player_stats_logs: [first_player_stats_log, second_player_stats_log]
+    } do
+      first_player_stats_log_update =
+        Map.merge(
+          %{id: first_player_stats_log.id},
+          %{stats: %{"some" => "some first updated"}}
+        )
+
+      second_player_stats_log_update =
+        Map.merge(
+          %{id: second_player_stats_log.id},
+          %{stats: %{"some" => "some second updated"}}
+        )
+
+      player_stats_logs = [first_player_stats_log_update, second_player_stats_log_update]
+
+      conn =
+        patch(
+          conn,
+          Routes.v1_player_stats_log_path(
+            conn,
+            :batch_update
+          ),
+          player_stats_logs: player_stats_logs
+        )
+
+      first_player_stats_log_id = first_player_stats_log.id
+      second_player_stats_log_id = second_player_stats_log.id
+
+      %{
+        ^first_player_stats_log_id => first_player_stats_log_result,
+        ^second_player_stats_log_id => second_player_stats_log_result
+      } = json_response(conn, 200)["data"]
+
+      assert first_player_stats_log_result["id"] == first_player_stats_log.id
+
+      assert first_player_stats_log_result["stats"] == %{
+               "some" => "some first updated"
+             }
+
+      assert second_player_stats_log_result["id"] == second_player_stats_log.id
+
+      assert second_player_stats_log_result["stats"] == %{
+               "some" => "some second updated"
+             }
+    end
+  end
+
   describe "delete player_stats_log" do
     setup [:create_player_stats_log]
 

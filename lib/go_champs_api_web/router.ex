@@ -87,6 +87,7 @@ defmodule GoChampsApiWeb.Router do
     resources "/players", PlayerController, only: [:create, :update, :delete]
 
     resources "/player-stats-logs", PlayerStatsLogController, only: [:create, :update, :delete]
+    patch "/player-stats-logs", PlayerStatsLogController, :batch_update
 
     resources "/teams", TeamController, only: [:create, :update, :delete]
 

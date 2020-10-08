@@ -21,4 +21,23 @@ defmodule GoChampsApiWeb.PlayerStatsLogView do
       tournament_id: player_stats_log.tournament_id
     }
   end
+
+  def render("batch_list.json", %{player_stats_logs: player_stats_logs}) do
+    player_stats_logs_view =
+      player_stats_logs
+      |> Map.keys()
+      |> Enum.reduce(%{}, fn player_stats_log_id, acc_player_stats_logs ->
+        Map.put(
+          acc_player_stats_logs,
+          player_stats_log_id,
+          render_one(
+            Map.get(player_stats_logs, player_stats_log_id),
+            PlayerStatsLogView,
+            "player_stats_log.json"
+          )
+        )
+      end)
+
+    %{data: player_stats_logs_view}
+  end
 end
