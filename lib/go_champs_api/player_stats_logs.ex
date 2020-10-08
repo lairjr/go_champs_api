@@ -127,6 +127,32 @@ defmodule GoChampsApi.PlayerStatsLogs do
   end
 
   @doc """
+  Updates many player stats logs.
+
+  ## Examples
+
+      iex> update_player_stats_logs([%{field: new_value}])
+      {:ok, [%PlayerStatsLog{}]}
+
+      iex> update_player_stats_logs([%{field: bad_value}])
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_player_stats_logs(player_stats_logs) do
+    multi =
+      player_stats_logs
+      |> Enum.reduce(Ecto.Multi.new(), fn player_stats_log, multi ->
+        %{"id" => id} = player_stats_log
+        current_player_stats_log = Repo.get_by!(PlayerStatsLog, id: id)
+        changeset = PlayerStatsLog.changeset(current_player_stats_log, player_stats_log)
+
+        Ecto.Multi.update(multi, id, changeset)
+      end)
+
+    Repo.transaction(multi)
+  end
+
+  @doc """
   Deletes a player_stats_log.
 
   ## Examples

@@ -107,6 +107,44 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert player_stats_log == PlayerStatsLogs.get_player_stats_log!(player_stats_log.id)
     end
 
+    test "update_player_stats_logs/1 with valid data updates the player_stats_log" do
+      attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
+
+      {:ok, %PlayerStatsLog{} = first_player_stats_log} =
+        PlayerStatsLogs.create_player_stats_log(attrs)
+
+      {:ok, %PlayerStatsLog{} = second_player_stats_log} =
+        PlayerStatsLogs.create_player_stats_log(attrs)
+
+      first_updated_player_stats_log = %{
+        "id" => first_player_stats_log.id,
+        "stats" => %{"some" => "some first updated"}
+      }
+
+      second_updated_player_stats_log = %{
+        "id" => second_player_stats_log.id,
+        "stats" => %{"some" => "some second updated"}
+      }
+
+      {:ok, batch_results} =
+        PlayerStatsLogs.update_player_stats_logs([
+          first_updated_player_stats_log,
+          second_updated_player_stats_log
+        ])
+
+      assert batch_results[first_player_stats_log.id].id == first_player_stats_log.id
+
+      assert batch_results[first_player_stats_log.id].stats == %{
+               "some" => "some first updated"
+             }
+
+      assert batch_results[second_player_stats_log.id].id == second_player_stats_log.id
+
+      assert batch_results[second_player_stats_log.id].stats == %{
+               "some" => "some second updated"
+             }
+    end
+
     test "delete_player_stats_log/1 deletes the player_stats_log" do
       player_stats_log = player_stats_log_fixture()
       assert {:ok, %PlayerStatsLog{}} = PlayerStatsLogs.delete_player_stats_log(player_stats_log)
