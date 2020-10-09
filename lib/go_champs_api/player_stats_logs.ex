@@ -65,6 +65,38 @@ defmodule GoChampsApi.PlayerStatsLogs do
   end
 
   @doc """
+  Gets a player_stats_logs tournament id.
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+  iex> get_player_stats_logs_tournament_id!(123)
+  %Tournament{}
+
+  iex> get_player_stats_logs_tournament_id!(456)
+  ** (Ecto.NoResultsError)
+
+  """
+  def get_player_stats_logs_tournament_id(player_stats_logs) do
+    player_stats_logs_id =
+      Enum.map(player_stats_logs, fn player_stats_log -> player_stats_log["id"] end)
+
+    case Repo.all(
+           from player_stats_log in PlayerStatsLog,
+             where: player_stats_log.id in ^player_stats_logs_id,
+             group_by: player_stats_log.tournament_id,
+             select: player_stats_log.tournament_id
+         ) do
+      [tournament_id] ->
+        {:ok, tournament_id}
+
+      _ ->
+        {:error, "Can only update player_stats_log from same tournament"}
+    end
+  end
+
+  @doc """
   Creates a player_stats_log.
 
   ## Examples

@@ -46,9 +46,18 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
       create_attrs = PlayerHelpers.map_player_id_and_tournament_id(@create_attrs)
 
       conn =
-        post(conn, Routes.v1_player_stats_log_path(conn, :create), player_stats_log: create_attrs)
+        post(conn, Routes.v1_player_stats_log_path(conn, :create),
+          player_stats_logs: [create_attrs]
+        )
 
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert %{
+               "0" => %{
+                 "id" => id,
+                 "stats" => %{
+                   "some" => "some"
+                 }
+               }
+             } = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.v1_player_stats_log_path(conn, :show, id))
 
@@ -65,7 +74,9 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
       invalid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@invalid_attrs)
 
       conn =
-        post(conn, Routes.v1_player_stats_log_path(conn, :create), player_stats_log: invalid_attrs)
+        post(conn, Routes.v1_player_stats_log_path(conn, :create),
+          player_stats_logs: [invalid_attrs]
+        )
 
       assert json_response(conn, 422)["errors"] != %{}
     end

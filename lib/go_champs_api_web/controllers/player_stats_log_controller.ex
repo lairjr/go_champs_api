@@ -7,7 +7,9 @@ defmodule GoChampsApiWeb.PlayerStatsLogController do
   action_fallback GoChampsApiWeb.FallbackController
 
   plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog, :id when action in [:delete, :update]
-  plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog, :player_stats_log when action in [:create]
+
+  plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog,
+       :create_player_stats_logs when action in [:create]
 
   # TODO(lairjr): Add authorization test covarage
 
@@ -16,16 +18,18 @@ defmodule GoChampsApiWeb.PlayerStatsLogController do
     render(conn, "index.json", player_stats_log: player_stats_log)
   end
 
-  def create(conn, %{"player_stats_log" => player_stats_log_params}) do
-    with {:ok, %PlayerStatsLog{} = player_stats_log} <-
-           PlayerStatsLogs.create_player_stats_log(player_stats_log_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header(
-        "location",
-        Routes.v1_player_stats_log_path(conn, :show, player_stats_log)
-      )
-      |> render("show.json", player_stats_log: player_stats_log)
+  def create(conn, %{"player_stats_logs" => player_stats_logs_params}) do
+    case PlayerStatsLogs.create_player_stats_logs(player_stats_logs_params) do
+      {:ok, player_stats_logs} ->
+        conn
+        |> put_status(:created)
+        |> render("batch_list.json", player_stats_logs: player_stats_logs)
+
+      _ ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> put_view(GoChampsApiWeb.ErrorView)
+        |> render(:"422")
     end
   end
 

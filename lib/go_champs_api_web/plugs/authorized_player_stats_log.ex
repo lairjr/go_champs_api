@@ -7,20 +7,65 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog do
 
   def init(default), do: default
 
-  def call(conn, :player_stats_log) do
-    {:ok, player_stats_log} = Map.fetch(conn.params, "player_stats_log")
-    {:ok, tournament_id} = Map.fetch(player_stats_log, "tournament_id")
+  def call(conn, :create_player_stats_logs) do
+    {:ok, player_stats_logs} = Map.fetch(conn.params, "player_stats_logs")
 
-    organization = Tournaments.get_tournament_organization!(tournament_id)
-    current_user = Guardian.Plug.current_resource(conn)
+    tournament_ids =
+      player_stats_logs
+      |> Enum.frequencies_by(fn player_stats_log ->
+        {:ok, tournament_id} = Map.fetch(player_stats_log, "tournament_id")
+        tournament_id
+      end)
 
-    if Enum.any?(organization.members, fn member -> member.username == current_user.username end) do
-      conn
-    else
-      conn
-      |> put_status(:forbidden)
-      |> text("Forbidden")
-      |> halt
+    case map_size(tournament_ids) do
+      1 ->
+        [tournament_id] = Map.keys(tournament_ids)
+        organization = Tournaments.get_tournament_organization!(tournament_id)
+        current_user = Guardian.Plug.current_resource(conn)
+
+        if Enum.any?(organization.members, fn member ->
+             member.username == current_user.username
+           end) do
+          conn
+        else
+          conn
+          |> put_status(:forbidden)
+          |> text("Forbidden")
+          |> halt
+        end
+
+      _ ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> text("Only allow to create for one tournament")
+        |> halt
+    end
+  end
+
+  def call(conn, :player_stats_logs) do
+    {:ok, player_stats_logs} = Map.fetch(conn.params, "player_stats_logs")
+
+    case PlayerStatsLogs.get_player_stats_logs_tournament_id(player_stats_logs) do
+      {:ok, tournament_id} ->
+        organization = Tournaments.get_tournament_organization!(tournament_id)
+        current_user = Guardian.Plug.current_resource(conn)
+
+        if Enum.any?(organization.members, fn member ->
+             member.username == current_user.username
+           end) do
+          conn
+        else
+          conn
+          |> put_status(:forbidden)
+          |> text("Forbidden")
+          |> halt
+        end
+
+      {:error, message} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> text(message)
+        |> halt
     end
   end
 
