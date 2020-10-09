@@ -42,7 +42,7 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog do
     end
   end
 
-  def call(conn, :player_stats_logs) do
+  def call(conn, :update_player_stats_logs) do
     {:ok, player_stats_logs} = Map.fetch(conn.params, "player_stats_logs")
 
     case PlayerStatsLogs.get_player_stats_logs_tournament_id(player_stats_logs) do

@@ -9,9 +9,10 @@ defmodule GoChampsApiWeb.PlayerStatsLogController do
   plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog, :id when action in [:delete, :update]
 
   plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog,
-       :create_player_stats_logs when action in [:create]
+       :update_player_stats_logs when action in [:batch_update]
 
-  # TODO(lairjr): Add authorization test covarage
+  plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog,
+       :create_player_stats_logs when action in [:create]
 
   def index(conn, _params) do
     player_stats_log = PlayerStatsLogs.list_player_stats_log()

@@ -82,6 +82,21 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
     end
   end
 
+  describe "create player_stats_log with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      create_attrs =
+        PlayerHelpers.map_player_id_and_tournament_id_with_other_member(@create_attrs)
+
+      conn =
+        post(conn, Routes.v1_player_stats_log_path(conn, :create),
+          player_stats_logs: [create_attrs]
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "update player_stats_log" do
     setup [:create_player_stats_log]
 
@@ -115,6 +130,29 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
         )
 
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "update player_stats_log with different member" do
+    setup [:create_player_stats_log_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      player_stats_log: player_stats_log
+    } do
+      conn =
+        put(
+          conn,
+          Routes.v1_player_stats_log_path(
+            conn,
+            :update,
+            player_stats_log
+          ),
+          player_stats_log: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -183,6 +221,30 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
     end
   end
 
+  describe "batch update player_stats_log with different member" do
+    setup [:create_player_stats_log_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      player_stats_log: player_stats_log
+    } do
+      player_stats_log_update = Map.merge(%{id: player_stats_log.id}, %{title: "title updated"})
+
+      conn =
+        patch(
+          conn,
+          Routes.v1_player_stats_log_path(
+            conn,
+            :batch_update
+          ),
+          player_stats_logs: [player_stats_log_update]
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete player_stats_log" do
     setup [:create_player_stats_log]
 
@@ -197,8 +259,35 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
     end
   end
 
+  describe "delete player_stats_log with different member" do
+    setup [:create_player_stats_log_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      player_stats_log: player_stats_log
+    } do
+      conn =
+        delete(
+          conn,
+          Routes.v1_player_stats_log_path(
+            conn,
+            :delete,
+            player_stats_log
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_player_stats_log(_) do
     player_stats_log = fixture(:player_stats_log)
+    {:ok, player_stats_log: player_stats_log}
+  end
+
+  defp create_player_stats_log_with_different_member(_) do
+    player_stats_log = fixture(:player_stats_log_with_different_member)
     {:ok, player_stats_log: player_stats_log}
   end
 end
