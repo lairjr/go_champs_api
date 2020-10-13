@@ -5,7 +5,7 @@ import { createTournamentWithOrganizaion, deleteTournamentAndOrganization } from
 import { PLAYER_STATS_LOGS_URL } from "../URLs";
 import { authenticationHeader } from "../utils/auth";
 import httpClientFactory from "../utils/httpClientFactory";
-import { playerStatsLogPayload } from "./helpers";
+import { playerStatsLogPostPayload, playerStatsLogPatchayload } from "./helpers";
 import schema from "./player_stats_log_swagger.json";
 
 use(ChaiJsonSchema);
@@ -22,15 +22,16 @@ describe("PlayerStatsLogs", () => {
 
       const { player } = await createPlayer(tournament.id);
 
-      const payload = playerStatsLogPayload(player.id, tournament.id);
+      const payload = playerStatsLogPostPayload(player.id, tournament.id);
 
       const { status, data } = await httpClient.post(payload, { headers: authHeader });
 
       expect(payload).to.be.jsonSchema(schema.definitions.PlayerStatsLogRequest);
       expect(status).to.be.equal(201);
-      expect(data).to.be.jsonSchema(schema.definitions.PlayerStatsLogResponse);
+      expect(data).to.be.jsonSchema(schema.definitions.PlayerStatsLogPostPatchResponse);
+      const playerStatsLogId = data.data[Object.keys(data.data)[0]].id;
 
-      await httpClient.delete(data.data.id, { headers: authHeader });
+      await httpClient.delete(playerStatsLogId, { headers: authHeader });
       await deletePlayer(player.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
@@ -42,14 +43,15 @@ describe("PlayerStatsLogs", () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
       const { player } = await createPlayer(tournament.id);
 
-      const payload = playerStatsLogPayload(player.id, tournament.id);
+      const payload = playerStatsLogPostPayload(player.id, tournament.id);
       const { data: created } = await httpClient.post(payload, { headers: authHeader });
+      const playerStatsLogId = created.data[Object.keys(created.data)[0]].id;
 
-      const { status, data: response } = await httpClient.get(created.data.id);
+      const { status, data: response } = await httpClient.get(playerStatsLogId);
       expect(response).to.be.jsonSchema(schema.definitions.PlayerStatsLogResponse);
       expect(status).to.be.equal(200);
 
-      await httpClient.delete(created.data.id, { headers: authHeader });
+      await httpClient.delete(playerStatsLogId, { headers: authHeader });
       await deletePlayer(player.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
@@ -61,16 +63,18 @@ describe("PlayerStatsLogs", () => {
       const { tournament, organization } = await createTournamentWithOrganizaion();
       const { player } = await createPlayer(tournament.id);
 
-      const payload = playerStatsLogPayload(player.id, tournament.id);
+      const payload = playerStatsLogPostPayload(player.id, tournament.id);
       const { data: created } = await httpClient.post(payload, { headers: authHeader });
 
-      const patchPayload = playerStatsLogPayload(player.id, tournament.id);
-      const { status, data: response } = await httpClient.patch(created.data.id, patchPayload, { headers: authHeader });
+      const playerStatsLogId = created.data[Object.keys(created.data)[0]].id;
+      const patchPayload = playerStatsLogPatchayload(playerStatsLogId, player.id, tournament.id);
+      const { status, data: response } =
+        await httpClient.patchBatch(patchPayload, { headers: authHeader });
       expect(patchPayload).to.be.jsonSchema(schema.definitions.PlayerStatsLogRequest);
-      expect(response).to.be.jsonSchema(schema.definitions.PlayerStatsLogResponse);
+      expect(response).to.be.jsonSchema(schema.definitions.PlayerStatsLogPostPatchResponse);
       expect(status).to.be.equal(200);
 
-      await httpClient.delete(created.data.id, { headers: authHeader });
+      await httpClient.delete(playerStatsLogId, { headers: authHeader });
       await deletePlayer(player.id);
       await deleteTournamentAndOrganization(tournament.id, organization.id);
     });
@@ -83,9 +87,12 @@ describe("PlayerStatsLogs", () => {
 
       const { player } = await createPlayer(tournament.id);
 
-      const payload = playerStatsLogPayload(player.id, tournament.id);
+      const payload = playerStatsLogPostPayload(player.id, tournament.id);
       const { data: created } = await httpClient.post(payload, { headers: authHeader });
-      const { status } = await httpClient.delete(created.data.id, { headers: authHeader });
+
+      const playerStatsLogId = created.data[Object.keys(created.data)[0]].id;
+
+      const { status } = await httpClient.delete(playerStatsLogId, { headers: authHeader });
       expect(status).to.be.equal(204);
 
       await deletePlayer(player.id);

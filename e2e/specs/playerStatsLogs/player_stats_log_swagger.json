@@ -86,23 +86,43 @@
       },
       "description": "Response schema for single tournament player stats logs"
     },
-    "PlayerStatsLogRequest": {
+    "PlayerStatsLogPostPatchResponse": {
       "type": "object",
-      "title": "PlayerStatsLogRequest",
-      "required": [
-        "player_stats_log"
-      ],
-      "properties": {
-        "player_stats_log": {
+      "title": "PlayerStatsLogResponse",
+      "patternProperties": {
+        "^[0-9a-fA-F-]+$": {
           "description": "The tournament player stats logs details",
           "$ref": "#/definitions/PlayerStatsLog"
         }
       },
-      "example": {
-        "player_stats_log": {
-          "name": "PlayerStatsLog name",
-          "slug": "tournament-name"
+      "description": "Response schema for single tournament player stats logs"
+    },
+    "PlayerStatsLogRequest": {
+      "type": "object",
+      "title": "PlayerStatsLogRequest",
+      "required": [
+        "player_stats_logs"
+      ],
+      "properties": {
+        "player_stats_logs": {
+          "description": "The tournament player stats logs details",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/PlayerStatsLog"
+          }
         }
+      },
+      "example": {
+        "player_stats_logs": [
+          {
+            "player_id": "PlayerStatsLog player id",
+            "tournament_id": "PlayerStatsLog tournament id",
+            "stats": {
+              "stat-id": "stat value"
+            }
+          }
+        ]
       },
       "description": "POST body for creating a tournament player stats logs"
     },

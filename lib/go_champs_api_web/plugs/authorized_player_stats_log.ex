@@ -12,14 +12,14 @@ defmodule GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog do
 
     tournament_ids =
       player_stats_logs
-      |> Enum.frequencies_by(fn player_stats_log ->
+      |> Enum.reduce(MapSet.new(), fn player_stats_log, map ->
         {:ok, tournament_id} = Map.fetch(player_stats_log, "tournament_id")
-        tournament_id
+        MapSet.put(map, tournament_id)
       end)
 
-    case map_size(tournament_ids) do
+    case MapSet.size(tournament_ids) do
       1 ->
-        [tournament_id] = Map.keys(tournament_ids)
+        [tournament_id] = MapSet.to_list(tournament_ids)
         organization = Tournaments.get_tournament_organization!(tournament_id)
         current_user = Guardian.Plug.current_resource(conn)
 

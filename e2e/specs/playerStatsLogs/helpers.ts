@@ -8,7 +8,19 @@ const randomPlayerStatsLog = (playerId: string, tournamentId: string) => ({
   tournament_id: tournamentId,
 });
 
-export const playerStatsLogPayload = (playerId: string, tournamentId: string) => (
+export const playerStatsLogPatchayload = (playerStatsLogId: string, playerId: string, tournamentId: string) => (
   {
-    player_stats_log: randomPlayerStatsLog(playerId, tournamentId),
+    player_stats_logs: [
+      {
+        ...randomPlayerStatsLog(playerId, tournamentId),
+        id: playerStatsLogId,
+      },
+    ],
   });
+
+  export const playerStatsLogPostPayload = (playerId: string, tournamentId: string) => (
+    {
+      player_stats_logs: [
+        randomPlayerStatsLog(playerId, tournamentId),
+      ],
+    });
