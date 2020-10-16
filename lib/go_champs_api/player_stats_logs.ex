@@ -22,6 +22,20 @@ defmodule GoChampsApi.PlayerStatsLogs do
   end
 
   @doc """
+  Returns the list of Player Stats Logs filter by keywork param.
+
+  ## Examples
+
+      iex> list_player_stats_log([game_id: "game-id"])
+      [%PlayerStatsLog{}, ...]
+
+  """
+  def list_player_stats_log(where) do
+    query = from t in PlayerStatsLog, where: ^where
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single player_stats_log.
 
   Raises `Ecto.NoResultsError` if the Player stats log does not exist.

@@ -14,8 +14,22 @@ defmodule GoChampsApiWeb.PlayerStatsLogController do
   plug GoChampsApiWeb.Plugs.AuthorizedPlayerStatsLog,
        :create_player_stats_logs when action in [:create]
 
-  def index(conn, _params) do
-    player_stats_log = PlayerStatsLogs.list_player_stats_log()
+  defp map_to_keyword(map) do
+    Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
+    player_stats_log =
+      case params do
+        %{"where" => where} ->
+          where
+          |> map_to_keyword()
+          |> PlayerStatsLogs.list_player_stats_log()
+
+        _ ->
+          PlayerStatsLogs.list_player_stats_log()
+      end
+
     render(conn, "index.json", player_stats_log: player_stats_log)
   end
 

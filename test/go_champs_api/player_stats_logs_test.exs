@@ -4,8 +4,10 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
   alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.Tournaments
   alias GoChampsApi.Helpers.PlayerHelpers
+  alias GoChampsApi.Phases
 
   describe "player_stats_log" do
+    alias GoChampsApi.Phases.Phase
     alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
 
     @valid_attrs %{stats: %{"some" => "some"}}
@@ -25,6 +27,34 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
     test "list_player_stats_log/0 returns all player_stats_log" do
       player_stats_log = player_stats_log_fixture()
       assert PlayerStatsLogs.list_player_stats_log() == [player_stats_log]
+    end
+
+    test "list_player_stats_log/1 returns all tournaments pertaining to some game id" do
+      first_valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
+
+      phase_attrs = %{
+        is_in_progress: true,
+        title: "some title",
+        type: "elimination",
+        elimination_stats: [%{"title" => "stat title"}],
+        tournament_id: first_valid_attrs.tournament_id
+      }
+
+      assert {:ok, %Phase{} = phase} = Phases.create_phase(phase_attrs)
+
+      second_valid_attrs =
+        @valid_attrs
+        |> Map.merge(%{
+          player_id: first_valid_attrs.player_id,
+          tournament_id: first_valid_attrs.tournament_id,
+          phase_id: phase.id
+        })
+
+      assert {:ok, batch_results} =
+               PlayerStatsLogs.create_player_stats_logs([first_valid_attrs, second_valid_attrs])
+
+      where = [phase_id: phase.id]
+      assert PlayerStatsLogs.list_player_stats_log(where) == [batch_results[1]]
     end
 
     test "get_player_stats_log!/1 returns the player_stats_log with given id" do

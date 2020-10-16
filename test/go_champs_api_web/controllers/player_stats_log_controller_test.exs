@@ -4,6 +4,8 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
   alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
   alias GoChampsApi.Helpers.PlayerHelpers
+  alias GoChampsApi.Phases
+  alias GoChampsApi.Phases.Phase
 
   @create_attrs %{
     stats: %{
@@ -37,6 +39,37 @@ defmodule GoChampsApiWeb.PlayerStatsLogControllerTest do
     test "lists all player_stats_log", %{conn: conn} do
       conn = get(conn, Routes.v1_player_stats_log_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
+    end
+
+    test "lists all player_stats_logs matching where", %{conn: conn} do
+      first_player_stats_log = fixture(:player_stats_log)
+
+      phase_attrs = %{
+        is_in_progress: true,
+        title: "some title",
+        type: "elimination",
+        elimination_stats: [%{"title" => "stat title"}],
+        tournament_id: first_player_stats_log.tournament_id
+      }
+
+      assert {:ok, %Phase{} = phase} = Phases.create_phase(phase_attrs)
+
+      second_player_stats_logs =
+        @create_attrs
+        |> Map.merge(%{
+          player_id: first_player_stats_log.player_id,
+          tournament_id: first_player_stats_log.tournament_id,
+          phase_id: phase.id
+        })
+
+      assert {:ok, second_player_stats_log} =
+               PlayerStatsLogs.create_player_stats_log(second_player_stats_logs)
+
+      where = %{"phase_id" => phase.id}
+
+      conn = get(conn, Routes.v1_player_stats_log_path(conn, :index, where: where))
+      [player_stats_log_result] = json_response(conn, 200)["data"]
+      assert player_stats_log_result["id"] == second_player_stats_log.id
     end
   end
 
