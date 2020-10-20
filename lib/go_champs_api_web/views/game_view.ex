@@ -17,6 +17,7 @@ defmodule GoChampsApiWeb.GameView do
       away_team: render_one(game.away_team, TeamView, "team.json"),
       away_score: game.away_score,
       datetime: game.datetime,
+      phase_id: game.phase_id,
       home_team: render_one(game.home_team, TeamView, "team.json"),
       home_score: game.home_score,
       info: game.info,

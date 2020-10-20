@@ -77,7 +77,7 @@ defmodule GoChampsApiWeb.GameControllerTest do
     test "renders game when data is valid", %{conn: conn} do
       create_attrs = PhaseHelpers.map_phase_id(@create_attrs)
       conn = post(conn, Routes.v1_game_path(conn, :create), game: create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert %{"id" => id, "phase_id" => phase_id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.v1_game_path(conn, :show, id))
 
@@ -85,6 +85,7 @@ defmodule GoChampsApiWeb.GameControllerTest do
                "away_score" => 10,
                "away_team" => nil,
                "datetime" => "2019-08-25T16:59:27Z",
+               "phase_id" => phase_id,
                "home_score" => 20,
                "home_team" => nil,
                "id" => id,
