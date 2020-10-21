@@ -198,10 +198,6 @@
               "title": {
                 "type": "string",
                 "description": "Stat title"
-              },
-              "aggregation_type": {
-                "type": "string",
-                "description": "Stat title"
               }
             }
           }

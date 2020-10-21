@@ -14,16 +14,13 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
     twitter: "twitter",
     player_stats: [
       %{
-        title: "fixed stat",
-        aggregation_type: "fixed"
+        title: "fixed stat"
       },
       %{
-        title: "sum stat",
-        aggregation_type: "sum"
+        title: "sum stat"
       },
       %{
-        title: "average stat",
-        aggregation_type: "average"
+        title: "average stat"
       }
     ]
   }
@@ -112,11 +109,8 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       [fixed_stat, sum_stat, average_stat] = result_player_stats
 
       assert fixed_stat["title"] == "fixed stat"
-      assert fixed_stat["aggregation_type"] == "fixed"
       assert sum_stat["title"] == "sum stat"
-      assert sum_stat["aggregation_type"] == "sum"
       assert average_stat["title"] == "average stat"
-      assert average_stat["aggregation_type"] == "average"
     end
 
     @tag :authenticated

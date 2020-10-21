@@ -19,7 +19,6 @@ defmodule GoChampsApi.Tournaments.Tournament do
 
     embeds_many :player_stats, PlayerStats, on_replace: :delete do
       field :title, :string
-      field :aggregation_type, :string
     end
 
     belongs_to :organization, Organization
@@ -51,8 +50,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
 
   defp player_stats_changeset(schema, params) do
     schema
-    |> cast(params, [:aggregation_type, :title])
+    |> cast(params, [:title])
     |> validate_required([:title])
-    |> validate_inclusion(:aggregation_type, ["fixed", "sum", "average"])
   end
 end

@@ -40,8 +40,7 @@ defmodule GoChampsApiWeb.TournamentView do
   def render("player_stats.json", %{tournament: player_stats}) do
     %{
       id: player_stats.id,
-      title: player_stats.title,
-      aggregation_type: player_stats.aggregation_type
+      title: player_stats.title
     }
   end
 end
