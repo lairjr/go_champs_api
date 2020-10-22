@@ -49,7 +49,8 @@ defmodule GoChampsApi.MixProject do
       {:guardian, "~> 2.0"},
       {:comeonin, "~> 5.3.1"},
       {:bcrypt_elixir, "~> 2.2.0"},
-      {:recaptcha, "~> 3.0"}
+      {:recaptcha, "~> 3.0"},
+      {:quantum, "~> 3.0"}
     ]
   end
 

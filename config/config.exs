@@ -31,6 +31,12 @@ config :go_champs_api, GoChampsApiWeb.Auth.Guardian,
 #     ]
 #   }
 
+config :go_champs_api, GoChampsApi.Scheduler,
+  jobs: [
+    # Every minute
+    {"* * * * *", {GoChampsApi.PlayerStatsLogs, :do_work, []}}
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

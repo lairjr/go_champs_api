@@ -226,4 +226,9 @@ defmodule GoChampsApi.PlayerStatsLogs do
   def change_player_stats_log(%PlayerStatsLog{} = player_stats_log) do
     PlayerStatsLog.changeset(player_stats_log, %{})
   end
+
+  def do_work() do
+    IO.inspect("trigger doing work")
+    IO.inspect(DateTime.utc_now())
+  end
 end
