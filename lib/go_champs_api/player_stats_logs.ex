@@ -8,6 +8,8 @@ defmodule GoChampsApi.PlayerStatsLogs do
 
   alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
 
+  alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments.PendingAggregatedPlayerStatsByTournament
+
   @doc """
   Returns the list of player_stats_log.
 
@@ -123,9 +125,36 @@ defmodule GoChampsApi.PlayerStatsLogs do
 
   """
   def create_player_stats_log(attrs \\ %{}) do
-    %PlayerStatsLog{}
-    |> PlayerStatsLog.changeset(attrs)
-    |> Repo.insert()
+    player_stats_logs_changeset =
+      %PlayerStatsLog{}
+      |> PlayerStatsLog.changeset(attrs)
+
+    case player_stats_logs_changeset.valid? do
+      false ->
+        {:error, player_stats_logs_changeset}
+
+      true ->
+        pending_aggregated_player_stats_by_tournament = %{
+          tournament_id: attrs.tournament_id
+        }
+
+        pending_aggregated_player_stats_by_tournament_changeset =
+          %PendingAggregatedPlayerStatsByTournament{}
+          |> PendingAggregatedPlayerStatsByTournament.changeset(
+            pending_aggregated_player_stats_by_tournament
+          )
+
+        {:ok, %{player_stats_logs: player_stats_logs}} =
+          Ecto.Multi.new()
+          |> Ecto.Multi.insert(:player_stats_logs, player_stats_logs_changeset)
+          |> Ecto.Multi.insert(
+            :pending_aggregated_player_stats_by_tournament,
+            pending_aggregated_player_stats_by_tournament_changeset
+          )
+          |> Repo.transaction()
+
+        {:ok, player_stats_logs}
+    end
   end
 
   @doc """

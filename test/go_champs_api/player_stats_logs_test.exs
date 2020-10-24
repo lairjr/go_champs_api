@@ -4,6 +4,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
   alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.Tournaments
   alias GoChampsApi.Helpers.PlayerHelpers
+  alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments
   alias GoChampsApi.Phases
 
   describe "player_stats_log" do
@@ -74,7 +75,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert organization.id == tournament.organization_id
     end
 
-    test "create_player_stats_log/1 with valid data creates a player_stats_log" do
+    test "create_player_stats_log/1 with valid data creates a player_stats_log and add pending aggregated player stats" do
       valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
 
       assert {:ok, %PlayerStatsLog{} = player_stats_log} =
@@ -83,6 +84,12 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert player_stats_log.stats == %{
                "some" => "some"
              }
+
+      [pending_aggregated_player_stats_by_tournament] =
+        PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+
+      assert pending_aggregated_player_stats_by_tournament.tournament_id ==
+               player_stats_log.tournament_id
     end
 
     test "create_player_stats_log/1 with invalid data returns error changeset" do
