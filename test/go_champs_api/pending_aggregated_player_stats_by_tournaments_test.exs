@@ -2,6 +2,7 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Tournaments
   alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments
 
   describe "pending_aggregated_player_stats_by_tournament" do
@@ -115,6 +116,31 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
                PendingAggregatedPlayerStatsByTournaments.change_pending_aggregated_player_stats_by_tournament(
                  pending_aggregated_player_stats_by_tournament
                )
+    end
+
+    test "list tournament_id\'s in list_tournament_ids" do
+      pending_aggregated_player_stats_by_tournament =
+        pending_aggregated_player_stats_by_tournament_fixture()
+
+      %{tournament_id: pending_aggregated_player_stats_by_tournament.tournament_id}
+      |> PendingAggregatedPlayerStatsByTournaments.create_pending_aggregated_player_stats_by_tournament()
+
+      some_tournament =
+        Tournaments.get_tournament!(pending_aggregated_player_stats_by_tournament.tournament_id)
+
+      {:ok, another_tournament} =
+        %{name: "another tournament", slug: "another-slug"}
+        |> Map.merge(%{organization_id: some_tournament.organization_id})
+        |> Tournaments.create_tournament()
+
+      %{tournament_id: another_tournament.id}
+      |> PendingAggregatedPlayerStatsByTournaments.create_pending_aggregated_player_stats_by_tournament()
+
+      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() ==
+               [
+                 some_tournament.id,
+                 another_tournament.id
+               ]
     end
   end
 end
