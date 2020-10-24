@@ -118,7 +118,7 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
                )
     end
 
-    test "list tournament_id\'s in list_tournament_ids" do
+    test "list_tournament_ids returns all tournament_ids" do
       pending_aggregated_player_stats_by_tournament =
         pending_aggregated_player_stats_by_tournament_fixture()
 
@@ -136,11 +136,26 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
       %{tournament_id: another_tournament.id}
       |> PendingAggregatedPlayerStatsByTournaments.create_pending_aggregated_player_stats_by_tournament()
 
-      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() ==
-               [
-                 some_tournament.id,
-                 another_tournament.id
-               ]
+      results = PendingAggregatedPlayerStatsByTournaments.list_tournament_ids()
+
+      assert Enum.member?(results, some_tournament.id) == true
+      assert Enum.member?(results, another_tournament.id) == true
+    end
+
+    test "delete_by_tournament_id deletes all pending_aggregated_player_stats_by_tournament pertaining to a tournament_id" do
+      pending_aggregated_player_stats_by_tournament =
+        pending_aggregated_player_stats_by_tournament_fixture()
+
+      %{tournament_id: pending_aggregated_player_stats_by_tournament.tournament_id}
+      |> PendingAggregatedPlayerStatsByTournaments.create_pending_aggregated_player_stats_by_tournament()
+
+      assert {2, _} =
+               PendingAggregatedPlayerStatsByTournaments.delete_by_tournament_id(
+                 pending_aggregated_player_stats_by_tournament.tournament_id
+               )
+
+      assert PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament() ==
+               []
     end
   end
 end
