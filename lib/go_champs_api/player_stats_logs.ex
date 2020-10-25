@@ -250,7 +250,7 @@ defmodule GoChampsApi.PlayerStatsLogs do
 
   """
   def update_player_stats_logs(player_stats_logs) do
-    multi =
+    multi_player_stats_logs =
       player_stats_logs
       |> Enum.reduce(Ecto.Multi.new(), fn player_stats_log, multi ->
         %{"id" => id} = player_stats_log
@@ -260,7 +260,41 @@ defmodule GoChampsApi.PlayerStatsLogs do
         Ecto.Multi.update(multi, id, changeset)
       end)
 
-    Repo.transaction(multi)
+    case Enum.count(player_stats_logs) do
+      0 ->
+        Repo.transaction(multi_player_stats_logs)
+
+      _ ->
+        current_player_stats_log =
+          Repo.get_by!(PlayerStatsLog, id: List.first(player_stats_logs)["id"])
+
+        pending_aggregated_player_stats_by_tournament = %{
+          tournament_id: current_player_stats_log.tournament_id
+        }
+
+        pending_aggregated_player_stats_by_tournament_changeset =
+          %PendingAggregatedPlayerStatsByTournament{}
+          |> PendingAggregatedPlayerStatsByTournament.changeset(
+            pending_aggregated_player_stats_by_tournament
+          )
+
+        multi_player_stats_logs_and_pending_aggregated_player_stats =
+          multi_player_stats_logs
+          |> Ecto.Multi.insert(
+            :pending_aggregated_player_stats_by_tournament,
+            pending_aggregated_player_stats_by_tournament_changeset
+          )
+
+        case Repo.transaction(multi_player_stats_logs_and_pending_aggregated_player_stats) do
+          {:ok, transaction_result} ->
+            {:ok,
+             transaction_result
+             |> Map.drop([:pending_aggregated_player_stats_by_tournament])}
+
+          _ ->
+            Repo.transaction(multi_player_stats_logs_and_pending_aggregated_player_stats)
+        end
+    end
   end
 
   @doc """

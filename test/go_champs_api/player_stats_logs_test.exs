@@ -130,7 +130,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
                batch_results[0].tournament_id
     end
 
-    test "update_player_stats_log/2 with valid data updates the player_stats_log" do
+    test "update_player_stats_log/2 with valid data updates the player_stats_log and creates a player_stats_log and add pending aggregated player stats" do
       player_stats_log = player_stats_log_fixture()
 
       assert {:ok, %PlayerStatsLog{} = player_stats_log} =
@@ -139,6 +139,12 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert player_stats_log.stats == %{
                "some" => "some updated"
              }
+
+      [pending_aggregated_player_stats_by_tournament] =
+        PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+
+      assert pending_aggregated_player_stats_by_tournament.tournament_id ==
+               player_stats_log.tournament_id
     end
 
     test "update_player_stats_log/2 with invalid data returns error changeset" do
@@ -150,7 +156,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert player_stats_log == PlayerStatsLogs.get_player_stats_log!(player_stats_log.id)
     end
 
-    test "update_player_stats_logs/1 with valid data updates the player_stats_log" do
+    test "update_player_stats_logs/1 with valid data updates the player_stats_log and creates a player_stats_log and add pending aggregated player stats" do
       attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
 
       {:ok, %PlayerStatsLog{} = first_player_stats_log} =
@@ -186,6 +192,17 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert batch_results[second_player_stats_log.id].stats == %{
                "some" => "some second updated"
              }
+
+      # In this test we are calling create_player_stats_log twice to set 
+      # the test up, that why we need to assert if only have 3 cause the 
+      # update should only add it once.
+      assert Enum.count(
+               PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+             ) == 3
+
+      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() == [
+               attrs.tournament_id
+             ]
     end
 
     test "delete_player_stats_log/1 deletes the player_stats_log" do
