@@ -140,11 +140,16 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
                "some" => "some updated"
              }
 
-      [pending_aggregated_player_stats_by_tournament] =
-        PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+      # In this test we are calling create_player_stats_log twice to set 
+      # the test up, that why we need to assert if only have 3 cause the 
+      # update should only add it once.
+      assert Enum.count(
+               PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+             ) == 2
 
-      assert pending_aggregated_player_stats_by_tournament.tournament_id ==
+      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() == [
                player_stats_log.tournament_id
+             ]
     end
 
     test "update_player_stats_log/2 with invalid data returns error changeset" do

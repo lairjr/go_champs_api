@@ -232,9 +232,36 @@ defmodule GoChampsApi.PlayerStatsLogs do
 
   """
   def update_player_stats_log(%PlayerStatsLog{} = player_stats_log, attrs) do
-    player_stats_log
-    |> PlayerStatsLog.changeset(attrs)
-    |> Repo.update()
+    player_stats_logs_changeset =
+      player_stats_log
+      |> PlayerStatsLog.changeset(attrs)
+
+    case player_stats_logs_changeset.valid? do
+      false ->
+        {:error, player_stats_logs_changeset}
+
+      true ->
+        pending_aggregated_player_stats_by_tournament = %{
+          tournament_id: player_stats_log.tournament_id
+        }
+
+        pending_aggregated_player_stats_by_tournament_changeset =
+          %PendingAggregatedPlayerStatsByTournament{}
+          |> PendingAggregatedPlayerStatsByTournament.changeset(
+            pending_aggregated_player_stats_by_tournament
+          )
+
+        {:ok, %{player_stats_logs: player_stats_logs}} =
+          Ecto.Multi.new()
+          |> Ecto.Multi.update(:player_stats_logs, player_stats_logs_changeset)
+          |> Ecto.Multi.insert(
+            :pending_aggregated_player_stats_by_tournament,
+            pending_aggregated_player_stats_by_tournament_changeset
+          )
+          |> Repo.transaction()
+
+        {:ok, player_stats_logs}
+    end
   end
 
   @doc """
