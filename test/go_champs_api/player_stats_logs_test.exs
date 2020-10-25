@@ -140,8 +140,8 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
                "some" => "some updated"
              }
 
-      # In this test we are calling create_player_stats_log twice to set 
-      # the test up, that why we need to assert if only have 3 cause the 
+      # In this test we are calling create_player_stats_log once to set 
+      # the test up, that why we need to assert if only have 2 cause the 
       # update should only add it once.
       assert Enum.count(
                PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
@@ -217,6 +217,17 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert_raise Ecto.NoResultsError, fn ->
         PlayerStatsLogs.get_player_stats_log!(player_stats_log.id)
       end
+
+      # In this test we are calling create_player_stats_log once to set 
+      # the test up, that why we need to assert if only have 2 cause the 
+      # update should only add it once.
+      assert Enum.count(
+               PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+             ) == 2
+
+      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() == [
+               player_stats_log.tournament_id
+             ]
     end
 
     test "change_player_stats_log/1 returns a player_stats_log changeset" do

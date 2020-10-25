@@ -337,7 +337,26 @@ defmodule GoChampsApi.PlayerStatsLogs do
 
   """
   def delete_player_stats_log(%PlayerStatsLog{} = player_stats_log) do
-    Repo.delete(player_stats_log)
+    pending_aggregated_player_stats_by_tournament = %{
+      tournament_id: player_stats_log.tournament_id
+    }
+
+    pending_aggregated_player_stats_by_tournament_changeset =
+      %PendingAggregatedPlayerStatsByTournament{}
+      |> PendingAggregatedPlayerStatsByTournament.changeset(
+        pending_aggregated_player_stats_by_tournament
+      )
+
+    {:ok, %{player_stats_logs: player_stats_logs}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete(:player_stats_logs, player_stats_log)
+      |> Ecto.Multi.insert(
+        :pending_aggregated_player_stats_by_tournament,
+        pending_aggregated_player_stats_by_tournament_changeset
+      )
+      |> Repo.transaction()
+
+    {:ok, player_stats_logs}
   end
 
   @doc """
