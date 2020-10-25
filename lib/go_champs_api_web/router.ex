@@ -38,6 +38,10 @@ defmodule GoChampsApiWeb.Router do
   scope "/v1", GoChampsApiWeb, as: :v1 do
     pipe_through :api
 
+    resources "/aggregated-player-stats-by-tournament",
+              AggregatedPlayerStatsByTournamentController,
+              only: [:index, :show]
+
     resources "/draws", DrawController, only: [:show]
 
     resources "/eliminations", EliminationController, only: [:show]
