@@ -75,7 +75,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert organization.id == tournament.organization_id
     end
 
-    test "create_player_stats_log/1 with valid data creates a player_stats_log and add pending aggregated player stats" do
+    test "create_player_stats_log/1 with valid data and creates a player_stats_log and add pending aggregated player stats" do
       valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
 
       assert {:ok, %PlayerStatsLog{} = player_stats_log} =
@@ -96,7 +96,7 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert {:error, %Ecto.Changeset{}} = PlayerStatsLogs.create_player_stats_log(@invalid_attrs)
     end
 
-    test "create_player_stats_logs/1 with valid data creates a player_stats_log" do
+    test "create_player_stats_logs/1 with valid data creates a player_stats_log and creates a player_stats_log and add pending aggregated player stats" do
       first_valid_attrs = PlayerHelpers.map_player_id_and_tournament_id(@valid_attrs)
 
       second_valid_attrs =
@@ -122,6 +122,12 @@ defmodule GoChampsApi.PlayerStatsLogsTest do
       assert batch_results[1].stats == %{
                "some" => "some"
              }
+
+      [pending_aggregated_player_stats_by_tournament] =
+        PendingAggregatedPlayerStatsByTournaments.list_pending_aggregated_player_stats_by_tournament()
+
+      assert pending_aggregated_player_stats_by_tournament.tournament_id ==
+               batch_results[0].tournament_id
     end
 
     test "update_player_stats_log/2 with valid data updates the player_stats_log" do
