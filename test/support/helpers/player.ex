@@ -2,6 +2,14 @@ defmodule GoChampsApi.Helpers.PlayerHelpers do
   alias GoChampsApi.Helpers.TournamentHelpers
   alias GoChampsApi.Players
 
+  def map_player_id(tournament_id, attrs \\ %{}) do
+    {:ok, player} =
+      %{name: "some player", tournament_id: tournament_id}
+      |> Players.create_player()
+
+    Map.merge(attrs, %{player_id: player.id, tournament_id: player.tournament_id})
+  end
+
   def map_player_id_and_tournament_id(attrs \\ %{}) do
     {:ok, player} =
       %{name: "some player"}

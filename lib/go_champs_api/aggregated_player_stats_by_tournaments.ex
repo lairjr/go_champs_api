@@ -6,6 +6,8 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
   import Ecto.Query, warn: false
   alias GoChampsApi.Repo
 
+  alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
+  alias GoChampsApi.Tournaments
   alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
 
   @doc """
@@ -108,5 +110,55 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
         %AggregatedPlayerStatsByTournament{} = aggregated_player_stats_by_tournament
       ) do
     AggregatedPlayerStatsByTournament.changeset(aggregated_player_stats_by_tournament, %{})
+  end
+
+  @doc """
+  Generates a aggregated_player_stats_by_tournament by tournament id.
+
+  ## Examples
+
+      iex> generate_aggregated_player_stats(tournament_id)
+      %Ecto.Changeset{source: %AggregatedPlayerStatsByTournament{}}
+
+  """
+  def generate_aggregated_player_stats(tournament_id) do
+    tournament = Tournaments.get_tournament!(tournament_id)
+
+    player_id_query =
+      from p in PlayerStatsLog,
+        where: p.tournament_id == ^tournament_id,
+        group_by: p.player_id,
+        select: p.player_id
+
+    players_id = Repo.all(player_id_query)
+
+    Enum.each(players_id, fn player_id ->
+      player_stats_query =
+        from p in PlayerStatsLog,
+          where: p.tournament_id == ^tournament_id and p.player_id == ^player_id
+
+      player_stats_logs = Repo.all(player_stats_query)
+
+      player_aggregated_stats =
+        player_stats_logs
+        |> Enum.reduce(%{}, fn player_stats_log, aggregated_stats ->
+          tournament.player_stats
+          |> Enum.reduce(aggregated_stats, fn player_stats, player_stats_map ->
+            {current_stat_value, _} =
+              Map.get(player_stats_log.stats, player_stats.id, "0")
+              |> Float.parse()
+
+            aggregated_stat_value = Map.get(aggregated_stats, player_stats.id, 0)
+
+            Map.put(player_stats_map, player_stats.id, current_stat_value + aggregated_stat_value)
+          end)
+        end)
+
+      create_aggregated_player_stats_by_tournament(%{
+        tournament_id: tournament_id,
+        player_id: player_id,
+        stats: player_aggregated_stats
+      })
+    end)
   end
 end

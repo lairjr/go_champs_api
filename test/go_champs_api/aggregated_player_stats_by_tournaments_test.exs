@@ -2,9 +2,13 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Tournaments
+  alias GoChampsApi.Helpers.OrganizationHelpers
+  alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.Helpers.PlayerHelpers
 
   describe "aggregated_player_stats_by_tournament" do
+    alias GoChampsApi.Tournaments.Tournament
     alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
 
     @valid_attrs %{stats: %{"some" => "some"}}
@@ -12,6 +16,19 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
       stats: %{"some" => "some updated"}
     }
     @invalid_attrs %{player_id: nil, stats: nil, tournament_id: nil}
+
+    @valid_tournament_attrs %{
+      name: "some name",
+      slug: "some-slug",
+      player_stats: [
+        %{
+          title: "some stat"
+        },
+        %{
+          title: "another stat"
+        }
+      ]
+    }
 
     def aggregated_player_stats_by_tournament_fixture(attrs \\ %{}) do
       {:ok, aggregated_player_stats_by_tournament} =
@@ -114,6 +131,55 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
                AggregatedPlayerStatsByTournaments.change_aggregated_player_stats_by_tournament(
                  aggregated_player_stats_by_tournament
                )
+    end
+
+    test "generate_aggregated_player_stats/1 inserts aggregated player stats log" do
+      valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
+      assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
+
+      [first_player_stat, second_player_stat] = tournament.player_stats
+
+      first_valid_attrs =
+        PlayerHelpers.map_player_id(tournament.id, %{
+          stats: %{
+            first_player_stat.id => "6",
+            second_player_stat.id => "2"
+          }
+        })
+
+      second_valid_attrs =
+        %{
+          stats: %{first_player_stat.id => "4", second_player_stat.id => "3"}
+        }
+        |> Map.merge(%{
+          player_id: first_valid_attrs.player_id,
+          tournament_id: first_valid_attrs.tournament_id
+        })
+
+      assert {:ok, batch_results} =
+               PlayerStatsLogs.create_player_stats_logs([first_valid_attrs, second_valid_attrs])
+
+      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats(
+        first_valid_attrs.tournament_id
+      )
+
+      [aggregated_player_stats_by_tournament] =
+        AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+
+      assert aggregated_player_stats_by_tournament.player_id == first_valid_attrs.player_id
+
+      {:ok, first_stat_value} =
+        Map.fetch(aggregated_player_stats_by_tournament.stats, first_player_stat.id)
+
+      assert first_stat_value == 10.0
+
+      {:ok, second_stat_value} =
+        Map.fetch(aggregated_player_stats_by_tournament.stats, second_player_stat.id)
+
+      assert second_stat_value == 5
+
+      assert aggregated_player_stats_by_tournament.tournament_id ==
+               first_valid_attrs.tournament_id
     end
   end
 end
