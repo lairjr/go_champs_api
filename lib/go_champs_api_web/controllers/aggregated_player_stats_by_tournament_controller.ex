@@ -2,7 +2,6 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
   use GoChampsApiWeb, :controller
 
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
-  alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
 
   action_fallback GoChampsApiWeb.FallbackController
 

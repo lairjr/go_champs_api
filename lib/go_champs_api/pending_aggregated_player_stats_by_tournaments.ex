@@ -166,11 +166,18 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
   def run_pending_aggregated_player_stats_generation() do
     list_tournament_ids()
     |> Enum.each(fn tournament_id ->
+      IO.inspect("Trigger aggregated player stats generation")
+      IO.inspect("Tournanment: #{tournament_id}")
+      IO.inspect(DateTime.utc_now())
+
       AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
         tournament_id
       )
 
       delete_by_tournament_id(tournament_id)
+
+      IO.inspect("Tournanment: #{tournament_id}")
+      IO.inspect("Finish aggregated player stats generation")
     end)
   end
 end
