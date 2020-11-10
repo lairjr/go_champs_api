@@ -7,6 +7,7 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments.PendingAggregatedPlayerStatsByTournament
+  alias GoChampsApi.AggregatedPlayerStatsByTournaments
 
   @doc """
   Returns the list of pending_aggregated_player_stats_by_tournament.
@@ -152,5 +153,24 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
       pending_aggregated_player_stats_by_tournament,
       %{}
     )
+  end
+
+  @doc """
+  Generates aggregated player stats log for pending tournaments
+
+  ## Examples
+
+      iex> run_pending_aggregated_player_stats_generation()
+
+  """
+  def run_pending_aggregated_player_stats_generation() do
+    list_tournament_ids()
+    |> Enum.each(fn tournament_id ->
+      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
+        tournament_id
+      )
+
+      delete_by_tournament_id(tournament_id)
+    end)
   end
 end

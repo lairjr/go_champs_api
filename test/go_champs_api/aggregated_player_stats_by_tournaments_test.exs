@@ -133,7 +133,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
                )
     end
 
-    test "generate_aggregated_player_stats/1 inserts aggregated player stats log" do
+    test "generate_aggregated_player_stats_for_tournament/1 inserts aggregated player stats log" do
       valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
       assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
 
@@ -159,7 +159,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
       assert {:ok, batch_results} =
                PlayerStatsLogs.create_player_stats_logs([first_valid_attrs, second_valid_attrs])
 
-      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats(
+      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
         first_valid_attrs.tournament_id
       )
 

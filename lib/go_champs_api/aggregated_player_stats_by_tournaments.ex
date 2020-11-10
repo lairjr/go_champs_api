@@ -117,11 +117,11 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
 
   ## Examples
 
-      iex> generate_aggregated_player_stats(tournament_id)
+      iex> generate_aggregated_player_stats_for_tournament(tournament_id)
       %Ecto.Changeset{source: %AggregatedPlayerStatsByTournament{}}
 
   """
-  def generate_aggregated_player_stats(tournament_id) do
+  def generate_aggregated_player_stats_for_tournament(tournament_id) do
     tournament = Tournaments.get_tournament!(tournament_id)
 
     player_id_query =
