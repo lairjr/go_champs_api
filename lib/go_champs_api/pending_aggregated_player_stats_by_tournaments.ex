@@ -168,7 +168,8 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
     |> Enum.each(fn tournament_id ->
       IO.inspect("Trigger aggregated player stats generation")
       IO.inspect("Tournanment: #{tournament_id}")
-      IO.inspect(DateTime.utc_now())
+      IO.inspect(DateTime.to_string(DateTime.utc_now()))
+      from_date = DateTime.utc_now()
 
       AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
         tournament_id
@@ -177,7 +178,10 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
       delete_by_tournament_id(tournament_id)
 
       IO.inspect("Tournanment: #{tournament_id}")
+      IO.inspect(DateTime.to_string(DateTime.utc_now()))
+      to_date = DateTime.utc_now()
       IO.inspect("Finish aggregated player stats generation")
+      IO.inspect("Duration: #{DateTime.diff(from_date, to_date)} seconds")
     end)
   end
 end

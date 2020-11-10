@@ -184,10 +184,6 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
       valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
       assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
 
-      attrs =
-        @valid_attrs
-        |> Map.merge(%{tournament_id: tournament.id})
-
       [first_player_stat, second_player_stat] = tournament.player_stats
 
       first_valid_attrs =

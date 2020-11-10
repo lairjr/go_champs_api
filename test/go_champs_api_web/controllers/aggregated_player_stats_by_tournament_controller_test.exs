@@ -3,19 +3,12 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentControllerTest do
 
   alias GoChampsApi.Helpers.PlayerHelpers
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
-  alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
 
   @create_attrs %{
     stats: %{
       some: "some"
     }
   }
-  @update_attrs %{
-    stats: %{
-      some: "some updated"
-    }
-  }
-  @invalid_attrs %{player_id: nil, stats: nil, tournament_id: nil}
 
   def fixture(:aggregated_player_stats_by_tournament) do
     attrs = PlayerHelpers.map_player_id_and_tournament_id(@create_attrs)
