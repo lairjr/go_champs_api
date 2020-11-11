@@ -48,6 +48,37 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
              ]
     end
 
+    test "list_aggregated_player_stats_by_tournament/0 returns all aggregated_player_stats_by_tournament pertaining to some tournament" do
+      aggregated_player_stats_by_tournament = aggregated_player_stats_by_tournament_fixture()
+
+      some_tournament =
+        Tournaments.get_tournament!(aggregated_player_stats_by_tournament.tournament_id)
+
+      {:ok, another_tournament} =
+        %{name: "another tournament", slug: "another-slug"}
+        |> Map.merge(%{
+          organization_id: some_tournament.organization_id
+        })
+        |> Tournaments.create_tournament()
+
+      valid_attrs =
+        @valid_attrs
+        |> Map.merge(%{
+          tournament_id: another_tournament.id,
+          player_id: aggregated_player_stats_by_tournament.player_id
+        })
+
+      {:ok, %AggregatedPlayerStatsByTournament{} = another_aggregated_player_stats_by_tournament} =
+        AggregatedPlayerStatsByTournaments.create_aggregated_player_stats_by_tournament(
+          valid_attrs
+        )
+
+      where = [tournament_id: another_tournament.id]
+
+      assert AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(where) ==
+               [another_aggregated_player_stats_by_tournament]
+    end
+
     test "get_aggregated_player_stats_by_tournament!/1 returns the aggregated_player_stats_by_tournament with given id" do
       aggregated_player_stats_by_tournament = aggregated_player_stats_by_tournament_fixture()
 

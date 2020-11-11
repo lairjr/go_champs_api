@@ -24,6 +24,20 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
   end
 
   @doc """
+  Returns the list of aggregated_player_stats_by_tournaments filter by keywork param.
+
+  ## Examples
+
+      iex> list_aggregated_player_stats_by_tournament([name: "some name"])
+      [%AggregatedPlayerStatsByTournament{}, ...]
+
+  """
+  def list_aggregated_player_stats_by_tournament(where) do
+    query = from t in AggregatedPlayerStatsByTournament, where: ^where
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single aggregated_player_stats_by_tournament.
 
   Raises `Ecto.NoResultsError` if the Aggregated player stats by tournament does not exist.
