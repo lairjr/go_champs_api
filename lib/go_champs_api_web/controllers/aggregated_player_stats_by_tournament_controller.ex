@@ -5,9 +5,21 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
-  def index(conn, _params) do
+  defp map_to_keyword(map) do
+    Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
     aggregated_player_stats_by_tournament =
-      AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+      case params do
+        %{"where" => where} ->
+          where
+          |> map_to_keyword()
+          |> AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+
+        _ ->
+          AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+      end
 
     render(conn, "index.json",
       aggregated_player_stats_by_tournament: aggregated_player_stats_by_tournament

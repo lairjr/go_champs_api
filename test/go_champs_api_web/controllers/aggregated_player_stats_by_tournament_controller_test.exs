@@ -3,6 +3,7 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentControllerTest do
 
   alias GoChampsApi.Helpers.PlayerHelpers
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Tournaments
 
   @create_attrs %{
     stats: %{
@@ -28,10 +29,35 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentControllerTest do
       conn = get(conn, Routes.v1_aggregated_player_stats_by_tournament_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
-  end
 
-  defp create_aggregated_player_stats_by_tournament(_) do
-    aggregated_player_stats_by_tournament = fixture(:aggregated_player_stats_by_tournament)
-    {:ok, aggregated_player_stats_by_tournament: aggregated_player_stats_by_tournament}
+    test "lists all tournaments matching where", %{conn: conn} do
+      first_aggregated_player_stats = fixture(:aggregated_player_stats_by_tournament)
+
+      tournament = Tournaments.get_tournament!(first_aggregated_player_stats.tournament_id)
+
+      {:ok, other_tournament} =
+        %{name: "some other tournament", slug: "some-other-tournament"}
+        |> Map.merge(%{organization_id: tournament.organization_id})
+        |> Tournaments.create_tournament()
+
+      {:ok, second_aggregated_player_stats} =
+        @create_attrs
+        |> Map.merge(%{
+          tournament_id: other_tournament.id,
+          player_id: first_aggregated_player_stats.player_id
+        })
+        |> AggregatedPlayerStatsByTournaments.create_aggregated_player_stats_by_tournament()
+
+      where = %{"tournament_id" => second_aggregated_player_stats.tournament_id}
+
+      conn =
+        get(
+          conn,
+          Routes.v1_aggregated_player_stats_by_tournament_path(conn, :index, where: where)
+        )
+
+      [aggregated_player_stats_result] = json_response(conn, 200)["data"]
+      assert aggregated_player_stats_result["id"] == second_aggregated_player_stats.id
+    end
   end
 end
