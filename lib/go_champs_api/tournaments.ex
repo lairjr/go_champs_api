@@ -7,6 +7,12 @@ defmodule GoChampsApi.Tournaments do
   alias GoChampsApi.Repo
 
   alias GoChampsApi.Tournaments.Tournament
+
+  alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments.PendingAggregatedPlayerStatsByTournament
+  alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
+  alias GoChampsApi.Players.Player
+  alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
+
   alias GoChampsApi.Organizations.Organization
 
   @doc """
@@ -142,7 +148,44 @@ defmodule GoChampsApi.Tournaments do
 
   """
   def delete_tournament(%Tournament{} = tournament) do
-    Repo.delete(tournament)
+    aggregated_delete_query =
+      from a in AggregatedPlayerStatsByTournament,
+        where: a.tournament_id == ^tournament.id
+
+    pending_aggregated_delete_query =
+      from p in PendingAggregatedPlayerStatsByTournament,
+        where: p.tournament_id == ^tournament.id
+
+    player_delete_query =
+      from p in Player,
+        where: p.tournament_id == ^tournament.id
+
+    player_stats_logs_delete_query =
+      from p in PlayerStatsLog,
+        where: p.tournament_id == ^tournament.id
+
+    {:ok, %{tournament: tournament_result}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete_all(
+        :aggregated_player_stats_by_tournament,
+        aggregated_delete_query
+      )
+      |> Ecto.Multi.delete_all(
+        :pending_aggregated_player_stats_by_tournament,
+        pending_aggregated_delete_query
+      )
+      |> Ecto.Multi.delete_all(
+        :player_stats_logs,
+        player_stats_logs_delete_query
+      )
+      |> Ecto.Multi.delete_all(
+        :players,
+        player_delete_query
+      )
+      |> Ecto.Multi.delete(:tournament, tournament)
+      |> Repo.transaction()
+
+    {:ok, tournament_result}
   end
 
   @doc """

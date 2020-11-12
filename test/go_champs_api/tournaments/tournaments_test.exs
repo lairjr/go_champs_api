@@ -3,6 +3,12 @@ defmodule GoChampsApi.TournamentsTest do
 
   alias GoChampsApi.Helpers.OrganizationHelpers
   alias GoChampsApi.Tournaments
+  alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Helpers.PlayerHelpers
+  alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Players
+  alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.Organizations
 
   describe "tournaments" do
@@ -152,6 +158,53 @@ defmodule GoChampsApi.TournamentsTest do
       tournament = tournament_fixture()
       assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
       assert_raise Ecto.NoResultsError, fn -> Tournaments.get_tournament!(tournament.id) end
+    end
+
+    test "delete_tournament/1 deletes the tournament and associated players" do
+      {:ok, player} =
+        %{name: "player name"}
+        |> TournamentHelpers.map_tournament_id()
+        |> Players.create_player()
+
+      tournament = Tournaments.get_tournament!(player.tournament_id)
+
+      assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
+      assert Players.list_players() == []
+    end
+
+    test "delete_tournament/1 deletes the tournament and associated player_stats_logs" do
+      {:ok, player_stats_log} =
+        %{stats: %{"some" => "some"}}
+        |> PlayerHelpers.map_player_id_and_tournament_id()
+        |> PlayerStatsLogs.create_player_stats_log()
+
+      tournament = Tournaments.get_tournament!(player_stats_log.tournament_id)
+
+      assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
+      assert PlayerStatsLogs.list_player_stats_log() == []
+    end
+
+    test "delete_tournament/1 deletes the tournament and associated pending_aggregated_player_stats_by_tournament" do
+      tournament = tournament_fixture()
+
+      %{tournament_id: tournament.id}
+      |> PendingAggregatedPlayerStatsByTournaments.create_pending_aggregated_player_stats_by_tournament()
+
+      assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
+      assert PendingAggregatedPlayerStatsByTournaments.list_tournament_ids() == []
+    end
+
+    test "delete_tournament/1 deletes the tournament and associated aggregated_player_stats_by_tournament" do
+      {:ok, aggregated_player_stats_by_tournament} =
+        %{stats: %{"some" => "some"}}
+        |> PlayerHelpers.map_player_id_and_tournament_id()
+        |> AggregatedPlayerStatsByTournaments.create_aggregated_player_stats_by_tournament()
+
+      tournament =
+        Tournaments.get_tournament!(aggregated_player_stats_by_tournament.tournament_id)
+
+      assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
+      assert AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament() == []
     end
 
     test "change_tournament/1 returns a tournament changeset" do
