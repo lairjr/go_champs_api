@@ -2,6 +2,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Players
   alias GoChampsApi.Tournaments
   alias GoChampsApi.Helpers.OrganizationHelpers
   alias GoChampsApi.PlayerStatsLogs
@@ -75,8 +76,55 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
 
       where = [tournament_id: another_tournament.id]
 
-      assert AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(where) ==
+      assert AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(
+               where,
+               "some"
+             ) ==
                [another_aggregated_player_stats_by_tournament]
+    end
+
+    test "list_aggregated_player_stats_by_tournament/0 returns all aggregated_player_stats_by_tournament ordered" do
+      valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
+      assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
+
+      [first_player_stat, second_player_stat] = tournament.player_stats
+
+      first_valid_attrs =
+        PlayerHelpers.map_player_id(tournament.id, %{
+          stats: %{
+            first_player_stat.id => "6",
+            second_player_stat.id => "2"
+          }
+        })
+
+      {:ok, second_player} =
+        %{name: "another player"}
+        |> Map.merge(%{tournament_id: tournament.id})
+        |> Players.create_player()
+
+      second_valid_attrs = %{
+        stats: %{first_player_stat.id => "4", second_player_stat.id => "3"},
+        player_id: second_player.id,
+        tournament_id: first_valid_attrs.tournament_id
+      }
+
+      assert {:ok, batch_results} =
+               PlayerStatsLogs.create_player_stats_logs([second_valid_attrs, first_valid_attrs])
+
+      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
+        first_valid_attrs.tournament_id
+      )
+
+      where = [tournament_id: tournament.id]
+
+      [first_aggregated, second_aggregated] =
+        AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(
+          where,
+          first_player_stat.id
+        )
+
+      assert Map.fetch(first_aggregated.stats, first_player_stat.id) == {:ok, 6}
+      assert Map.fetch(second_aggregated.stats, first_player_stat.id) == {:ok, 4}
     end
 
     test "get_aggregated_player_stats_by_tournament!/1 returns the aggregated_player_stats_by_tournament with given id" do

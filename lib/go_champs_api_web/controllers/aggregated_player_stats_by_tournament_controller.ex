@@ -15,7 +15,7 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
         %{"where" => where} ->
           where
           |> map_to_keyword()
-          |> AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+          |> AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament("some")
 
         _ ->
           AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()

@@ -24,16 +24,22 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
   end
 
   @doc """
-  Returns the list of aggregated_player_stats_by_tournaments filter by keywork param.
+  Returns the list of aggregated_player_stats_by_tournaments filter by keywork param sorted by player stats id.
 
   ## Examples
 
-      iex> list_aggregated_player_stats_by_tournament([name: "some name"])
+      iex> list_aggregated_player_stats_by_tournament([name: "some name"], "player-stats-id")
       [%AggregatedPlayerStatsByTournament{}, ...]
 
   """
-  def list_aggregated_player_stats_by_tournament(where) do
-    query = from t in AggregatedPlayerStatsByTournament, where: ^where
+  def list_aggregated_player_stats_by_tournament(where, sort_stat_id) do
+    stat_order = "stats->>'#{sort_stat_id}'"
+
+    query =
+      from t in AggregatedPlayerStatsByTournament,
+        where: ^where,
+        order_by: fragment("? DESC", ^stat_order)
+
     Repo.all(query)
   end
 
