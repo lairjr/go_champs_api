@@ -2,6 +2,7 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
   use GoChampsApiWeb, :controller
 
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Tournaments
 
   action_fallback GoChampsApiWeb.FallbackController
 
@@ -13,9 +14,17 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
     aggregated_player_stats_by_tournament =
       case params do
         %{"where" => where} ->
-          where
-          |> map_to_keyword()
-          |> AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament("some")
+          query =
+            where
+            |> map_to_keyword()
+
+          player_stats_id =
+            Tournaments.get_tournament_default_player_stats_order_id!(query[:tournament_id])
+
+          AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(
+            query,
+            player_stats_id
+          )
 
         _ ->
           AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()

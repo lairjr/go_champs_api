@@ -33,7 +33,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
 
   """
   def list_aggregated_player_stats_by_tournament(where, sort_stat_id, page \\ 0) do
-    stat_order = "stats->>'#{sort_stat_id}'"
+    stat_order = "CAST(stats->>'#{sort_stat_id}' AS integer)"
 
     query =
       from t in AggregatedPlayerStatsByTournament,

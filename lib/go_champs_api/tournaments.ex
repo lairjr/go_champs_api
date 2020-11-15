@@ -87,6 +87,31 @@ defmodule GoChampsApi.Tournaments do
   end
 
   @doc """
+  Gets the first player stats log id
+
+  Raises `Ecto.NoResultsError` if the Tournament does not exist.
+
+  ## Examples
+
+      iex> get_tournament_default_player_stats_order_id!(123)
+      %Tournament{}
+
+      iex> get_tournament_default_player_stats_order_id!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_tournament_default_player_stats_order_id!(id) do
+    tournament =
+      Tournament
+      |> Repo.get!(id)
+
+    case Enum.count(tournament.player_stats) do
+      0 -> 0
+      _ -> Enum.at(tournament.player_stats, 0).id
+    end
+  end
+
+  @doc """
   Creates a tournament.
 
   ## Examples
