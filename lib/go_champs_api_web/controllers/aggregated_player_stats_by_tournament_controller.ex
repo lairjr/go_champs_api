@@ -13,6 +13,11 @@ defmodule GoChampsApiWeb.AggregatedPlayerStatsByTournamentController do
   def index(conn, params) do
     aggregated_player_stats_by_tournament =
       case params do
+        %{"where" => where, "sort" => sort} ->
+          where
+          |> map_to_keyword()
+          |> AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament(sort)
+
         %{"where" => where} ->
           query =
             where
