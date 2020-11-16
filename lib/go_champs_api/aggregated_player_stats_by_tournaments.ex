@@ -33,14 +33,14 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
 
   """
   def list_aggregated_player_stats_by_tournament(where, sort_stat_id, page \\ 0) do
-    stat_order = "CAST(stats->>'#{sort_stat_id}' AS integer)"
+    select_stat = "#{sort_stat_id}"
 
     query =
       from t in AggregatedPlayerStatsByTournament,
         where: ^where,
         limit: 50,
         offset: 50 * ^page,
-        order_by: fragment("? DESC", ^stat_order)
+        order_by: [desc: fragment("?->>?", t.stats, ^select_stat)]
 
     Repo.all(query)
   end
