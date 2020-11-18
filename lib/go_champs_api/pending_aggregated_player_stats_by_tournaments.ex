@@ -171,6 +171,10 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
       IO.inspect(DateTime.to_string(DateTime.utc_now()))
       from_date = DateTime.utc_now()
 
+      AggregatedPlayerStatsByTournaments.delete_aggregated_player_stats_for_tournament(
+        tournament_id
+      )
+
       AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
         tournament_id
       )

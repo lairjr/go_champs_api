@@ -260,5 +260,48 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
       assert aggregated_player_stats_by_tournament.tournament_id ==
                first_valid_attrs.tournament_id
     end
+
+    test "delete_aggregated_player_stats_for_tournament/1 deletes aggregated player stats log" do
+      valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
+      assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
+
+      [first_player_stat, second_player_stat] = tournament.player_stats
+
+      first_valid_attrs =
+        PlayerHelpers.map_player_id(tournament.id, %{
+          stats: %{
+            first_player_stat.id => "6",
+            second_player_stat.id => "2"
+          }
+        })
+
+      second_valid_attrs =
+        %{
+          stats: %{first_player_stat.id => "4", second_player_stat.id => "3"}
+        }
+        |> Map.merge(%{
+          player_id: first_valid_attrs.player_id,
+          tournament_id: first_valid_attrs.tournament_id
+        })
+
+      assert {:ok, batch_results} =
+               PlayerStatsLogs.create_player_stats_logs([first_valid_attrs, second_valid_attrs])
+
+      AggregatedPlayerStatsByTournaments.generate_aggregated_player_stats_for_tournament(
+        first_valid_attrs.tournament_id
+      )
+
+      assert 1 ==
+               AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+               |> Enum.count()
+
+      AggregatedPlayerStatsByTournaments.delete_aggregated_player_stats_for_tournament(
+        first_valid_attrs.tournament_id
+      )
+
+      assert 0 ==
+               AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament()
+               |> Enum.count()
+    end
   end
 end

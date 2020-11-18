@@ -183,4 +183,21 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
       })
     end)
   end
+
+  @doc """
+  Deletes a aggregated_player_stats_by_tournament by tournament id.
+
+  ## Examples
+
+      iex> generate_aggregated_player_stats_for_tournament(tournament_id)
+      %Ecto.Changeset{source: %AggregatedPlayerStatsByTournament{}}
+
+  """
+  def delete_aggregated_player_stats_for_tournament(tournament_id) do
+    query =
+      from t in AggregatedPlayerStatsByTournament,
+        where: [tournament_id: ^tournament_id]
+
+    Repo.delete_all(query)
+  end
 end
