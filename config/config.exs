@@ -15,7 +15,7 @@ config :go_champs_api, GoChampsApiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "imta0fFj1/DTKBsA9UFU4NP9/3U2KQAAi9TqID70AdjSC1sBxS8D1ddhrkRAHP5X",
   render_errors: [view: GoChampsApiWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: GoChampsApi.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: GoChampsApi.PubSub
 
 config :go_champs_api, GoChampsApiWeb.Auth.Guardian,
   issuer: "go_champs_api",

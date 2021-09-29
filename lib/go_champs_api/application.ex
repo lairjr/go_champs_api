@@ -11,6 +11,8 @@ defmodule GoChampsApi.Application do
     children = [
       # Start the Ecto repository
       GoChampsApi.Repo,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: GoChampsApiWeb.PubSub},
       # Start the endpoint when the application starts
       GoChampsApiWeb.Endpoint,
       # Starts a worker by calling: GoChampsApi.Worker.start_link(arg)
