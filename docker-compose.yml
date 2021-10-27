@@ -16,7 +16,7 @@ services:
       - db
 
   db:
-    image: postgres
+    image: postgres:10-alpine
     restart: always
     ports:
       - "5432:5432"
