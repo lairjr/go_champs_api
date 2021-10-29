@@ -22,7 +22,7 @@ defmodule GoChampsApiWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      
+
       alias GoChampsApiWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
