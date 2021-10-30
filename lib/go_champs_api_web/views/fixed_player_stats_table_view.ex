@@ -27,6 +27,10 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableView do
   def render("fixed_player_stats_table.json", %{
         fixed_player_stats_table: fixed_player_stats_table
       }) do
-    %{id: fixed_player_stats_table.id, player_stats: fixed_player_stats_table.player_stats}
+    %{
+      id: fixed_player_stats_table.id,
+      player_stats: fixed_player_stats_table.player_stats,
+      stat_id: fixed_player_stats_table.stat_id
+    }
   end
 end

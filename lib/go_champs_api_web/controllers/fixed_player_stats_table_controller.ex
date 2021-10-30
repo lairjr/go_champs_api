@@ -6,6 +6,11 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedFixedPlayerStatsTable, :id when action in [:delete, :update]
+
+  plug GoChampsApiWeb.Plugs.AuthorizedFixedPlayerStatsTable,
+       :fixed_player_stats_table when action in [:create]
+
   def index(conn, _params) do
     fixed_player_stats_table = FixedPlayerStatsTables.list_fixed_player_stats_table()
     render(conn, "index.json", fixed_player_stats_table: fixed_player_stats_table)
@@ -18,7 +23,7 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableController do
       |> put_status(:created)
       |> put_resp_header(
         "location",
-        Routes.fixed_player_stats_table_path(conn, :show, fixed_player_stats_table)
+        Routes.v1_fixed_player_stats_table_path(conn, :show, fixed_player_stats_table)
       )
       |> render("show.json", fixed_player_stats_table: fixed_player_stats_table)
     end

@@ -2,6 +2,7 @@ defmodule GoChampsApi.FixedPlayerStatsTables.FixedPlayerStatsTable do
   use Ecto.Schema
   use GoChampsApi.Schema
   import Ecto.Changeset
+  alias GoChampsApi.Tournaments.Tournament
 
   schema "fixed_player_stats_table" do
     field :player_stats, :map

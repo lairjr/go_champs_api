@@ -2,6 +2,8 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.FixedPlayerStatsTables
+  alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Tournaments
 
   describe "fixed_player_stats_table" do
     alias GoChampsApi.FixedPlayerStatsTables.FixedPlayerStatsTable
@@ -14,6 +16,7 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
       {:ok, fixed_player_stats_table} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> TournamentHelpers.map_tournament_id_and_stat_id()
         |> FixedPlayerStatsTables.create_fixed_player_stats_table()
 
       fixed_player_stats_table
@@ -31,9 +34,26 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
                fixed_player_stats_table
     end
 
+    test "get_fixed_player_stats_table_organization!/1 returns the organization with a give player id" do
+      fixed_player_stats_table = fixed_player_stats_table_fixture()
+
+      organization =
+        FixedPlayerStatsTables.get_fixed_player_stats_table_organization!(
+          fixed_player_stats_table.id
+        )
+
+      tournament = Tournaments.get_tournament!(fixed_player_stats_table.tournament_id)
+
+      assert organization.name == "some organization"
+      assert organization.slug == "some-slug"
+      assert organization.id == tournament.organization_id
+    end
+
     test "create_fixed_player_stats_table/1 with valid data creates a fixed_player_stats_table" do
+      attrs = TournamentHelpers.map_tournament_id_and_stat_id(@valid_attrs)
+
       assert {:ok, %FixedPlayerStatsTable{} = fixed_player_stats_table} =
-               FixedPlayerStatsTables.create_fixed_player_stats_table(@valid_attrs)
+               FixedPlayerStatsTables.create_fixed_player_stats_table(attrs)
 
       assert fixed_player_stats_table.player_stats == %{}
     end

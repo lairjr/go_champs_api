@@ -38,6 +38,33 @@ defmodule GoChampsApi.FixedPlayerStatsTables do
   def get_fixed_player_stats_table!(id), do: Repo.get!(FixedPlayerStatsTable, id)
 
   @doc """
+  Gets a fixed_player_stats_table organization.
+
+  Raises `Ecto.NoResultsError` if the Fixed player stats table does not exist.
+
+  ## Examples
+
+      iex> get_fixed_player_stats_table!(123)
+      %FixedPlayerStatsTable{}
+
+      iex> get_fixed_player_stats_table!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_fixed_player_stats_table_organization!(id) do
+    {:ok, tournament} =
+      Repo.get_by!(FixedPlayerStatsTable, id: id)
+      |> Repo.preload(tournament: :organization)
+      |> Map.fetch(:tournament)
+
+    {:ok, organization} =
+      tournament
+      |> Map.fetch(:organization)
+
+    organization
+  end
+
+  @doc """
   Creates a fixed_player_stats_table.
 
   ## Examples
