@@ -6,14 +6,20 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableControllerTest do
   alias GoChampsApi.Helpers.TournamentHelpers
 
   @create_attrs %{
-    player_stats: %{
-      playerid: "10"
-    }
+    player_stats: [
+      %{
+        player_id: "some-id",
+        value: "10"
+      }
+    ]
   }
   @update_attrs %{
-    player_stats: %{
-      playerid: "11"
-    }
+    player_stats: [
+      %{
+        player_id: "some-id",
+        value: "11"
+      }
+    ]
   }
   @invalid_attrs %{player_stats: nil}
 
@@ -61,13 +67,16 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableControllerTest do
 
       conn = get(conn, Routes.v1_fixed_player_stats_table_path(conn, :show, id))
 
-      assert %{
-               "id" => id,
-               "stat_id" => stat_id,
-               "player_stats" => %{
-                 "playerid" => "10"
-               }
-             } = json_response(conn, 200)["data"]
+      %{
+        "id" => response_id,
+        "stat_id" => response_stat_id,
+        "player_stats" => [response_player_stats]
+      } = json_response(conn, 200)["data"]
+
+      assert response_id == id
+      assert response_stat_id == stat_id
+      assert response_player_stats["player_id"] == "some-id"
+      assert response_player_stats["value"] == "10"
     end
 
     @tag :authenticated
@@ -117,13 +126,16 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableControllerTest do
 
       conn = get(conn, Routes.v1_fixed_player_stats_table_path(conn, :show, id))
 
-      assert %{
-               "id" => id,
-               "stat_id" => stat_id,
-               "player_stats" => %{
-                 "playerid" => "11"
-               }
-             } = json_response(conn, 200)["data"]
+      %{
+        "id" => response_id,
+        "stat_id" => response_stat_id,
+        "player_stats" => [response_player_stats]
+      } = json_response(conn, 200)["data"]
+
+      assert response_id == id
+      assert response_stat_id == stat_id
+      assert response_player_stats["player_id"] == "some-id"
+      assert response_player_stats["value"] == "11"
     end
 
     @tag :authenticated

@@ -8,8 +8,22 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
   describe "fixed_player_stats_table" do
     alias GoChampsApi.FixedPlayerStatsTables.FixedPlayerStatsTable
 
-    @valid_attrs %{player_stats: %{}}
-    @update_attrs %{player_stats: %{}}
+    @valid_attrs %{
+      player_stats: [
+        %{
+          player_id: "some-id",
+          value: "10"
+        }
+      ]
+    }
+    @update_attrs %{
+      player_stats: [
+        %{
+          player_id: "some-id",
+          value: "11"
+        }
+      ]
+    }
     @invalid_attrs %{player_stats: nil}
 
     def fixed_player_stats_table_fixture(attrs \\ %{}) do
@@ -55,7 +69,9 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
       assert {:ok, %FixedPlayerStatsTable{} = fixed_player_stats_table} =
                FixedPlayerStatsTables.create_fixed_player_stats_table(attrs)
 
-      assert fixed_player_stats_table.player_stats == %{}
+      [%{player_id: player_id, value: value}] = fixed_player_stats_table.player_stats
+      assert player_id == "some-id"
+      assert value == "10"
     end
 
     test "create_fixed_player_stats_table/1 with invalid data returns error changeset" do
@@ -72,7 +88,9 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
                  @update_attrs
                )
 
-      assert fixed_player_stats_table.player_stats == %{}
+      [%{player_id: player_id, value: value}] = fixed_player_stats_table.player_stats
+      assert player_id == "some-id"
+      assert value == "11"
     end
 
     test "update_fixed_player_stats_table/2 with invalid data returns error changeset" do
