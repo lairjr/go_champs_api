@@ -1,0 +1,167 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/api/fixed-player-stats-tables/": {
+      "post": {
+        "tags": [
+          "FixedPlayerStatsTable"
+        ],
+        "summary": "Post fixed_player_stats_table",
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/FixedPlayerStatsTableResponse"
+            },
+            "description": "FixedPlayerStatsTable created OK"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/definitions/FixedPlayerStatsTableRequest"
+            },
+            "required": true,
+            "name": "fixed_player_stats_table",
+            "in": "body",
+            "description": "The fixed_player_stats_table details"
+          }
+        ],
+        "description": "Creates a new fixed_player_stats_table",
+        "consumes": [
+          "application/json"
+        ]
+      },
+      "get": {
+        "tags": [
+          "FixedPlayerStatsTable"
+        ],
+        "summary": "List fixed_player_stats_table",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/FixedPlayerStatsTablesResponse"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "info": {
+    "version": "1.0",
+    "title": "Go Champs API Docs"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "FixedPlayerStatsTablesResponse": {
+      "type": "object",
+      "title": "FixedPlayerStatsTablesReponse",
+      "required": [
+        "data"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FixedPlayerStatsTable"
+          },
+          "description": "The fixed_player_stats_table details"
+        }
+      },
+      "description": "Response schema for multiple fixed_player_stats_table"
+    },
+    "FixedPlayerStatsTableResponse": {
+      "type": "object",
+      "title": "FixedPlayerStatsTableResponse",
+      "properties": {
+        "data": {
+          "description": "The fixed_player_stats_table details",
+          "$ref": "#/definitions/FixedPlayerStatsTable"
+        }
+      },
+      "description": "Response schema for single fixed_player_stats_table"
+    },
+    "FixedPlayerStatsTableRequest": {
+      "type": "object",
+      "title": "FixedPlayerStatsTableRequest",
+      "required": [
+        "fixed_player_stats_table"
+      ],
+      "properties": {
+        "fixed_player_stats_table": {
+          "description": "The fixed_player_stats_table details",
+          "$ref": "#/definitions/FixedPlayerStatsTable"
+        }
+      },
+      "example": {
+        "fixed_player_stats_table": {
+          "stat_id": "some-stat-id",
+          "player_stats": [{
+            "player_id": "some-player-id",
+            "value": "10"
+          }]
+        }
+      },
+      "description": "POST body for creating a fixed_player_stats_table"
+    },
+    "FixedPlayerStatsTable": {
+      "type": "object",
+      "title": "FixedPlayerStatsTable",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "FixedPlayerStatsTable ID"
+        },
+        "stat_id": {
+          "type": "string",
+          "description": "Tournament player stat ID"
+        },
+        "player_stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "player_id": {
+                "type": "string",
+                "description": "Tournament player ID"
+              },
+              "value": {
+                "type": "string",
+                "description": "Player stat value"
+              }
+            }
+          },
+          "description": "The fixed_player_stats_table details"
+        },
+        "tournament_id": {
+          "type": "string",
+          "description": "Tournament ID"
+        },
+        "inserted_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Update timestamp"
+        }
+      },
+      "example": {
+        "id": "1d8ac55c-fb5c-4605-beaf-30db7d4c2fec",
+        "stat_id": "some-stat-id",
+        "player_stats": [{
+          "player_id": "some-player-id",
+          "value": "10"
+        }]
+      },
+      "description": "A fixed_player_stats_table of the app"
+    }
+  }
+}

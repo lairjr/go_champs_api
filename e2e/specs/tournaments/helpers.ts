@@ -1,12 +1,15 @@
 import { randomString } from "../utils/random";
 
 const randomTournament = (organizationId: string) => ({
-  name: randomString(),
-  organization_id: organizationId,
-  slug: randomString(),
   facebook: randomString(),
   instagram: randomString(),
+  name: randomString(),
+  organization_id: organizationId,
+  player_stats: [{
+    title: "Stat one",
+  }],
   site_url: randomString(),
+  slug: randomString(),
   twitter: randomString(),
 });
 
