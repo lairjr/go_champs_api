@@ -11,9 +11,24 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableController do
   plug GoChampsApiWeb.Plugs.AuthorizedFixedPlayerStatsTable,
        :fixed_player_stats_table when action in [:create]
 
-  def index(conn, _params) do
-    fixed_player_stats_table = FixedPlayerStatsTables.list_fixed_player_stats_table()
-    render(conn, "index.json", fixed_player_stats_table: fixed_player_stats_table)
+  defp map_to_keyword(map) do
+    Enum.map(map, fn {key, value} -> {String.to_atom(key), value} end)
+  end
+
+  def index(conn, params) do
+    fixed_player_stats_tables =
+      case params do
+        %{"where" => where} ->
+          where
+          |> map_to_keyword()
+          |> FixedPlayerStatsTables.list_fixed_player_stats_tables()
+
+        _ ->
+          # TODO (lairjr): Return error if no filter is provided
+          []
+      end
+
+    render(conn, "index.json", fixed_player_stats_table: fixed_player_stats_tables)
   end
 
   def create(conn, %{"fixed_player_stats_table" => fixed_player_stats_table_params}) do

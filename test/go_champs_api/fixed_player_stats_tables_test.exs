@@ -36,9 +36,36 @@ defmodule GoChampsApi.FixedPlayerStatsTablesTest do
       fixed_player_stats_table
     end
 
-    test "list_fixed_player_stats_table/0 returns all fixed_player_stats_table" do
-      fixed_player_stats_table = fixed_player_stats_table_fixture()
-      assert FixedPlayerStatsTables.list_fixed_player_stats_table() == [fixed_player_stats_table]
+    test "list_fixed_player_stats_tables/1 returns all fixed_player_stats_table pertaining to some tournament" do
+      first_fixed_player_stats_table = fixed_player_stats_table_fixture()
+
+      some_tournament = Tournaments.get_tournament!(first_fixed_player_stats_table.tournament_id)
+
+      {:ok, another_tournament} =
+        %{
+          name: "another tournament",
+          slug: "another-slug",
+          player_stats: [
+            %{
+              title: "some stat"
+            }
+          ]
+        }
+        |> Map.merge(%{organization_id: some_tournament.organization_id})
+        |> Tournaments.create_tournament()
+
+      [second_player_stat] = another_tournament.player_stats
+
+      {:ok, second_fixed_player_stats_table} =
+        @valid_attrs
+        |> Map.merge(%{tournament_id: another_tournament.id, stat_id: second_player_stat.id})
+        |> FixedPlayerStatsTables.create_fixed_player_stats_table()
+
+      where = [tournament_id: second_fixed_player_stats_table.tournament_id]
+
+      assert FixedPlayerStatsTables.list_fixed_player_stats_tables(where) == [
+               second_fixed_player_stats_table
+             ]
     end
 
     test "get_fixed_player_stats_table!/1 returns the fixed_player_stats_table with given id" do

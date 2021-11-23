@@ -9,16 +9,17 @@ defmodule GoChampsApi.FixedPlayerStatsTables do
   alias GoChampsApi.FixedPlayerStatsTables.FixedPlayerStatsTable
 
   @doc """
-  Returns the list of fixed_player_stats_table.
+  Returns the list of fixed_player_stats_table filter by keywork param.
 
   ## Examples
 
-      iex> list_fixed_player_stats_table()
-      [%FixedPlayerStatsTable{}, ...]
+      iex> list_fixed_player_stats_tables([name: "some name"])
+      [%Tournament{}, ...]
 
   """
-  def list_fixed_player_stats_table do
-    Repo.all(FixedPlayerStatsTable)
+  def list_fixed_player_stats_tables(where) do
+    query = from t in FixedPlayerStatsTable, where: ^where
+    Repo.all(query)
   end
 
   @doc """

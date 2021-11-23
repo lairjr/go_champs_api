@@ -4,6 +4,7 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableControllerTest do
   alias GoChampsApi.FixedPlayerStatsTables
   alias GoChampsApi.FixedPlayerStatsTables.FixedPlayerStatsTable
   alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Tournaments
 
   @create_attrs %{
     player_stats: [
@@ -46,9 +47,36 @@ defmodule GoChampsApiWeb.FixedPlayerStatsTableControllerTest do
   end
 
   describe "index" do
-    test "lists all fixed_player_stats_table", %{conn: conn} do
-      conn = get(conn, Routes.v1_fixed_player_stats_table_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+    test "lists all fixed_player_stats_table matching where", %{conn: conn} do
+      first_fixed_player_stats_table = fixture(:fixed_player_stats_table)
+
+      tournament = Tournaments.get_tournament!(first_fixed_player_stats_table.tournament_id)
+
+      {:ok, another_tournament} =
+        %{
+          name: "another tournament",
+          slug: "another-slug",
+          player_stats: [
+            %{
+              title: "some stat"
+            }
+          ]
+        }
+        |> Map.merge(%{organization_id: tournament.organization_id})
+        |> Tournaments.create_tournament()
+
+      [second_player_stat] = another_tournament.player_stats
+
+      {:ok, second_fixed_player_stats_table} =
+        @create_attrs
+        |> Map.merge(%{tournament_id: another_tournament.id, stat_id: second_player_stat.id})
+        |> FixedPlayerStatsTables.create_fixed_player_stats_table()
+
+      where = %{"tournament_id" => second_fixed_player_stats_table.tournament_id}
+
+      conn = get(conn, Routes.v1_fixed_player_stats_table_path(conn, :index, where: where))
+      [fixed_player_stats_table_result] = json_response(conn, 200)["data"]
+      assert fixed_player_stats_table_result["id"] == second_fixed_player_stats_table.id
     end
   end
 
