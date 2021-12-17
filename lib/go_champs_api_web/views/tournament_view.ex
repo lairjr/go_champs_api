@@ -20,6 +20,7 @@ defmodule GoChampsApiWeb.TournamentView do
         instagram: tournament.instagram,
         site_url: tournament.site_url,
         twitter: tournament.twitter,
+        has_aggregated_player_stats: tournament.has_aggregated_player_stats,
         organization: render_one(tournament.organization, OrganizationView, "organization.json"),
         phases: render_many(tournament.phases, PhaseView, "phase.json"),
         players: render_many(tournament.players, PlayerView, "player.json"),

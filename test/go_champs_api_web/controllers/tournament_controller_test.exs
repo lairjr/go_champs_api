@@ -96,7 +96,8 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
                "instagram" => result_instagram,
                "site_url" => result_site,
                "twitter" => result_twitter,
-               "player_stats" => result_player_stats
+               "player_stats" => result_player_stats,
+               "has_aggregated_player_stats" => result_has_aggregated_player_stats
              } = json_response(conn, 200)["data"]
 
       assert result_name == "some name"
@@ -105,6 +106,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert result_instagram == "instagram"
       assert result_site == "site url"
       assert result_twitter == "twitter"
+      assert result_has_aggregated_player_stats == false
 
       [fixed_stat, sum_stat, average_stat] = result_player_stats
 

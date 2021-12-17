@@ -11,11 +11,11 @@ defmodule GoChampsApi.Tournaments.Tournament do
     field :name, :string
     field :slug, :string
     field :organization_slug, :string
-
     field :facebook, :string
     field :instagram, :string
     field :site_url, :string
     field :twitter, :string
+    field :has_aggregated_player_stats, :boolean
 
     embeds_many :player_stats, PlayerStats, on_replace: :delete do
       field :title, :string

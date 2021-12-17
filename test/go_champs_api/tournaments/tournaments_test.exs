@@ -59,7 +59,11 @@ defmodule GoChampsApi.TournamentsTest do
 
     test "list_tournaments/0 returns all tournaments" do
       tournament = tournament_fixture()
-      assert Tournaments.list_tournaments() == [tournament]
+
+      [result_tournament] = Tournaments.list_tournaments()
+      assert result_tournament.id == tournament.id
+      assert result_tournament.name == tournament.name
+      assert result_tournament.slug == tournament.slug
     end
 
     test "list_tournaments/1 returns all tournaments pertaining to some organization" do
@@ -72,7 +76,11 @@ defmodule GoChampsApi.TournamentsTest do
 
       second_tournament = tournament_fixture()
       where = [organization_id: second_tournament.organization_id]
-      assert Tournaments.list_tournaments(where) == [second_tournament]
+
+      [result_tournament] = Tournaments.list_tournaments(where)
+      assert result_tournament.id == second_tournament.id
+      assert result_tournament.name == second_tournament.name
+      assert result_tournament.slug == second_tournament.slug
     end
 
     test "get_tournament!/1 returns the tournament with given id" do
