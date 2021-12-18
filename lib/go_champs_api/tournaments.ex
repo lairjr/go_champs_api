@@ -230,6 +230,19 @@ defmodule GoChampsApi.Tournaments do
   end
 
   @doc """
+  Sets has_aggregated_player_stats of the given id tournament to true.
+  """
+  def set_aggregated_player_stats!(id) do
+    tournament =
+      Tournament
+      |> Repo.get!(id)
+
+    tournament = Ecto.Changeset.change(tournament, has_aggregated_player_stats: true)
+
+    Repo.update(tournament)
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking tournament changes.
 
   ## Examples

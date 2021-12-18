@@ -263,5 +263,17 @@ defmodule GoChampsApi.TournamentsTest do
 
       assert first_result.id == first_tournament.id
     end
+
+    test "set_aggregated_player_stats/1 updates to true the aggregated_player_stats property" do
+      tournament = tournament_fixture()
+
+      tournament_before = Tournaments.get_tournament!(tournament.id)
+      assert tournament_before.has_aggregated_player_stats == false
+
+      Tournaments.set_aggregated_player_stats!(tournament.id)
+
+      tournament_after = Tournaments.get_tournament!(tournament.id)
+      assert tournament_after.has_aggregated_player_stats == true
+    end
   end
 end
