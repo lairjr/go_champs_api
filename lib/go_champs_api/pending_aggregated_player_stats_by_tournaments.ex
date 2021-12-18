@@ -8,6 +8,7 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
 
   alias GoChampsApi.PendingAggregatedPlayerStatsByTournaments.PendingAggregatedPlayerStatsByTournament
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
+  alias GoChampsApi.Tournaments
 
   @doc """
   Returns the list of pending_aggregated_player_stats_by_tournament.
@@ -180,6 +181,8 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournaments do
       )
 
       delete_by_tournament_id(tournament_id)
+
+      Tournaments.set_aggregated_player_stats!(tournament_id)
 
       IO.inspect("Tournanment: #{tournament_id}")
       IO.inspect(DateTime.to_string(DateTime.utc_now()))

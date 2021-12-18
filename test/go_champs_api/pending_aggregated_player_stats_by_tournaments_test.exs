@@ -218,7 +218,12 @@ defmodule GoChampsApi.PendingAggregatedPlayerStatsByTournamentsTest do
       assert aggregated_player_stats_by_tournament.player_id == first_valid_attrs.player_id
       assert aggregated_player_stats_by_tournament.tournament_id == tournament.id
 
-      assert [] = PendingAggregatedPlayerStatsByTournaments.list_tournament_ids()
+      # Should have cleaned the pending aggregated player stats list
+      assert [] == PendingAggregatedPlayerStatsByTournaments.list_tournament_ids()
+
+      # Should set has_aggregated_player_stats of the tournament to true
+      tournament_after = Tournaments.get_tournament!(tournament.id)
+      assert tournament_after.has_aggregated_player_stats == true
     end
   end
 end
