@@ -14,13 +14,16 @@ defmodule GoChampsApiWeb.GameView do
   def render("game.json", %{game: game}) do
     %{
       id: game.id,
-      away_team: render_one(game.away_team, TeamView, "team.json"),
+      away_placeholder: game.away_placeholder,
       away_score: game.away_score,
+      away_team: render_one(game.away_team, TeamView, "team.json"),
       datetime: game.datetime,
       phase_id: game.phase_id,
-      home_team: render_one(game.home_team, TeamView, "team.json"),
+      home_placeholder: game.home_placeholder,
       home_score: game.home_score,
+      home_team: render_one(game.home_team, TeamView, "team.json"),
       info: game.info,
+      is_finished: game.is_finished,
       location: game.location
     }
   end

@@ -7,15 +7,20 @@ defmodule GoChampsApiWeb.GameControllerTest do
   alias GoChampsApi.Phases
 
   @create_attrs %{
+    away_placeholder: "away placeholder",
     away_score: 10,
     datetime: "2019-08-25T16:59:27.116Z",
+    home_placeholder: "home placeholder",
     home_score: 20,
     location: "some location"
   }
   @update_attrs %{
+    away_placeholder: "away placeholder updated",
     away_score: 20,
     datetime: "2019-08-25T16:59:27.116Z",
+    home_placeholder: "home placeholder updated",
     home_score: 30,
+    is_finished: true,
     location: "another location"
   }
 
@@ -82,13 +87,16 @@ defmodule GoChampsApiWeb.GameControllerTest do
       conn = get(conn, Routes.v1_game_path(conn, :show, id))
 
       assert %{
+               "away_placeholder" => "away placeholder",
                "away_score" => 10,
                "away_team" => nil,
                "datetime" => "2019-08-25T16:59:27Z",
                "phase_id" => phase_id,
+               "home_placeholder" => "home placeholder",
                "home_score" => 20,
                "home_team" => nil,
                "id" => id,
+               "is_finished" => false,
                "location" => "some location"
              } = json_response(conn, 200)["data"]
     end
@@ -116,12 +124,15 @@ defmodule GoChampsApiWeb.GameControllerTest do
       conn = get(conn, Routes.v1_game_path(conn, :show, id))
 
       assert %{
+               "away_placeholder" => "away placeholder updated",
                "away_score" => 20,
                "away_team" => nil,
                "datetime" => "2019-08-25T16:59:27Z",
+               "home_placeholder" => "home placeholder updated",
                "home_score" => 30,
                "home_team" => nil,
                "id" => id,
+               "is_finished" => true,
                "location" => "another location"
              } = json_response(conn, 200)["data"]
     end

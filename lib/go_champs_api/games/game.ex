@@ -7,9 +7,12 @@ defmodule GoChampsApi.Games.Game do
 
   schema "games" do
     field :away_score, :integer
+    field :away_placeholder, :string
     field :datetime, :utc_datetime
     field :home_score, :integer
+    field :home_placeholder, :string
     field :info, :string
+    field :is_finished, :boolean
     field :location, :string
 
     belongs_to :phase, Phase
@@ -26,9 +29,12 @@ defmodule GoChampsApi.Games.Game do
       :datetime,
       :location,
       :away_score,
+      :away_placeholder,
       :home_score,
+      :home_placeholder,
       :phase_id,
       :info,
+      :is_finished,
       :away_team_id,
       :home_team_id
     ])
