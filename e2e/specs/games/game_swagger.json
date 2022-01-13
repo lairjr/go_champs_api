@@ -133,6 +133,15 @@
           "type": "string",
           "description": "Tournament phase ID"
         },
+        "away_placeholder": {
+          "type": [
+            "object",
+            "string",
+            "null"
+          ],
+          "description": "Away placeholder",
+          "nullable": true
+        },
         "away_team": {
           "type": [
             "object",
@@ -153,6 +162,15 @@
         "away_team_id": {
           "type": "string",
           "description": "Tournament away team ID"
+        },
+        "home_placeholder": {
+          "type": [
+            "object",
+            "string",
+            "null"
+          ],
+          "description": "Home placeholder",
+          "nullable": true
         },
         "home_team": {
           "type": [
@@ -183,6 +201,10 @@
           "type": "string",
           "format": "datetime",
           "description": "Creation timestamp"
+        },
+        "is_finished": {
+          "type": "boolean",
+          "description": "Mark if the game is finished."
         },
         "updated_at": {
           "type": "string",
