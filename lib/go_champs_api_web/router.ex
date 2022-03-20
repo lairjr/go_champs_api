@@ -58,6 +58,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/player-stats-logs", PlayerStatsLogController, only: [:index, :show]
 
+    resources "/recently-view", RecentlyViewController
+
     get "/search", SearchController, :index
 
     resources "/teams", TeamController, only: [:show]
