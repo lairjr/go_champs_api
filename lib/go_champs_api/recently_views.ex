@@ -18,7 +18,17 @@ defmodule GoChampsApi.RecentlyViews do
 
   """
   def list_recently_view do
-    Repo.all(RecentlyView)
+    query =
+      from r in RecentlyView,
+        group_by: r.tournament_id,
+        select: %{
+          tournament_id: r.tournament_id,
+          views: count()
+        },
+        order_by: [desc: count()],
+        preload: [:tournament]
+
+    Repo.all(query)
   end
 
   @doc """

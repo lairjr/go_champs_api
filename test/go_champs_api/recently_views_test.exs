@@ -2,7 +2,9 @@ defmodule GoChampsApi.RecentlyViewsTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.Helpers.TournamentHelpers
+  alias GoChampsApi.Organizations
   alias GoChampsApi.RecentlyViews
+  alias GoChampsApi.Tournaments
 
   describe "recently_view" do
     alias GoChampsApi.RecentlyViews.RecentlyView
@@ -21,9 +23,52 @@ defmodule GoChampsApi.RecentlyViewsTest do
       recently_view
     end
 
-    test "list_recently_view/0 returns all recently_view" do
+    def recently_view_for_tournament_id(tournament_id) do
+      {:ok, recently_view} =
+        @valid_attrs
+        |> Map.merge(%{tournament_id: tournament_id})
+        |> RecentlyViews.create_recently_view()
+
+      recently_view
+    end
+
+    def recently_view_for_other_tournament(attrs \\ %{}) do
+      {:ok, organization} =
+        Organizations.create_organization(%{name: "another organization", slug: "another-slug"})
+
+      {:ok, tournament} =
+        %{name: "another name", slug: "some-slug"}
+        |> Map.merge(%{organization_id: organization.id})
+        |> Tournaments.create_tournament()
+
+      {:ok, recently_view} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Map.merge(%{tournament_id: tournament.id})
+        |> RecentlyViews.create_recently_view()
+
+      recently_view
+    end
+
+    test "list_recently_view/0 returns one recently_view aggegated by tournament_id with count" do
       recently_view = recently_view_fixture()
-      assert RecentlyViews.list_recently_view() == [recently_view]
+
+      [recently_view_result] = RecentlyViews.list_recently_view()
+      assert recently_view_result.tournament_id == recently_view.tournament_id
+      assert recently_view_result.views == 1
+    end
+
+    test "list_recently_view/0 returns recently_views aggegated by tournament_id with count" do
+      first_recently_view = recently_view_fixture()
+      second_recently_view = recently_view_for_tournament_id(first_recently_view.tournament_id)
+      third_recently_view = recently_view_for_other_tournament()
+
+      [first_tournament, second_tournament] = RecentlyViews.list_recently_view()
+
+      assert first_tournament.tournament_id == first_recently_view.tournament_id
+      assert first_tournament.views == 2
+      assert second_tournament.tournament_id == third_recently_view.tournament_id
+      assert second_tournament.views == 1
     end
 
     test "get_recently_view!/1 returns the recently_view with given id" do
