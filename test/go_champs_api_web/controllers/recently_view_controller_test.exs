@@ -22,12 +22,12 @@ defmodule GoChampsApiWeb.RecentlyViewControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  # describe "index" do
-  #   test "lists all recently_view", %{conn: conn} do
-  #     conn = get(conn, Routes.v1_recently_view_path(conn, :index))
-  #     assert json_response(conn, 200)["data"] == []
-  #   end
-  # end
+  describe "index" do
+    test "lists all recently_view", %{conn: conn} do
+      conn = get(conn, Routes.v1_recently_view_path(conn, :index))
+      assert json_response(conn, 200)["data"] == []
+    end
+  end
 
   describe "create recently_view" do
     test "renders recently_view when data is valid", %{conn: conn} do

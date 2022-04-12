@@ -50,26 +50,29 @@ defmodule GoChampsApi.RecentlyViewsTest do
       recently_view
     end
 
-    # test "list_recently_view/0 returns one recently_view aggegated by tournament_id with count" do
-    #   recently_view = recently_view_fixture()
+    test "list_recently_view/0 returns one recently_view aggegated by tournament_id with count" do
+      recently_view = recently_view_fixture()
 
-    #   [recently_view_result] = RecentlyViews.list_recently_view()
-    #   assert recently_view_result.tournament_id == recently_view.tournament_id
-    #   assert recently_view_result.views == 1
-    # end
+      [recently_view_result] = RecentlyViews.list_recently_view()
+      assert recently_view_result.tournament_id == recently_view.tournament_id
+      assert recently_view_result.views == 1
+      assert recently_view_result.tournament.id == recently_view.tournament_id
+    end
 
-    # test "list_recently_view/0 returns recently_views aggegated by tournament_id with count" do
-    #   first_recently_view = recently_view_fixture()
-    #   second_recently_view = recently_view_for_tournament_id(first_recently_view.tournament_id)
-    #   third_recently_view = recently_view_for_other_tournament()
+    test "list_recently_view/0 returns recently_views aggegated by tournament_id with count" do
+      first_recently_view = recently_view_fixture()
+      second_recently_view = recently_view_for_tournament_id(first_recently_view.tournament_id)
+      third_recently_view = recently_view_for_other_tournament()
 
-    #   [first_tournament, second_tournament] = RecentlyViews.list_recently_view()
+      [first_tournament, second_tournament] = RecentlyViews.list_recently_view()
 
-    #   assert first_tournament.tournament_id == first_recently_view.tournament_id
-    #   assert first_tournament.views == 2
-    #   assert second_tournament.tournament_id == third_recently_view.tournament_id
-    #   assert second_tournament.views == 1
-    # end
+      assert first_tournament.tournament_id == first_recently_view.tournament_id
+      assert first_tournament.views == 2
+      assert first_tournament.tournament.id == first_recently_view.tournament_id
+      assert second_tournament.tournament_id == third_recently_view.tournament_id
+      assert second_tournament.views == 1
+      assert second_tournament.tournament.id == third_recently_view.tournament_id
+    end
 
     test "get_recently_view!/1 returns the recently_view with given id" do
       recently_view = recently_view_fixture()
