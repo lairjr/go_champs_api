@@ -23,9 +23,14 @@ defmodule GoChampsApiWeb.RecentlyViewControllerTest do
   end
 
   describe "index" do
-    test "lists all recently_view", %{conn: conn} do
+    setup [:create_recently_view]
+
+    test "lists all recently_view", %{conn: conn, recently_view: recently_view} do
       conn = get(conn, Routes.v1_recently_view_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+
+      [recently_view_result] = json_response(conn, 200)["data"]
+      assert recently_view_result["tournament"]["id"] == recently_view.tournament_id
+      assert recently_view_result["views"] == 1
     end
   end
 
