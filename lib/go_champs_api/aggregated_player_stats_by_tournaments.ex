@@ -40,7 +40,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournaments do
         where: ^where,
         limit: 50,
         offset: 50 * ^page,
-        order_by: [desc: fragment("?->>?", t.stats, ^select_stat)]
+        order_by: [desc: fragment("(?->>?)::numeric", t.stats, ^select_stat)]
 
     Repo.all(query)
   end

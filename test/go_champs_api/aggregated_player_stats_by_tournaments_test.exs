@@ -12,9 +12,9 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
     alias GoChampsApi.Tournaments.Tournament
     alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
 
-    @valid_attrs %{stats: %{"some" => "some"}}
+    @valid_attrs %{stats: %{"some" => "8"}}
     @update_attrs %{
-      stats: %{"some" => "some updated"}
+      stats: %{"some" => "10"}
     }
     @invalid_attrs %{player_id: nil, stats: nil, tournament_id: nil}
 
@@ -144,7 +144,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
                )
 
       assert aggregated_player_stats_by_tournament.player_id != nil
-      assert aggregated_player_stats_by_tournament.stats == %{"some" => "some"}
+      assert aggregated_player_stats_by_tournament.stats == %{"some" => "8"}
       assert aggregated_player_stats_by_tournament.tournament_id != nil
     end
 
@@ -167,7 +167,7 @@ defmodule GoChampsApi.AggregatedPlayerStatsByTournamentsTest do
       assert aggregated_player_stats_by_tournament.player_id ==
                aggregated_player_stats_by_tournament.player_id
 
-      assert aggregated_player_stats_by_tournament.stats == %{"some" => "some updated"}
+      assert aggregated_player_stats_by_tournament.stats == %{"some" => "10"}
 
       assert aggregated_player_stats_by_tournament.tournament_id ==
                aggregated_player_stats_by_tournament.tournament_id
