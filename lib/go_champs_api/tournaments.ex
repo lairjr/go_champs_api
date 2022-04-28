@@ -12,6 +12,7 @@ defmodule GoChampsApi.Tournaments do
   alias GoChampsApi.AggregatedPlayerStatsByTournaments.AggregatedPlayerStatsByTournament
   alias GoChampsApi.Players.Player
   alias GoChampsApi.PlayerStatsLogs.PlayerStatsLog
+  alias GoChampsApi.RecentlyViews.RecentlyView
 
   alias GoChampsApi.Organizations.Organization
 
@@ -189,6 +190,10 @@ defmodule GoChampsApi.Tournaments do
       from p in PlayerStatsLog,
         where: p.tournament_id == ^tournament.id
 
+    recently_views_delete_query =
+      from p in RecentlyView,
+        where: p.tournament_id == ^tournament.id
+
     {:ok, %{tournament: tournament_result}} =
       Ecto.Multi.new()
       |> Ecto.Multi.delete_all(
@@ -206,6 +211,10 @@ defmodule GoChampsApi.Tournaments do
       |> Ecto.Multi.delete_all(
         :players,
         player_delete_query
+      )
+      |> Ecto.Multi.delete_all(
+        :recently_views,
+        recently_views_delete_query
       )
       |> Ecto.Multi.delete(:tournament, tournament)
       |> Repo.transaction()

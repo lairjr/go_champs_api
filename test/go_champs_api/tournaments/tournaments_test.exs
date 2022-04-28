@@ -10,6 +10,7 @@ defmodule GoChampsApi.TournamentsTest do
   alias GoChampsApi.AggregatedPlayerStatsByTournaments
   alias GoChampsApi.PlayerStatsLogs
   alias GoChampsApi.Organizations
+  alias GoChampsApi.RecentlyViews
 
   describe "tournaments" do
     alias GoChampsApi.Tournaments.Tournament
@@ -220,6 +221,16 @@ defmodule GoChampsApi.TournamentsTest do
 
       assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
       assert AggregatedPlayerStatsByTournaments.list_aggregated_player_stats_by_tournament() == []
+    end
+
+    test "delete_tournament/1 deletes the tournament and associated recently_view" do
+      tournament = tournament_fixture()
+
+      %{tournament_id: tournament.id}
+      |> RecentlyViews.create_recently_view()
+
+      assert {:ok, %Tournament{}} = Tournaments.delete_tournament(tournament)
+      assert RecentlyViews.list_recently_view() == []
     end
 
     test "change_tournament/1 returns a tournament changeset" do
