@@ -11,6 +11,10 @@ const randomTournament = (organizationId: string) => ({
   site_url: randomString(),
   slug: randomString(),
   twitter: randomString(),
+  team_stats: [{
+    title: "Team stat one",
+    source: "player-stat-id"
+  }],
 });
 
 export const tournamentPayload = (organizationId: string) => (

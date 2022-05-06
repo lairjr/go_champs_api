@@ -206,6 +206,26 @@
             }
           }
         },
+        "team_stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Team Stat id"
+              },
+              "title": {
+                "type": "string",
+                "description": "Team Stat title"
+              },
+              "source": {
+                "type": "string",
+                "description": "Team Stat source"
+              }
+            }
+          }
+        },
         "inserted_at": {
           "type": "string",
           "format": "datetime",
