@@ -22,6 +22,12 @@ defmodule GoChampsApi.Tournaments.Tournament do
       field :is_default_order, :boolean
     end
 
+    embeds_many :team_stats, TeamStats, on_replace: :delete do
+      field :title, :string
+      field :source, :string
+      field :is_default_order, :boolean
+    end
+
     belongs_to :organization, Organization
     has_many :phases, Phase
     has_many :players, Player
@@ -44,6 +50,7 @@ defmodule GoChampsApi.Tournaments.Tournament do
       :organization_slug
     ])
     |> cast_embed(:player_stats, with: &player_stats_changeset/2)
+    |> cast_embed(:team_stats, with: &team_stats_changeset/2)
     |> validate_required([:name, :slug, :organization_id])
     |> validate_format(:slug, ~r/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     |> unique_constraint(:slug, name: :tournaments_slug_organization_id_index)
@@ -52,6 +59,12 @@ defmodule GoChampsApi.Tournaments.Tournament do
   defp player_stats_changeset(schema, params) do
     schema
     |> cast(params, [:title, :is_default_order])
+    |> validate_required([:title])
+  end
+
+  defp team_stats_changeset(schema, params) do
+    schema
+    |> cast(params, [:title, :source, :is_default_order])
     |> validate_required([:title])
   end
 end

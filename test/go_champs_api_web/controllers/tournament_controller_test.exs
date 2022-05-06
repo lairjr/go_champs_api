@@ -22,6 +22,16 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       %{
         title: "average stat"
       }
+    ],
+    team_stats: [
+      %{
+        title: "team fixed stat",
+        is_default_order: true
+      },
+      %{
+        title: "team source stat",
+        source: "player-stat-id"
+      }
     ]
   }
   @update_attrs %{
@@ -97,6 +107,7 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
                "site_url" => result_site,
                "twitter" => result_twitter,
                "player_stats" => result_player_stats,
+               "team_stats" => result_team_stats,
                "has_aggregated_player_stats" => result_has_aggregated_player_stats
              } = json_response(conn, 200)["data"]
 
@@ -113,6 +124,13 @@ defmodule GoChampsApiWeb.TournamentControllerTest do
       assert fixed_stat["title"] == "fixed stat"
       assert sum_stat["title"] == "sum stat"
       assert average_stat["title"] == "average stat"
+
+      [fixed_team_stat, source_team_stat] = result_team_stats
+
+      assert fixed_team_stat["title"] == "team fixed stat"
+      assert fixed_team_stat["is_default_order"] == true
+      assert source_team_stat["title"] == "team source stat"
+      assert source_team_stat["source"] == "player-stat-id"
     end
 
     @tag :authenticated

@@ -32,6 +32,16 @@ defmodule GoChampsApi.TournamentsTest do
         %{
           title: "average stat"
         }
+      ],
+      team_stats: [
+        %{
+          title: "team fixed stat",
+          is_default_order: true
+        },
+        %{
+          title: "team source stat",
+          source: "player-stat-id"
+        }
       ]
     }
     @update_attrs %{
@@ -121,6 +131,13 @@ defmodule GoChampsApi.TournamentsTest do
       assert fixed_stat.title == "fixed stat"
       assert sum_stat.title == "sum stat"
       assert average_stat.title == "average stat"
+
+      [fixed_team_stat, fixed_source_stat] = tournament.team_stats
+
+      assert fixed_team_stat.title == "team fixed stat"
+      assert fixed_team_stat.is_default_order == true
+      assert fixed_source_stat.title == "team source stat"
+      assert fixed_source_stat.source == "player-stat-id"
     end
 
     test "create_tournament/1 with invalid data returns error changeset" do
