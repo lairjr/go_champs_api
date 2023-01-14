@@ -1,6 +1,13 @@
 version: '3.1'
 
-services:  
+services:
+  bash:
+    build: 
+      context: .
+    command: /bin/bash
+    volumes:
+            - ./:/app
+
   phoenix:
     build: 
       context: .
