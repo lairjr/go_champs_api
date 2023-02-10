@@ -6,7 +6,7 @@ services:
       context: .
     command: /bin/bash
     volumes:
-            - ./:/app
+      - ./:/app
 
   phoenix:
     build: 
@@ -54,3 +54,10 @@ services:
     - ./e2e/specs:/contractTest/specs
     depends_on:
       - phoenix
+
+  vs-code:
+    build: 
+      context: .
+    command: sleep infinity
+    volumes:
+      - ./:/app
