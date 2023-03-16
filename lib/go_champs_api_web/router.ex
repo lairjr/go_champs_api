@@ -64,6 +64,8 @@ defmodule GoChampsApiWeb.Router do
 
     resources "/teams", TeamController, only: [:show]
 
+    resources "/team-stats-logs", TeamStatsLogController, only: [:index, :show]
+
     resources "/tournaments", TournamentController, only: [:index, :show]
 
     post "/accounts/signup", UserController, :create
@@ -101,6 +103,9 @@ defmodule GoChampsApiWeb.Router do
     patch "/player-stats-logs", PlayerStatsLogController, :batch_update
 
     resources "/teams", TeamController, only: [:create, :update, :delete]
+
+    resources "/team-stats-logs", TeamStatsLogController, only: [:create, :update, :delete]
+    patch "/team-stats-logs", TeamStatsLogController, :batch_update
 
     resources "/tournaments", TournamentController, only: [:create, :update, :delete]
 
