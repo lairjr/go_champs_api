@@ -6,6 +6,9 @@ defmodule GoChampsApiWeb.TeamStatsLogController do
 
   action_fallback GoChampsApiWeb.FallbackController
 
+  plug GoChampsApiWeb.Plugs.AuthorizedTeamStatsLog, :team_stats_log when action in [:create]
+  plug GoChampsApiWeb.Plugs.AuthorizedTeamStatsLog, :id when action in [:delete, :update]
+
   def index(conn, _params) do
     team_stats_log = TeamStatsLogs.list_team_stats_log()
     render(conn, "index.json", team_stats_log: team_stats_log)

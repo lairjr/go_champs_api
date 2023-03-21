@@ -28,6 +28,16 @@ defmodule GoChampsApiWeb.TeamStatsLogControllerTest do
     team_stats_log
   end
 
+  def fixture(:team_stats_log_with_different_member) do
+    {:ok, team_stats_log} =
+      @create_attrs
+      |> TeamHelpers.map_team_id_and_tournament_id_with_other_member()
+      |> PhaseHelpers.map_phase_id_for_tournament()
+      |> TeamStatsLogs.create_team_stats_log()
+
+    team_stats_log
+  end
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -62,10 +72,29 @@ defmodule GoChampsApiWeb.TeamStatsLogControllerTest do
 
     @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
+      invalid_attrs =
+        @invalid_attrs
+        |> TeamHelpers.map_team_id_and_tournament_id()
+
       conn =
-        post(conn, Routes.v1_team_stats_log_path(conn, :create), team_stats_log: @invalid_attrs)
+        post(conn, Routes.v1_team_stats_log_path(conn, :create), team_stats_log: invalid_attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "create team_stats_log with different organization member" do
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{conn: conn} do
+      create_attrs =
+        @create_attrs
+        |> TeamHelpers.map_team_id_and_tournament_id_with_other_member()
+        |> PhaseHelpers.map_phase_id_for_tournament()
+
+      conn =
+        post(conn, Routes.v1_team_stats_log_path(conn, :create), team_stats_log: create_attrs)
+
+      assert text_response(conn, 403) == "Forbidden"
     end
   end
 
@@ -103,6 +132,23 @@ defmodule GoChampsApiWeb.TeamStatsLogControllerTest do
     end
   end
 
+  describe "update team_stats_log with different member" do
+    setup [:create_team_stats_log_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      team_stats_log: %TeamStatsLog{id: id} = team_stats_log
+    } do
+      conn =
+        put(conn, Routes.v1_team_stats_log_path(conn, :update, team_stats_log),
+          team_stats_log: @update_attrs
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   describe "delete team_stats_log" do
     setup [:create_team_stats_log]
 
@@ -117,8 +163,35 @@ defmodule GoChampsApiWeb.TeamStatsLogControllerTest do
     end
   end
 
+  describe "delete team_stats_log with different member" do
+    setup [:create_team_stats_log_with_different_member]
+
+    @tag :authenticated
+    test "returns forbidden for an user that is not a member", %{
+      conn: conn,
+      team_stats_log: team_stats_log
+    } do
+      conn =
+        delete(
+          conn,
+          Routes.v1_team_stats_log_path(
+            conn,
+            :delete,
+            team_stats_log
+          )
+        )
+
+      assert text_response(conn, 403) == "Forbidden"
+    end
+  end
+
   defp create_team_stats_log(_) do
     team_stats_log = fixture(:team_stats_log)
     %{team_stats_log: team_stats_log}
+  end
+
+  defp create_team_stats_log_with_different_member(_) do
+    team_stats_log = fixture(:team_stats_log_with_different_member)
+    {:ok, team_stats_log: team_stats_log}
   end
 end
