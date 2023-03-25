@@ -151,5 +151,23 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
       assert Enum.member?(results, some_tournament.id) == true
       assert Enum.member?(results, another_tournament.id) == true
     end
+
+    test "delete_by_tournament_id deletes all pending_aggregated_team_stats_by_phase pertaining to a tournament_id" do
+      pending_aggregated_team_stats_by_phase = pending_aggregated_team_stats_by_phase_fixture()
+
+      %{
+        tournament_id: pending_aggregated_team_stats_by_phase.tournament_id,
+        phase_id: pending_aggregated_team_stats_by_phase.phase_id
+      }
+      |> PendingAggregatedTeamStatsByPhases.create_pending_aggregated_team_stats_by_phase()
+
+      assert {2, _} =
+               PendingAggregatedTeamStatsByPhases.delete_by_tournament_id(
+                 pending_aggregated_team_stats_by_phase.tournament_id
+               )
+
+      assert PendingAggregatedTeamStatsByPhases.list_pending_aggregated_team_stats_by_phase() ==
+               []
+    end
   end
 end

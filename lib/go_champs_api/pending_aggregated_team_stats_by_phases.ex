@@ -114,6 +114,26 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhases do
   end
 
   @doc """
+  Deletes all pending_aggregated_team_stats_by_phase pertaining to a tournament_id.
+
+  ## Examples
+
+      iex> delete_by_tournament_id(pending_aggregated_team_stats_by_phase)
+      {:ok, %PendingAggregatedPlayerStatsByTournament{}}
+
+      iex> delete_by_tournament_id(pending_aggregated_team_stats_by_phase)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_by_tournament_id(tournament_id) do
+    query =
+      from p in PendingAggregatedTeamStatsByPhase,
+        where: p.tournament_id == ^tournament_id
+
+    Repo.delete_all(query)
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking pending_aggregated_team_stats_by_phase changes.
 
   ## Examples
