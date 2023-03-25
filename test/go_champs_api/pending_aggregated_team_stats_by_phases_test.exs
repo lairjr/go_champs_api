@@ -3,6 +3,7 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
 
   alias GoChampsApi.Helpers.PhaseHelpers
   alias GoChampsApi.PendingAggregatedTeamStatsByPhases
+  alias GoChampsApi.Tournaments
 
   describe "pending_aggregated_team_stats_by_phase" do
     alias GoChampsApi.PendingAggregatedTeamStatsByPhases.PendingAggregatedTeamStatsByPhase
@@ -10,6 +11,18 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
     @valid_attrs %{}
     @update_attrs %{}
     @invalid_attrs %{tournament_id: nil}
+    @valid_tournament_attrs %{
+      name: "some name",
+      slug: "some-slug",
+      team_stats: [
+        %{
+          title: "some stat"
+        },
+        %{
+          title: "another stat"
+        }
+      ]
+    }
 
     def pending_aggregated_team_stats_by_phase_fixture(attrs \\ %{}) do
       {:ok, pending_aggregated_team_stats_by_phase} =
@@ -108,6 +121,35 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
                PendingAggregatedTeamStatsByPhases.change_pending_aggregated_team_stats_by_phase(
                  pending_aggregated_team_stats_by_phase
                )
+    end
+
+    test "list_tournament_ids returns all tournament_ids" do
+      pending_aggregated_team_stats_by_phase = pending_aggregated_team_stats_by_phase_fixture()
+
+      %{
+        tournament_id: pending_aggregated_team_stats_by_phase.tournament_id,
+        phase_id: pending_aggregated_team_stats_by_phase.phase_id
+      }
+      |> PendingAggregatedTeamStatsByPhases.create_pending_aggregated_team_stats_by_phase()
+
+      some_tournament =
+        Tournaments.get_tournament!(pending_aggregated_team_stats_by_phase.tournament_id)
+
+      {:ok, another_tournament} =
+        %{name: "another tournament", slug: "another-slug"}
+        |> Map.merge(%{organization_id: some_tournament.organization_id})
+        |> Tournaments.create_tournament()
+
+      %{
+        tournament_id: another_tournament.id,
+        phase_id: pending_aggregated_team_stats_by_phase.phase_id
+      }
+      |> PendingAggregatedTeamStatsByPhases.create_pending_aggregated_team_stats_by_phase()
+
+      results = PendingAggregatedTeamStatsByPhases.list_tournament_ids()
+
+      assert Enum.member?(results, some_tournament.id) == true
+      assert Enum.member?(results, another_tournament.id) == true
     end
   end
 end

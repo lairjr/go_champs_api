@@ -22,6 +22,24 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhases do
   end
 
   @doc """
+  Returns the list of tournament_ids stored
+
+  ## Examples
+
+      iex> list_tournament_ids()
+      ["some-id", ...]
+
+  """
+  def list_tournament_ids do
+    query =
+      from p in PendingAggregatedTeamStatsByPhase,
+        group_by: p.tournament_id,
+        select: p.tournament_id
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single pending_aggregated_team_stats_by_phase.
 
   Raises `Ecto.NoResultsError` if the Pending aggregated team stats by phase does not exist.
