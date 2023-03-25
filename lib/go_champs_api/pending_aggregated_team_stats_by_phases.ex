@@ -148,4 +148,15 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhases do
       ) do
     PendingAggregatedTeamStatsByPhase.changeset(pending_aggregated_team_stats_by_phase, attrs)
   end
+
+  @doc """
+  Generates aggregated team stats log for pending tournaments
+
+  ## Examples
+
+      iex> run_pending_aggregated_team_stats_generation()
+
+  """
+  def run_pending_aggregated_team_stats_generation() do
+  end
 end

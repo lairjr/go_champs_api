@@ -2,10 +2,18 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
   use GoChampsApi.DataCase
 
   alias GoChampsApi.Helpers.PhaseHelpers
+  alias GoChampsApi.Helpers.OrganizationHelpers
+  alias GoChampsApi.Helpers.TeamHelpers
+
+  alias GoChampsApi.AggregatedTeamStatsByPhases
   alias GoChampsApi.PendingAggregatedTeamStatsByPhases
+  alias GoChampsApi.Phases
+  alias GoChampsApi.TeamStatsLogs
   alias GoChampsApi.Tournaments
 
   describe "pending_aggregated_team_stats_by_phase" do
+    alias GoChampsApi.Tournaments.Tournament
+    alias GoChampsApi.Phases.Phase
     alias GoChampsApi.PendingAggregatedTeamStatsByPhases.PendingAggregatedTeamStatsByPhase
 
     @valid_attrs %{}
@@ -22,6 +30,12 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
           title: "another stat"
         }
       ]
+    }
+    @valid_phase_attrs %{
+      is_in_progress: true,
+      title: "some title",
+      type: "elimination",
+      elimination_stats: [%{"title" => "stat title"}]
     }
 
     def pending_aggregated_team_stats_by_phase_fixture(attrs \\ %{}) do
@@ -169,5 +183,57 @@ defmodule GoChampsApi.PendingAggregatedTeamStatsByPhasesTest do
       assert PendingAggregatedTeamStatsByPhases.list_pending_aggregated_team_stats_by_phase() ==
                []
     end
+
+    # test """
+    #   run_pending_aggregated_team_stats_generation/0
+    #   inserts aggregated player stats log for pending tournament,
+    #   removes pending_aggregated_team_stats_by_phase
+    # """ do
+    #   valid_tournament = OrganizationHelpers.map_organization_id(@valid_tournament_attrs)
+    #   assert {:ok, %Tournament{} = tournament} = Tournaments.create_tournament(valid_tournament)
+
+    #   [first_team_stat, second_team_stat] = tournament.team_stats
+
+    #   {:ok, %Phase{} = phase} =
+    #     Map.merge(@valid_phase_attrs, %{tournament_id: tournament.id})
+    #     |> Phases.create_phase()
+
+    #   first_valid_attrs =
+    #     TeamHelpers.map_team_id(tournament.id, %{
+    #       phase_id: phase.id,
+    #       stats: %{
+    #         first_team_stat.id => "6",
+    #         second_team_stat.id => "2"
+    #       }
+    #     })
+
+    #   second_valid_attrs =
+    #     %{
+    #       stats: %{first_team_stat.id => "4", second_team_stat.id => "3"}
+    #     }
+    #     |> Map.merge(%{
+    #       phase_id: first_valid_attrs.phase_id,
+    #       team_id: first_valid_attrs.team_id,
+    #       tournament_id: first_valid_attrs.tournament_id
+    #     })
+
+    #   # This operation adds pending_aggregated_team_stats_by_phase
+    #   assert {:ok, batch_results} =
+    #            TeamStatsLogs.create_team_stats_logs([first_valid_attrs, second_valid_attrs])
+
+    #   assert [tournament_id] = PendingAggregatedTeamStatsByPhases.list_tournament_ids()
+    #   assert tournament_id == tournament.id
+
+    #   PendingAggregatedTeamStatsByPhases.run_pending_aggregated_team_stats_generation()
+
+    #   [aggregated_team_stats_by_phase] =
+    #     AggregatedTeamStatsByPhases.list_aggregated_team_stats_by_phase()
+
+    #   assert aggregated_team_stats_by_phase.player_id == first_valid_attrs.player_id
+    #   assert aggregated_team_stats_by_phase.tournament_id == tournament.id
+
+    #   # Should have cleaned the pending aggregated player stats list
+    #   assert [] == PendingAggregatedTeamStatsByPhases.list_tournament_ids()
+    # end
   end
 end
